@@ -8,9 +8,9 @@
             :default-active="activeIndex"
             class="el-menu-vertical-demo"
           >
-            <el-menu-item :index="item.meta.code" v-for="(item,index) in navbarData" :key="index">
-              <i class="el-icon-menu"></i>
-              <span slot="title">{{item.meta.title}}</span>
+            <el-menu-item v-for="(item,index) in navbarData" :key="index" :index="item.meta.code">
+              <i class="el-icon-menu" />
+              <span slot="title">{{ item.meta.title }}</span>
             </el-menu-item>
           </el-menu>
         </div>
@@ -19,7 +19,7 @@
         <div class="grid-content bg-purple ">
           <transition name="fade-transform" mode="out-in">
             <!--<keep-alive>-->
-            <router-view/>
+            <router-view />
             <!--</keep-alive>-->
           </transition>
         </div>
@@ -29,40 +29,38 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
-  export default {
-    name: 'AppMain',
-    data() {
-      return {
-        index: '',
-        activeIndex: ''
-      }
-    },
-    watch: {
-      $route: {
-        handler: function(route) {
-          this.activeIndex=route.path.match(/^\/[a-z]+/)[0]
-        },
-        immediate: true
-      }
-    },
-    computed: {
-      ...mapGetters([
-        'permission_routes',
-        'sidebar'
-      ]),
-      navbarData() {
-        return this.permission_routes.filter(res => {
-          return res.meta
-        })
-      }
-    },
-    methods: {},
-    mounted() {
-      console.log(this.navbarData,7777)
+export default {
+  name: 'AppMain',
+  data() {
+    return {
+      activeIndex: ''
     }
-  }
+  },
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.activeIndex = route.path.match(/^\/[a-z]+/)[0]
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'permission_routes',
+      'sidebar'
+    ]),
+    navbarData() {
+      return this.permission_routes.filter(res => {
+        return res.meta
+      })
+    }
+  },
+  mounted() {
+  },
+  methods: {}
+}
 </script>
 
 <style scoped lang="scss">

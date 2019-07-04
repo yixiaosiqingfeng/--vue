@@ -65,16 +65,16 @@ const mutations = {
 
 const actions = {
   generateRoutes({ commit }, roles) {
-    return new Promise(resolve => {
+    return new Promise(async resolve => {
       let accessedRoutes
-      if (!roles.includes('admin')) {
+      if (roles.includes('adfmifvn')) {
         accessedRoutes = asyncRoutes || []
       } else {
-        let arr = addCodeRoutes(asyncRoutes)
-        accessedRoutes = filterAsyncRoutes(arr, roles)
+        const arr = await addCodeRoutes(asyncRoutes)
+        accessedRoutes = await filterAsyncRoutes(arr, roles)
       }
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+      await commit('SET_ROUTES', accessedRoutes)
+      await resolve(accessedRoutes)
     })
   }
 }

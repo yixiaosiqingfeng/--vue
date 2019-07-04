@@ -1,18 +1,20 @@
 import request from '@/utils/request'
 
 export function login(data) {
+  // const data=obj;
   return request({
-    url: '/user/login',
+    url: '/admin_public/loginV1',
     method: 'post',
     data
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
+    url: '/admin_auth/getAccountInfoV1',
+    // url: '/comm/{domain}/create',
+    method: 'post',
+    data: { code: 2004 }
   })
 }
 

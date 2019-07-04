@@ -5,8 +5,12 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: 'http://192.168.0.19:8084', // 宇驰
+  // baseURL: 'http://192.168.0.14:8084', // 帅哥
+  baseURL: 'http://192.168.0.18:8084', // 胡超
+  //  baseURL: 'http://192.168.0.17:8084', // 展鹏
+  // baseURL: 'http://192.168.0.254:8084', //服务器
   timeout: 5000 // request timeout
 })
 
@@ -46,7 +50,7 @@ service.interceptors.response.use(
     const res = response.data
 
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    if (res.errorCode !== 0) {
       Message({
         message: res.message || 'Error',
         type: 'error',

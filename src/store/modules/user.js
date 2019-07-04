@@ -1,12 +1,14 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import { encryption } from '@/utils/crypto'
 
 const state = {
   token: getToken(),
   name: '',
   avatar: '',
   introduction: '',
+  muneRoles: null,
   roles: []
 }
 
@@ -25,6 +27,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_MUNEROLES: (state, muneRoles) => {
+    state.muneRoles = muneRoles
   }
 }
 
@@ -33,11 +38,15 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ data: { username: username.trim(), password: encryption(password) }, code: '2000' }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
+        if (!data) {
+          reject()
+        } else {
+          commit('SET_TOKEN', data)
+          setToken(data)
+          resolve()
+        }
       }).catch(error => {
         reject(error)
       })
@@ -45,27 +54,22 @@ const actions = {
   },
 
   // get user info
-  getInfo({ commit, state }) {
+  getInfo({ commit }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      getInfo().then(response => {
         const { data } = response
-
         if (!data) {
           reject('Verification failed, please Login again.')
+          return
         }
-
-        const { roles, name, avatar, introduction } = data
-
+        const { menus } = data
         // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
+        if (!menus || menus.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
+          return
         }
-
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
-        resolve(data)
+        commit('SET_MUNEROLES', menus)
+        resolve(menus)
       }).catch(error => {
         reject(error)
       })
@@ -75,15 +79,15 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
-        removeToken()
-        resetRouter()
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      // logout(state.token).then(() => {
+      commit('SET_TOKEN', '')
+      commit('SET_MUNEROLES', [])
+      removeToken()
+      resetRouter()
+      resolve()
+      // }).catch(error => {
+      //   reject(error)
+      // })
     })
   },
 
