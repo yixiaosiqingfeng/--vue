@@ -1,45 +1,45 @@
 <template>
   <div>
     <div>
-      <headers @disHid="disHid"></headers>
+      <headers @disHid="disHid" />
     </div>
     <div class="wt1360 AppMain">
-      <AppMain></AppMain>
+      <AppMain />
     </div>
   </div>
 </template>
 
 <script>
-  import headers from './components/headers'
-  import AppMain from './components/AppMain'
+import headers from './components/headers'
+import AppMain from './components/AppMain'
 
-  export default {
-    name: 'Layout',
-    components: { headers, AppMain },
-    data() {
-      return {
-        flag: false
-      }
+export default {
+  name: 'Layout',
+  components: { headers, AppMain },
+  data() {
+    return {
+      flag: false
+    }
+  },
+  methods: {
+    disHid(val) {
+      this.flag = val
     },
-    methods: {
-      disHid(val) {
-        this.flag = val
-      },
-      zhezhaoFn() {
-        if (this.flag === 1) {
-          this.flag = 2
-        }
+    zhezhaoFn() {
+      if (this.flag === 1) {
+        this.flag = 2
       }
     }
   }
+}
 </script>
 
 <style scoped lang="scss">
   .AppMain {
-    height: calc(100vh - 38px);
-    background-color: #f6f6f6;
-
+    height: calc(100vh - 53px);
+    background-color: #fff;
   }
+
 </style>
 <!--<style lang="scss" scoped>-->
 <!--.Navbar_box {-->

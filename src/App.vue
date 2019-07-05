@@ -21,7 +21,7 @@ export default {
 
   ::-webkit-scrollbar-track {
     border-radius: 2px; /*滚动条的背景区域的圆角*/
-    background-color: #fff; /*滚动条的背景颜色*/
+     /*滚动条的背景颜色*/
   }
 
   ::-webkit-scrollbar-thumb {

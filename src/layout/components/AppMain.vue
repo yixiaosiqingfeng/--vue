@@ -1,7 +1,7 @@
 <template>
   <section class="app-main">
-    <el-row>
-      <el-col :span="3">
+    <div style="display:flex;">
+      <div class="leftBar">
         <div class="grid-content navbar">
           <el-menu
             router
@@ -14,8 +14,8 @@
             </el-menu-item>
           </el-menu>
         </div>
-      </el-col>
-      <el-col :span="21">
+      </div>
+      <div class="rightMain">
         <div class="grid-content bg-purple ">
           <transition name="fade-transform" mode="out-in">
             <!--<keep-alive>-->
@@ -23,8 +23,8 @@
             <!--</keep-alive>-->
           </transition>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -65,6 +65,21 @@ export default {
 
 <style scoped lang="scss">
   .el-menu {
-    height: calc(100vh - 40px);
+    height: calc(100vh - 55px);
+  }
+
+  .el-menu-vertical-demo, .el-menu {
+    border: 0;
+  }
+
+  .leftBar {
+    width: 155px;
+    box-shadow: 0 0 10px #ddd;
+  }
+
+  .rightMain {
+    flex: 1;
+    margin-left: 15px;
+    box-shadow: 0 0 10px #ddd;
   }
 </style>

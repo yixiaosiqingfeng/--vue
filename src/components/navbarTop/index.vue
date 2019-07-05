@@ -1,12 +1,12 @@
 <template>
-  <div style="height:100%;">
-    <div>
+  <div style="height:100%;position:relative;">
+    <div class="topBar">
       <el-menu router :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
         <el-menu-item v-for="(item,index) in navArr" :key="index" :index="item.meta.code">{{ item.meta.title }}
         </el-menu-item>
       </el-menu>
     </div>
-    <div class="appMain_box" style="position:relative;">
+    <div class="appMain_box">
       <div class="appMain">
         <transition name="fade-transform" mode="out-in">
           <router-view />
@@ -49,18 +49,29 @@ export default {
     })
     this.navArr = arr
     this.activeIndex = this.$route.path
-    console.log(this.navArr, 888)
   }
 }
 </script>
 
 <style scoped>
   .appMain_box {
-    height: calc(100vh - 105px);
+    position:relative;
+    top:60px;
+    height: calc(100vh - 115px);
     overflow-y: scroll;
     overflow-x: hidden;
   }
   .appMain{
+    width:100%;
     position:absolute;
+  }
+  .el-menu-demo{
+    border:0;
+  }
+  .topBar{
+    position:absolute;
+    width:100%;
+    box-shadow: 0 5px 10px #f6f6f6;
+    z-index: 500;
   }
 </style>
