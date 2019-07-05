@@ -1,6 +1,6 @@
 <template>
-  <div style="position:absolute;">
-    <div style="width:1185px">
+  <div>
+    <div>
       <div style="margin:15px;">
         <el-button size="mini" type="success" @click="addMenuOne">新增</el-button>
         <el-button size="mini" type="success" @click="expandAll(1)">展开</el-button>
