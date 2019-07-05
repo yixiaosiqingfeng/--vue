@@ -93,7 +93,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="dialogVisible1 = false">取 消</el-button>
-        <el-button size="mini" @click="resetForm('modForm')">重置</el-button>
+        <!-- <el-button size="mini" @click="resetForm('modForm')">重置</el-button> -->
         <el-button size="mini" type="primary" @click="modifyForm('modForm')">确 定</el-button>
       </div>
     </el-dialog>
@@ -168,7 +168,7 @@ export default {
           type: 'index'
         },
         {
-          width: 180,
+          width: 200,
           label: '角色名称',
           prop: 'name'
           // popup: true,
@@ -182,7 +182,7 @@ export default {
         //   // character: null //字符转义函数
         // },
         {
-          width: 180,
+          width: 200,
           label: '创建时间',
           prop: 'createDate'
           // popup: true,
@@ -194,7 +194,7 @@ export default {
           prop: 'note'
         },
         {
-          // width: 180,
+          width: 325,
           label: '操作',
           prop: 'name',
           type: 'btn'

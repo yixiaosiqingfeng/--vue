@@ -145,7 +145,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="dialogVisible1 = false">取 消</el-button>
-        <el-button size="mini" @click="resetForm('modForm')">重置</el-button>
+        <!-- <el-button size="mini" @click="resetForm('modForm')">重置</el-button> -->
         <el-button size="mini" type="primary" @click="modifyForm('modForm')">确 定</el-button>
       </div>
     </el-dialog>

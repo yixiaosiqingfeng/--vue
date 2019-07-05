@@ -10,7 +10,7 @@
       <el-table-column prop="code" label="授权码" width="180" />
       <el-table-column prop="indexOrder" label="排序" width="180" />
       <el-table-column prop="note" label="备注" width="300" />
-      <el-table-column prop="remark" label="操作">
+      <el-table-column prop="remark" label="操作" width="300">
         <template slot-scope="scope">
           <div>
             <el-button size="medium" type="text" @click="editFn(scope.row)">编辑</el-button>
@@ -205,7 +205,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="dialogVisible3 = false">取 消</el-button>
-        <el-button size="mini" @click="resetForm('ruleForm3')">重 置</el-button>
+        <!-- <el-button size="mini" @click="resetForm('ruleForm3')">重 置</el-button> -->
         <el-button size="mini" type="primary" @click="modifyMenu('ruleForm3')">确 定</el-button>
       </div>
     </el-dialog>
