@@ -93,6 +93,9 @@ export default {
   methods: {
     resetpass(from) {
       // 记得做密码加密处理
+    },
+    closeDisalog() {
+      this.$emit('changdia')
     }
   }
 }

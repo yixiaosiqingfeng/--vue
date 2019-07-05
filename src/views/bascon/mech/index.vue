@@ -13,7 +13,7 @@
       <el-table-column prop="principal" label="负责人" width="120" />
       <el-table-column prop="contactTel" label="联系电话" width="150" />
       <el-table-column prop="note" label="备注" width="300" />
-      <el-table-column prop="remark" label="操作">
+      <el-table-column prop="remark" label="操作" width="200">
         <template slot-scope="scope">
           <div>
             <el-button size="mini" type="text" @click="editFn(scope.row)">修改</el-button>
