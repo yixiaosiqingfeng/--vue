@@ -4,46 +4,48 @@
       <!-- 头部搜索部分 -->
       <staffHeader @search="search" @resettop="resettop" />
       <!-- 表格部分 -->
-      <tableAss
-        :table-config="tableConfig"
-        :path="path"
-        :query-data="queryData"
-        :target="target"
-        @popupFn="popupFn"
-      >
-        <template slot="footer" slot-scope="scope" class="table_btn">
-          <div style="display:flex;">
-            <el-button type="text" size="mini" @click="edit(scope.row)">修改</el-button>
-            <el-button type="text" size="mini" @click="remomv(scope.$index,scope.row)">删除</el-button>
-            <el-button
-              v-show="scope.row.accountStatus===10"
-              type="text"
-              size="mini"
-              @click="stashow(scope.row)"
-            >禁用账号</el-button>
-            <el-button
-              v-show="scope.row.accountStatus===20"
-              type="text"
-              size="mini"
-              @click="stashow(scope.row)"
-            >激活账号</el-button>
-          </div>
-        </template>
-        <template slot="header" slot-scope="scope" class="staff_create">
-          <el-button type="success" size="mini" class="tabtop_btn" @click="addss(scope.scope)">创建新员工</el-button>
-          <el-button type="danger" size="mini" class="staff_btnt" @click="remvs(scope.scope)">选中删除</el-button>
-          <el-button type="primary" size="mini">
-            下载Excel模板
-            <i class="el-icon-download el-icon--right" />
-          </el-button>
-          <el-button type="primary" size="mini" @click="diaExcel=true">
-            上传Excel
-            <i class="el-icon-upload el-icon--right" />
-          </el-button>
-          <el-button type="success" size="mini" @click="diapos=true">设置默认密码</el-button>
-          <el-button type="success" size="mini" @click="resetPassword(scope.scope)">重置密码</el-button>
-        </template>
-      </tableAss>
+      <div style="margin-left:5px;">
+        <tableAss
+          :table-config="tableConfig"
+          :path="path"
+          :query-data="queryData"
+          :target="target"
+          @popupFn="popupFn"
+        >
+          <template slot="footer" slot-scope="scope" class="table_btn">
+            <div style="display:flex;">
+              <el-button type="text" size="mini" @click="edit(scope.row)">修改</el-button>
+              <el-button type="text" size="mini" @click="remomv(scope.$index,scope.row)">删除</el-button>
+              <el-button
+                v-show="scope.row.accountStatus===10"
+                type="text"
+                size="mini"
+                @click="stashow(scope.row)"
+              >禁用账号</el-button>
+              <el-button
+                v-show="scope.row.accountStatus===20"
+                type="text"
+                size="mini"
+                @click="stashow(scope.row)"
+              >激活账号</el-button>
+            </div>
+          </template>
+          <template slot="header" slot-scope="scope" class="staff_create">
+            <el-button type="success" size="mini" class="tabtop_btn" @click="addss(scope.scope)">创建新员工</el-button>
+            <el-button type="danger" size="mini" class="staff_btnt" @click="remvs(scope.scope)">选中删除</el-button>
+            <el-button type="primary" size="mini">
+              下载Excel模板
+              <i class="el-icon-download el-icon--right" />
+            </el-button>
+            <el-button type="primary" size="mini" @click="diaExcel=true">
+              上传Excel
+              <i class="el-icon-upload el-icon--right" />
+            </el-button>
+            <el-button type="success" size="mini" @click="diapos=true">设置默认密码</el-button>
+            <el-button type="success" size="mini" @click="resetPassword(scope.scope)">重置密码</el-button>
+          </template>
+        </tableAss>
+      </div>
       <!-- 新建员工页面 -->
       <el-dialog title="新建员工信息" center :visible.sync="dialogVisible" width="960px">
         <el-form
@@ -995,6 +997,7 @@ export default {
 }
 .reset_title {
   font-size: 12px;
+
 }
 </style>
 

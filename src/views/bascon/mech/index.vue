@@ -7,14 +7,14 @@
       <el-button size="mini" type="success" @click="expandAll(2)">收缩</el-button>
       <el-button size="mini" type="success" @click="reset">刷新</el-button>
     </div>
-    <div class="table_h" style="width:100%;">
+    <div class="table_h" style="width:100%;margin-left:5px;border-right: 1px solid #000;">
       <el-table ref="table" :data="tableData" style="width:100%;" row-key="id" border>
         <el-table-column prop="name" label="机构名称" width="220" />
         <el-table-column prop="address" label="地址" width="250" />
         <el-table-column prop="principal" label="负责人" width="120" />
         <el-table-column prop="contactTel" label="联系电话" width="150" />
         <el-table-column prop="note" label="备注" width="260" />
-        <el-table-column prop="remark" label="操作">
+        <el-table-column prop="remark" label="操作" width="180">
           <template slot-scope="scope">
             <div>
               <el-button size="mini" type="text" @click="editFn(scope.row)">修改</el-button>
@@ -469,7 +469,7 @@ export default {
 }
 </script>
 <style scoped>
-.table_h /deep/ .el-table__header{
+/* .table_h /deep/ .el-table__header{
   width: 100%;
-}
+} */
 </style>
