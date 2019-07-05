@@ -912,6 +912,7 @@ export default {
                   })
                   this.diareset = false
                   this.fromdata2.newPassword = '123456'
+                  this.accstaffsid = []
                 } else {
                   this.$message.error(res.msg)
                 }
