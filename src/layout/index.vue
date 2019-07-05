@@ -24,11 +24,6 @@ export default {
   methods: {
     disHid(val) {
       this.flag = val
-    },
-    zhezhaoFn() {
-      if (this.flag === 1) {
-        this.flag = 2
-      }
     }
   }
 }

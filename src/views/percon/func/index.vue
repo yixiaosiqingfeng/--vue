@@ -1,5 +1,5 @@
 <template>
-  <div style="position:absolute; margin-left:5px;">
+  <div style="position:absolute; padding-left:5px;width:100%;padding-right:1px;">
     <!--//头部-->
     <search @search="search" @reset="reset" />
     <!--表格-->
@@ -17,7 +17,138 @@
         </div>
       </template>
     </tableAss>
+    <!--创建功能-->
+    <el-dialog title="创建新功能" center :visible.sync="dialogVisible" width="50%">
+      <div>
+        <el-form
+          ref="ruleForm"
+          :model="ruleForm"
+          :rules="rules"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
+          <div style="display:flex;flex-wrap:wrap;">
+            <div style="width:50%;">
+              <el-form-item label="菜单名称" prop="organization">
+                <el-cascader v-model="ruleForm.organization" :options="options1" />
+              </el-form-item>
+            </div>
 
+            <div style="width:50%;">
+              <el-form-item label="功能名称" prop="name">
+                <el-input v-model="ruleForm.name" size="mini" />
+              </el-form-item>
+            </div>
+
+            <div style="width:50%;">
+              <el-form-item label="功能编码" prop="code">
+                <el-input v-model="ruleForm.code" size="mini" />
+              </el-form-item>
+            </div>
+            <div style="width:50%;">
+              <el-form-item label="排序字段" prop="indexOrder">
+                <el-input
+                  v-model="ruleForm.indexOrder"
+                  type="number"
+                  min="0"
+                  placeholder="请输入排序数字"
+                  size="mini"
+                />
+              </el-form-item>
+            </div>
+
+            <div style="width:50%;">
+              <el-form-item label="接口地址" prop="serviceUrl">
+                <el-input v-model="ruleForm.serviceUrl" size="mini" />
+              </el-form-item>
+            </div>
+
+            <div style="width:50%;">
+              <el-form-item label="菜单路径" prop="menuUrl">
+                <el-input v-model="ruleForm.menuUrl" size="mini" />
+              </el-form-item>
+            </div>
+
+            <div style="width:100%;">
+              <el-form-item label="备注" prop="note">
+                <el-input v-model="ruleForm.note" type="textarea" />
+              </el-form-item>
+            </div>
+          </div>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
+        <el-button size="mini" @click="resetForm('ruleForm')">重 置</el-button>
+        <el-button size="mini" type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!--修改功能-->
+    <el-dialog title="修改功能" center :visible.sync="dialogVisible1" width="50%">
+      <div>
+        <el-form
+          ref="modForm"
+          :model="modForm"
+          :rules="rules"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
+          <div style="display:flex;flex-wrap:wrap;">
+            <div style="width:50%;">
+              <el-form-item label="菜单名称" prop="organization">
+                <el-cascader v-model="modForm.organization" :show-all-levels="false" :options="options1" />
+              </el-form-item>
+            </div>
+
+            <div style="width:50%;">
+              <el-form-item label="功能名称" prop="name">
+                <el-input v-model="modForm.name" size="mini" />
+              </el-form-item>
+            </div>
+
+            <div style="width:50%;">
+              <el-form-item label="功能编码" prop="code">
+                <el-input v-model="modForm.code" size="mini" />
+              </el-form-item>
+            </div>
+            <div style="width:50%;">
+              <el-form-item label="排序字段" prop="indexOrder">
+                <el-input
+                  v-model="modForm.indexOrder"
+                  type="number"
+                  min="0"
+                  placeholder="请输入排序数字"
+                  size="mini"
+                />
+              </el-form-item>
+            </div>
+
+            <div style="width:50%;">
+              <el-form-item label="接口地址" prop="serviceUrl">
+                <el-input v-model="modForm.serviceUrl" size="mini" />
+              </el-form-item>
+            </div>
+
+            <div style="width:50%;">
+              <el-form-item label="菜单路径" prop="menuUrl">
+                <el-input v-model="modForm.menuUrl" size="mini" />
+              </el-form-item>
+            </div>
+
+            <div style="width:100%;">
+              <el-form-item label="备注" prop="note">
+                <el-input v-model="modForm.note" type="textarea" />
+              </el-form-item>
+            </div>
+          </div>
+        </el-form>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="dialogVisible1 = false">取 消</el-button>
+        <!-- <el-button size="mini" @click="resetForm('modForm')">重置</el-button> -->
+        <el-button size="mini" type="primary" @click="modifyForm('modForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -184,23 +315,12 @@ export default {
   methods: {
     // 修改功能数据回显
     modifyFn(obj) {
-      // console.log(obj, 888);
-      this.getMenuList()
-
       for (const a in this.modForm) {
-        this.modForm[a] = obj[a]
-      }
-      // console.log(this.options1);
-      // console.log(this.modForm, 9999);
-      this.options1.forEach(tim => {
-        if (tim.children && tim.children.length > 0) {
-          // tim.children.forEach(tom => {
-          //   if (tom.value === obj.id) {
-          this.modForm.organization = [tim.value, obj.id]
-          //   }
-          // });
+        if (a !== 'organization') {
+          this.modForm[a] = obj[a]
         }
-      })
+      }
+      this.modForm.organization = [obj.menuId]
       this.dialogVisible1 = true
     },
     // 删除功能
@@ -275,7 +395,6 @@ export default {
     },
     // 搜索按钮
     search(obj) {
-      console.log(obj)
       if (!obj.name && !obj.menuId) {
         this.$message.error('请输入要搜索的内容')
         return
@@ -399,22 +518,7 @@ export default {
             JSON.stringify(list).replace(/name/g, 'label')
           )
           const list2 = JSON.parse(JSON.stringify(list1).replace(/id/g, 'value'))
-          console.log(list2)
           this.options1 = list2
-
-          // list2.forEach((item, index, list2) => {
-          //   if (item.children && item.children.length > 0) {//如果有二级菜单就选二级不选一级菜单
-          //     item.children.forEach(item1 => {
-          //       //  console.log( typeof item1)
-
-          //       // this.options1 = item1;
-          //       this.options1.push(item1)
-          //       // console.log(this.options1)
-          //     });
-          //   }else{//如果没有二级菜单就选一级菜单
-          //       this.options1.push(item)
-          //   }
-          // });
         } else {
           this.$message.error('获取失败' + res.msg)
         }

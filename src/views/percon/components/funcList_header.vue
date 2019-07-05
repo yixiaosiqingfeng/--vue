@@ -67,7 +67,6 @@ export default {
             JSON.stringify(list).replace(/name/g, 'label')
           )
           const list2 = JSON.parse(JSON.stringify(list1).replace(/id/g, 'value'))
-          console.log(list2)
           this.options1 = list2
 
           // list2.forEach((item, index, list2) => {

@@ -118,7 +118,6 @@ export default {
         this.tableData = res.data
         this.tableQuery.total = res.total
         this.loadingFn()
-        console.log(this.tableData, '我是首页表格内容')
       })
     },
     popupFn(boo) {
