@@ -667,6 +667,8 @@ export default {
                 type: 'success',
                 message: '删除成功!'
               })
+              this.empstaffsid = []
+              this.accstaffsid = []
               this.target = !this.target
             } else {
               this.$message.error('删除失败' + res.msg)
