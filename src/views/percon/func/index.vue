@@ -3,22 +3,20 @@
     <!--//头部-->
     <search @search="search" @reset="reset" />
     <!--表格-->
-    <div style="width:1185px">
-      <tableAss :table-config="tableConfig" :path="path" :query-data="queryData" :target="flag">
-        <template slot="footer" slot-scope="scope">
-          <div style="display:flex;">
-            <el-button size="medium" type="text" @click="modifyFn(scope.row)">修改</el-button>
-            <el-button size="medium" type="text" @click="deleteFunc(scope.row)">删除</el-button>
-          </div>
-        </template>
-        <template slot="header" slot-scope="scope">
-          <div style="margin-left:20px;">
-            <el-button size="mini" type="success" @click="dialogVisible=true">创建新功能</el-button>
-            <el-button size="mini" type="danger" @click="deleteFuncAll(scope.scope.scope)">选中删除</el-button>
-          </div>
-        </template>
-      </tableAss>
-    </div>
+    <tableAss :table-config="tableConfig" :path="path" :query-data="queryData" :target="flag">
+      <template slot="footer" slot-scope="scope">
+        <div style="display:flex;">
+          <el-button size="medium" type="text" @click="modifyFn(scope.row)">修改</el-button>
+          <el-button size="medium" type="text" @click="deleteFunc(scope.row)">删除</el-button>
+        </div>
+      </template>
+      <template slot="header" slot-scope="scope">
+        <div style="margin-left:20px;">
+          <el-button size="mini" type="success" @click="dialogVisible=true">创建新功能</el-button>
+          <el-button size="mini" type="danger" @click="deleteFuncAll(scope.scope.scope)">选中删除</el-button>
+        </div>
+      </template>
+    </tableAss>
     <!--创建功能-->
     <el-dialog title="创建新功能" center :visible.sync="dialogVisible" width="50%">
       <div>
