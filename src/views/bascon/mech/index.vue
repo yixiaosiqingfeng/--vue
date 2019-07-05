@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position:absolute;">
     <!-- 表格部分 -->
     <div style="margin:15px;">
       <el-button size="mini" type="success" @click="addMenuOne">新增</el-button>

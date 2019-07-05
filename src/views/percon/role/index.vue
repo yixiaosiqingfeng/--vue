@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position:absolute;">
     <!-- 头部搜索部分 -->
     <search @search="search" @reset="reset" />
     <!-- 表格展示部分 -->
