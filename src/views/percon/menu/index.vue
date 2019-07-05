@@ -1,30 +1,33 @@
 <template>
   <div style="position:absolute;">
-    <div style="margin:15px;">
-      <el-button size="mini" type="success" @click="addMenuOne">新增</el-button>
-      <el-button size="mini" type="success" @click="expandAll(1)">展开</el-button>
-      <el-button size="mini" type="success" @click="expandAll(2)">收缩</el-button>
+    <div style="width:1185px">
+      <div style="margin:15px;">
+        <el-button size="mini" type="success" @click="addMenuOne">新增</el-button>
+        <el-button size="mini" type="success" @click="expandAll(1)">展开</el-button>
+        <el-button size="mini" type="success" @click="expandAll(2)">收缩</el-button>
+      </div>
+
+      <el-table ref="table" :data="tableData" style="width: 100%" row-key="id" border>
+        <el-table-column prop="name" label="菜单名" width="220" />
+        <el-table-column prop="code" label="授权码" width="180" />
+        <el-table-column prop="indexOrder" label="排序" width="180" />
+        <el-table-column prop="note" label="备注" width="300" />
+        <el-table-column prop="remark" label="操作" width="300">
+          <template slot-scope="scope">
+            <div>
+              <el-button size="medium" type="text" @click="editFn(scope.row)">编辑</el-button>
+              <el-button size="medium" type="text" @click="deleteFn(scope.row)">删除</el-button>
+              <el-button
+                v-if="scope.row.parentId==='0'"
+                size="medium"
+                type="text"
+                @click="twoDialog(scope.row)"
+              >新增</el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
-    <el-table ref="table" :data="tableData" style="width: 100%" row-key="id" border>
-      <el-table-column prop="name" label="菜单名" width="220" />
-      <el-table-column prop="code" label="授权码" width="180" />
-      <el-table-column prop="indexOrder" label="排序" width="180" />
-      <el-table-column prop="note" label="备注" width="300" />
-      <el-table-column prop="remark" label="操作">
-        <template slot-scope="scope">
-          <div>
-            <el-button size="medium" type="text" @click="editFn(scope.row)">编辑</el-button>
-            <el-button size="medium" type="text" @click="deleteFn(scope.row)">删除</el-button>
-            <el-button
-              v-if="scope.row.parentId==='0'"
-              size="medium"
-              type="text"
-              @click="twoDialog(scope.row)"
-            >新增</el-button>
-          </div>
-        </template>
-      </el-table-column>
-    </el-table>
     <!--新增菜单-->
     <el-dialog title="新增菜单" :visible.sync="dialogVisible1" width="50%">
       <div>
@@ -205,7 +208,7 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" @click="dialogVisible3 = false">取 消</el-button>
-        <el-button size="mini" @click="resetForm('ruleForm3')">重 置</el-button>
+        <!-- <el-button size="mini" @click="resetForm('ruleForm3')">重 置</el-button> -->
         <el-button size="mini" type="primary" @click="modifyMenu('ruleForm3')">确 定</el-button>
       </div>
     </el-dialog>
