@@ -17,138 +17,7 @@
         </div>
       </template>
     </tableAss>
-    <!--创建功能-->
-    <el-dialog title="创建新功能" center :visible.sync="dialogVisible" width="50%">
-      <div>
-        <el-form
-          ref="ruleForm"
-          :model="ruleForm"
-          :rules="rules"
-          label-width="100px"
-          class="demo-ruleForm"
-        >
-          <div style="display:flex;flex-wrap:wrap;">
-            <div style="width:50%;">
-              <el-form-item label="菜单名称" prop="organization">
-                <el-cascader v-model="ruleForm.organization" :options="options1" clearable />
-              </el-form-item>
-            </div>
 
-            <div style="width:50%;">
-              <el-form-item label="功能名称" prop="name">
-                <el-input v-model="ruleForm.name" size="mini" />
-              </el-form-item>
-            </div>
-
-            <div style="width:50%;">
-              <el-form-item label="功能编码" prop="code">
-                <el-input v-model="ruleForm.code" size="mini" />
-              </el-form-item>
-            </div>
-            <div style="width:50%;">
-              <el-form-item label="排序字段" prop="indexOrder">
-                <el-input
-                  v-model="ruleForm.indexOrder"
-                  type="number"
-                  min="0"
-                  placeholder="请输入排序数字"
-                  size="mini"
-                />
-              </el-form-item>
-            </div>
-
-            <div style="width:50%;">
-              <el-form-item label="接口地址" prop="serviceUrl">
-                <el-input v-model="ruleForm.serviceUrl" size="mini" />
-              </el-form-item>
-            </div>
-
-            <div style="width:50%;">
-              <el-form-item label="菜单路径" prop="menuUrl">
-                <el-input v-model="ruleForm.menuUrl" size="mini" />
-              </el-form-item>
-            </div>
-
-            <div style="width:100%;">
-              <el-form-item label="备注" prop="note">
-                <el-input v-model="ruleForm.note" type="textarea" />
-              </el-form-item>
-            </div>
-          </div>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
-        <el-button size="mini" @click="resetForm('ruleForm')">重 置</el-button>
-        <el-button size="mini" type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-      </div>
-    </el-dialog>
-    <!--修改功能-->
-    <el-dialog title="修改功能" center :visible.sync="dialogVisible1" width="50%">
-      <div>
-        <el-form
-          ref="modForm"
-          :model="modForm"
-          :rules="rules"
-          label-width="100px"
-          class="demo-ruleForm"
-        >
-          <div style="display:flex;flex-wrap:wrap;">
-            <div style="width:50%;">
-              <el-form-item label="菜单名称" prop="organization">
-                <el-cascader v-model="modForm.organization" :options="options1" clearable />
-              </el-form-item>
-            </div>
-
-            <div style="width:50%;">
-              <el-form-item label="功能名称" prop="name">
-                <el-input v-model="modForm.name" size="mini" />
-              </el-form-item>
-            </div>
-
-            <div style="width:50%;">
-              <el-form-item label="功能编码" prop="code">
-                <el-input v-model="modForm.code" size="mini" />
-              </el-form-item>
-            </div>
-            <div style="width:50%;">
-              <el-form-item label="排序字段" prop="indexOrder">
-                <el-input
-                  v-model="modForm.indexOrder"
-                  type="number"
-                  min="0"
-                  placeholder="请输入排序数字"
-                  size="mini"
-                />
-              </el-form-item>
-            </div>
-
-            <div style="width:50%;">
-              <el-form-item label="接口地址" prop="serviceUrl">
-                <el-input v-model="modForm.serviceUrl" size="mini" />
-              </el-form-item>
-            </div>
-
-            <div style="width:50%;">
-              <el-form-item label="菜单路径" prop="menuUrl">
-                <el-input v-model="modForm.menuUrl" size="mini" />
-              </el-form-item>
-            </div>
-
-            <div style="width:100%;">
-              <el-form-item label="备注" prop="note">
-                <el-input v-model="modForm.note" type="textarea" />
-              </el-form-item>
-            </div>
-          </div>
-        </el-form>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="dialogVisible1 = false">取 消</el-button>
-        <!-- <el-button size="mini" @click="resetForm('modForm')">重置</el-button> -->
-        <el-button size="mini" type="primary" @click="modifyForm('modForm')">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -174,7 +43,7 @@ export default {
         },
         {
           label: '序号',
-          width: 36,
+          width: 50,
           type: 'index'
         },
         {
@@ -225,7 +94,6 @@ export default {
           prop: 'note'
         },
         {
-          width: 110,
           label: '操作',
           prop: 'name',
           type: 'btn'
