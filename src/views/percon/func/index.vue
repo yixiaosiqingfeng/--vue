@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position:absolute; margin-left:5px;">
     <!--//头部-->
     <search @search="search" @reset="reset" />
     <!--表格-->
@@ -65,7 +65,7 @@ export default {
           // character: null,      //字符转义函数
         },
         {
-          width: 180,
+          width: 160,
           label: '创建时间',
           prop: 'createDate'
           // popup: true,
