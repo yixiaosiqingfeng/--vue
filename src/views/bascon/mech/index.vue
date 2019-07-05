@@ -13,7 +13,7 @@
         <el-table-column prop="address" label="地址" width="250" />
         <el-table-column prop="principal" label="负责人" width="120" />
         <el-table-column prop="contactTel" label="联系电话" width="150" />
-        <el-table-column prop="note" label="备注" width="300" />
+        <el-table-column prop="note" label="备注" width="260" />
         <el-table-column prop="remark" label="操作">
           <template slot-scope="scope">
             <div>
