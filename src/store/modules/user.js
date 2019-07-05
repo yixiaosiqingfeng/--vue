@@ -40,12 +40,16 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ data: { username: username.trim(), password: encryption(password) }, code: '2000' }).then(response => {
         const { data } = response
-        if (!data) {
-          reject()
+        if (response.success && response === 0) {
+          if (!data) {
+            reject()
+          } else {
+            commit('SET_TOKEN', data)
+            setToken(data)
+            resolve()
+          }
         } else {
-          commit('SET_TOKEN', data)
-          setToken(data)
-          resolve()
+          reject(response.msg)
         }
       }).catch(error => {
         reject(error)
