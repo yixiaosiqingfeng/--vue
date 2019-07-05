@@ -3,23 +3,24 @@
     <!-- 头部搜索部分 -->
     <search @search="search" @reset="reset" />
     <!-- 表格展示部分 -->
-    <tableAss :table-config="tableConfig" :path="path" :query-data="queryData" :target="flag">
-      <template slot="footer" slot-scope="scope">
-        <div style="display:flex;">
-          <el-button size="medium" type="text" @click="funconfig(scope.row)">功能配置</el-button>
-          <el-button size="medium" type="text" @click="MenuConfig(scope.row)">菜单配置</el-button>
-          <el-button size="medium" type="text" @click="modifyrole(scope.row)">修改</el-button>
-          <el-button size="medium" type="text" @click="delrole(scope.row)">删除</el-button>
-        </div>
-      </template>
-      <template slot="header">
-        <div style="margin-left:20px;">
-          <el-button size="mini" type="success" @click="dialogVisible=true">创建角色</el-button>
+    <div style="width:1185px">
+      <tableAss :table-config="tableConfig" :path="path" :query-data="queryData" :target="flag">
+        <template slot="footer" slot-scope="scope">
+          <div style="display:flex;">
+            <el-button size="medium" type="text" @click="funconfig(scope.row)">功能配置</el-button>
+            <el-button size="medium" type="text" @click="MenuConfig(scope.row)">菜单配置</el-button>
+            <el-button size="medium" type="text" @click="modifyrole(scope.row)">修改</el-button>
+            <el-button size="medium" type="text" @click="delrole(scope.row)">删除</el-button>
+          </div>
+        </template>
+        <template slot="header">
+          <div style="margin-left:20px;">
+            <el-button size="mini" type="success" @click="dialogVisible=true">创建角色</el-button>
           <!-- <el-button size="mini" type="danger" @click="deleteRoleAll(scope.scope.scope)">选中删除</el-button> -->
-        </div>
-      </template>
-    </tableAss>
-
+          </div>
+        </template>
+      </tableAss>
+    </div>
     <!-- 创建角色弹框 -->
     <el-dialog title="创建角色" :visible.sync="dialogVisible" center width="50%">
       <!-- 弹框选项-->
