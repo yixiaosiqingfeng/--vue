@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position:absolute;">
     <div class="bascon_staff">
       <!-- 头部搜索部分 -->
       <staffHeader @search="search" @resettop="resettop" />
