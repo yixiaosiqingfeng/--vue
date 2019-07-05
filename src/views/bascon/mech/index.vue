@@ -468,8 +468,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-/* .table_h /deep/ .el-table__header{
-  width: 100%;
-} */
-</style>
