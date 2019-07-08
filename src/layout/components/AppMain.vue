@@ -41,7 +41,7 @@ export default {
   watch: {
     $route: {
       handler: function(route) {
-        this.activeIndex = route.path.match(/^\/[a-z]+/)[0]
+        this.activeIndex = route.path.match(/^\/[a-zA-Z]+/)[0]
       },
       immediate: true
     }

@@ -271,6 +271,40 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/traffic',
+    component: Layout,
+    redirect: '/traffic/askft',
+    name: 'traffic',
+    meta: {
+      title: '路况管理',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'askft',
+        component: () => import('@/views/traffic'),
+        name: 'askft',
+        redirect: '/traffic/askft/trafficList',
+        meta: {
+          title: '测试',
+          roles: ['admin', 'editor'] // or you can only set roles in sub nav
+        },
+        children: [
+          {
+            path: 'trafficList',
+            component: () => import('@/views/traffic/test'),
+            name: 'trafficList',
+            meta: {
+              title: '测试',
+              roles: ['admin', 'editor'] // or you can only set roles in sub nav
+            }
+          }
+        ]
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
