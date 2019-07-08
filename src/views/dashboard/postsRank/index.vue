@@ -1,39 +1,6 @@
 <template>
   <div class="postsRank-container">
     <h5>帖子排名</h5>
-    <!-- <ul class="infinite-list" v-infinite-scroll="load">
-      <li class="infinite-list-item" v-for="item in postRank" :key="item.id">
-        <h4>{{item.top}}</h4>
-        <div class="list-content">
-          <p class="list-content-head">
-            <img src="" alt=""/>
-            <span>{{item.name}}</span>
-            <a>{{item.title}}</a>
-            <span class="time">{{item.time}}</span>
-          </p>
-          <p class="list-content-text">
-            <span>{{item.con}}</span>
-            <img src="" alt="">
-          </p>
-          <p class="go-hot">#我要上热门</p>
-          <div class="link">
-            <p>[
-              <span>赞</span>
-              <a>{{item.praise}}</a>
-              ]
-            </p>
-            <p>
-              [<span>评论</span>
-              <a>{{item.comments}}</a>]
-            </p>
-            <p>
-              [<span>转发</span>
-              <a>{{item.forwarding}}</a>]
-            </p>
-          </div>
-        </div>
-      </li>
-    </ul> -->
     <div class="infinite-list-wrapper">
       <ul
         v-infinite-scroll="load"

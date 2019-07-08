@@ -94,12 +94,12 @@ export default {
     .show-con-progress{
       height: 30px;
       border: 1px solid red;
-      margin: 10px 15px;
+      margin: 10px 20px;
     }
     .show-con-date{
       display: flex;
       align-items: center;
-      margin: 15px;
+      margin: 15px 20px;
       font-size: 10px;
       .times{
         display: flex;
@@ -177,7 +177,7 @@ export default {
       }
     }
     .show-con-new{
-      margin: 15px;
+      margin: 15px 20px;
       ul{
         display: flex;
         flex-wrap: wrap;

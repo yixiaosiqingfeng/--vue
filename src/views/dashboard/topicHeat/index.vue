@@ -44,14 +44,14 @@ export default {
 <style scoped lang="scss">
   .topicHeat-container{
     box-shadow: 2px 2px 2px 2px #ddd;
-    padding: 15px;
+    padding: 16px;
     margin-bottom: 13px;
     ul{
       margin-top: 20px;
       li{
         display: flex;
         justify-content: space-between;
-        margin: 10px 0;
+        margin: 11px 0;
         font-size: 12px;
         p{
           display: flex;
