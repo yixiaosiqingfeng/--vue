@@ -45,7 +45,7 @@ export const constantRoutes = [
     meta: {
       title: '首页',
       icon: 'lock',
-      code:'/index',
+      code: '/index',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
@@ -84,7 +84,7 @@ export const asyncRoutes = [
           title: '机构列表',
           roles: ['admin', 'editor'] // or you can only set roles in sub nav
         },
-        children:[
+        children: [
           {
             path: 'mechList',
             component: () => import('@/views/bascon/mech'),
@@ -92,7 +92,7 @@ export const asyncRoutes = [
             meta: {
               title: '机构列表',
               roles: ['admin', 'editor'] // or you can only set roles in sub nav
-            },
+            }
           }
         ]
       },
@@ -105,7 +105,7 @@ export const asyncRoutes = [
           title: '员工列表',
           roles: ['admin', 'editor'] // or you can only set roles in sub nav
         },
-        children:[
+        children: [
           {
             path: 'staList',
             component: () => import('@/views/bascon/staff'),
@@ -113,7 +113,7 @@ export const asyncRoutes = [
             meta: {
               title: '员工列表',
               roles: ['admin', 'editor'] // or you can only set roles in sub nav
-            },
+            }
           }
         ]
       }
@@ -139,7 +139,7 @@ export const asyncRoutes = [
           title: '功能列表',
           roles: ['admin', 'editor'] // or you can only set roles in sub nav
         },
-        children:[
+        children: [
           {
             path: 'funcList',
             component: () => import('@/views/percon/func'),
@@ -147,7 +147,7 @@ export const asyncRoutes = [
             meta: {
               title: '功能列表',
               roles: ['admin', 'editor'] // or you can only set roles in sub nav
-            },
+            }
           }
         ]
       },
@@ -160,7 +160,7 @@ export const asyncRoutes = [
           title: '菜单列表',
           roles: ['admin', 'editor'] // or you can only set roles in sub nav
         },
-        children:[
+        children: [
           {
             path: 'menuList',
             component: () => import('@/views/percon/menu'),
@@ -168,7 +168,7 @@ export const asyncRoutes = [
             meta: {
               title: '菜单列表',
               roles: ['admin', 'editor'] // or you can only set roles in sub nav
-            },
+            }
           }
         ]
       },
@@ -181,7 +181,7 @@ export const asyncRoutes = [
           title: '角色列表',
           roles: ['admin', 'editor'] // or you can only set roles in sub nav
         },
-        children:[
+        children: [
           {
             path: 'roleList',
             component: () => import('@/views/percon/role'),
@@ -189,7 +189,83 @@ export const asyncRoutes = [
             meta: {
               title: '角色列表',
               roles: ['admin', 'editor'] // or you can only set roles in sub nav
-            },
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    path: '/chatCom',
+    component: Layout,
+    redirect: '/chatCom/fica',
+    name: 'chatCom',
+    meta: {
+      title: '互动社区',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'fica',
+        component: () => import('@/views/chatCom'),
+        name: 'fica',
+        redirect: '/chatCom/fica/ficaList',
+        meta: {
+          title: '分类管理',
+          roles: ['admin', 'editor'] // or you can only set roles in sub nav
+        },
+        children: [
+          {
+            path: 'ficaList',
+            component: () => import('@/views/chatCom/fica'),
+            name: 'ficaList',
+            meta: {
+              title: '分类管理',
+              roles: ['admin', 'editor'] // or you can only set roles in sub nav
+            }
+          }
+        ]
+      },
+      {
+        path: 'topic',
+        component: () => import('@/views/chatCom'),
+        name: 'topic',
+        redirect: '/chatCom/topic/topicList',
+        meta: {
+          title: '话题管理',
+          roles: ['admin', 'editor'] // or you can only set roles in sub nav
+        },
+        children: [
+          {
+            path: 'topicList',
+            component: () => import('@/views/chatCom/topic'),
+            name: 'topicList',
+            meta: {
+              title: '话题管理',
+              roles: ['admin', 'editor'] // or you can only set roles in sub nav
+            }
+          }
+        ]
+      },
+      {
+        path: 'postman',
+        component: () => import('@/views/chatCom'),
+        name: 'postman',
+        redirect: '/chatCom/postman/postmanList',
+        meta: {
+          title: '帖子管理',
+          roles: ['admin', 'editor'] // or you can only set roles in sub nav
+        },
+        children: [
+          {
+            path: 'postmanList',
+            component: () => import('@/views/chatCom/postman'),
+            name: 'postmanList',
+            meta: {
+              title: '帖子管理',
+              roles: ['admin', 'editor'] // or you can only set roles in sub nav
+            }
           }
         ]
       }
