@@ -98,7 +98,7 @@
     </el-dialog>
 
     <!-- 功能配置 element-ui穿梭框 -->
-    <el-dialog title="功能配置" :visible.sync="dialogVisible2" center width="30%">
+    <el-dialog title="功能配置" :visible.sync="dialogVisible2" center width="50%">
       <div>
         <juris
           :left-data="arr5"
@@ -113,7 +113,7 @@
     </el-dialog>
 
     <!-- 菜单配置 穿梭框 -->
-    <el-dialog title="菜单配置" :visible.sync="dialogVisible3" width="30%">
+    <el-dialog title="菜单配置" :visible.sync="dialogVisible3" width="40%">
       <div>
         <!-- <input type="text" v-model="searchId" placeholder="搜索"> -->
         <transfer
