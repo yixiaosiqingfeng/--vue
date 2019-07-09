@@ -7,20 +7,24 @@
         type="circle"
         :percentage="videoUploadPercent"
       />
-      <video
-        v-if="imageUrl"
-        v-show="videoFlag"
-        :src="imageUrl"
-        style="width:50px;height:50px;"
-        @click="abc(imageUrl)"
-      />
+      <div v-show="videoFlag&&imageUrl" class="deVideo">
+        <!--v-show="videoFlag&&imageUrl"-->
+        <i @click="deleteVideo">x</i>
+        <video
+          :src="imageUrl"
+          style="width:50px;height:50px;"
+          @click="dialogVisible = true"
+        />
+      </div>
     </div>
     <el-upload
       action="https://jsonplaceholder.typicode.com/posts/"
       :show-file-list="false"
       :on-success="handleAvatarSuccess"
       :limit="1"
+      :accept="accept"
       :on-exceed="handleExceed"
+      :on-error="handleErr"
       :on-progress="uploadVideoProcess"
       :before-upload="beforeAvatarUpload"
     >
@@ -49,7 +53,8 @@ export default {
       imageUrl: '',
       videoUploadPercent: 0,
       dialogVisible: false,
-      videoFlag: false
+      videoFlag: false,
+      accept: '.mp4,.ogg,.flv,.avi,.wmv,.rmvb'
     }
   },
   methods: {
@@ -75,8 +80,29 @@ export default {
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
-    abc() {
-      this.dialogVisible = true
+    handleErr(err, file, fileList) {
+      this.videoUploadPercent = 0
+      console.log(err)
+    },
+    deleteVideo() {
+      this.$confirm('确定要删除该视频吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+        this.videoUploadPercent = 0
+        this.imageUrl = ''
+        this.videoFlag = false
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   }
 }
@@ -107,5 +133,28 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+  }
+
+  .deVideo {
+    position: relative;
+    width: 50px;
+    height: 50px;
+  }
+
+  .deVideo i {
+    display: block;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 12px;
+    height: 12px;
+    line-height: 10px;
+    border-radius: 50%;
+    color: #f6f6f6;
+    font-size: 12px;
+    text-align: center;
+    border: 1px solid #ccc;
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
   }
 </style>

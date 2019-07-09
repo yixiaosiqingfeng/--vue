@@ -1,6 +1,6 @@
 <template>
   <div>
-    <biaoqin v-model="value" />
+    <biaoqin v-model="value" @submit="submit" />
   </div>
 </template>
 
@@ -17,7 +17,12 @@ export default {
   },
   watch: {
     value() {
-      console.log(this.value, '我是传过来的值')
+      console.log(11)
+    }
+  },
+  methods: {
+    submit() {
+      console.log(this.value, 222)
     }
   }
 }

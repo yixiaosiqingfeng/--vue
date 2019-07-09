@@ -11,7 +11,7 @@
     />
     <div>
       <el-button size="mini" icon="el-icon-picture-outline-round" type="warning" circle @click.stop="biaoqnFn" />
-      <el-button size="mini" type="success">发布</el-button>
+      <el-button size="mini" type="success" @click="submit">发布</el-button>
     </div>
     <div style="position:relative;" @click.stop="biaoqing=1">
       <div class="biaoqin_box" :class="{open:biaoqing===1,hidden:biaoqing===2}">
@@ -110,7 +110,21 @@ export default {
       this.$emit('input', this.$refs.biaoqingBox.innerHTML)
     },
     getSrc(src) {
-      this.$refs.biaoqingBox.innerHTML += '<img src="' + src + '">'
+      const str = this.$refs.biaoqingBox.innerHTML
+      const isDiv = str.slice(str.length - 6, str.length)
+      const newStr = str.substring(0, str.length - 6)
+      const isBr = newStr.slice(newStr.length - 4, newStr.length)
+      const newStr2 = newStr.substring(0, newStr.length - 4)
+      if (isDiv === '</div>') {
+        if (isBr === '<br>') {
+          this.$refs.biaoqingBox.innerHTML = newStr2 + '<img src="' + src + '">' + isDiv
+        } else {
+          this.$refs.biaoqingBox.innerHTML = newStr + '<img src="' + src + '">' + isDiv
+        }
+      } else {
+        this.$refs.biaoqingBox.innerHTML += '<img src="' + src + '">'
+      }
+      this.$emit('input', this.$refs.biaoqingBox.innerHTML)
     },
     biaoqnFn() {
       if (this.biaoqing === 1) {
@@ -120,6 +134,9 @@ export default {
       } else {
         this.biaoqing = 1
       }
+    },
+    submit() {
+      this.$emit('submit')
     }
   }
 }
@@ -169,28 +186,30 @@ export default {
   }
 
   .open {
-    animation:strat 0.5s ;
+    animation: strat 0.1s;
     animation-fill-mode: forwards;
   }
 
   .hidden {
-    animation:end 0.5s ;
+    animation: end 0.1s;
     animation-fill-mode: forwards;
   }
+
   @keyframes strat {
-    0%{
-      height:0;
+    0% {
+      height: 0;
     }
-    100%{
-      height:120px;
+    100% {
+      height: 120px;
     }
   }
+
   @keyframes end {
-    0%{
-      height:120px;
+    0% {
+      height: 120px;
     }
-    100%{
-      height:0;
+    100% {
+      height: 0;
     }
   }
 </style>
