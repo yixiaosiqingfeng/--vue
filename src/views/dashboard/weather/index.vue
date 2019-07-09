@@ -5,8 +5,8 @@
       <span>2019-07-08 星期一 天气晴，适宜外出</span>
     </div>
     <div class="weather-con-right">
-      <i />
-      <span>畅驾APP最新体验公告</span>
+      <span class="iconfont icon-notice" />
+      <p class="title-text">畅驾APP最新体验公告</p>
       <a>2019-07-08</a>
       <p class="more">更多</p>
     </div>
@@ -47,12 +47,10 @@ export default {
 	}
 	.weather-con-right{
 		display: flex;
-		i{
-			display: inline-block;
-			width: 20px;
-			border: 1px solid #ccc;
-		}
 		span{
+			font-size: 13px;
+		}
+		.title-text{
 			padding: 0 15px;
 		}
 		a{
@@ -62,6 +60,7 @@ export default {
 		}
 		.more{
 			font-size: 12px;
+			cursor: pointer;
 		}
 	}
   }

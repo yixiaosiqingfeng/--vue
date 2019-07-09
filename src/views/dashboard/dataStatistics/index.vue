@@ -3,18 +3,18 @@
     <div class="dataStatistics-con-title">
       <h5>数据统计</h5>
       <p>
-        <span>更新时间：2019-06-15  12：00</span>
-        <a>刷新</a>
+        <a>更新时间：2019-06-15  12：00</a>
+        <span class="iconfont icon-shuaxin" />
       </p>
     </div>
     <div class="dataStatistics-con-list">
       <ul>
         <li v-for="item in dataList" :key="item.id">
           <h2>{{ item.num }}</h2>
-          <span>{{ item.title }}</span>
+          <a>{{ item.title }}</a>
           <p>
-            <span>环比昨日  {{ item.score }}</span>
-            <i />
+            <a>环比昨日  {{ item.score }}</a>
+            <span :class="item.icon" :style="{color:item.icon==='iconfont icon-up'?'green':'red'}" />
           </p>
         </li>
       </ul>
@@ -32,8 +32,8 @@ export default {
   data() {
     return {
       dataList: [
-        { id: 1, title: '用户总数', num: 1200, score: '2%' }, { id: 2, title: '用户总数', num: 1200, score: '2%' },
-        { id: 3, title: '用户总数', num: 1200, score: '2%' }, { id: 4, title: '用户总数', num: 1200, score: '2%' }
+        { id: 1, title: '用户总数', num: 1200, score: '2%', icon: 'iconfont icon-up' }, { id: 2, title: '用户总数', num: 1200, score: '4%', icon: 'iconfont icon-down' },
+        { id: 3, title: '用户总数', num: 1200, score: '2%', icon: 'iconfont icon-down' }, { id: 4, title: '用户总数', num: 1200, score: '11%', icon: 'iconfont icon-up' }
       ]
     }
   },
@@ -53,19 +53,19 @@ export default {
 			display: flex;
       justify-content: space-between;
       p{
-        span{
+        a{
           color: #999;
           font-size: 12px;
           padding-right: 20px;
         }
-        a{
-          font-size: 13px;
+        .icon-shuaxin{
+          cursor: pointer;
         }
       }
 		}
 		.dataStatistics-con-list{
 			display: flex;
-      margin: 12px 15px;
+      margin: 10px 15px;
       ul{
         width: 95%;
         padding: 10px 0;
@@ -78,17 +78,14 @@ export default {
           align-items: center;
           font-size: 12px;
           color: #666;
-          line-height: 23px;
+          line-height: 22px;
           h2{
             color: #222;
           }
           p{
             display: flex;
-            i{
+            span{
               display: inline-block;
-              width: 20px;
-              height: 20px;
-              border: 1px solid #ccc;
             }
           }
         }
@@ -101,11 +98,13 @@ export default {
         p{
             width: 22px;
             height: 22px;
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
+            color: #888;
             border-radius: 50%;
             text-align: center;
             line-height: 22px;
-            box-shadow: 1px 1px 1px #ddd;
+            box-shadow: 3px 3px 3px 1px #ddd;
+            cursor: pointer;
         }
       }
 		}

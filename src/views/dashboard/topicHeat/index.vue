@@ -1,23 +1,25 @@
 <template>
   <div class="topicHeat-container">
-    <h5>话题热度</h5>
+    <div class="topHeat-con-title">
+      <h5>话题热度</h5>
+      <a>更多</a>
+    </div>
     <ul>
       <li v-for="item in heatToptic" :key="item.id">
         <p class="top-num" :style="{background:item.color}">{{ item.topicNum }}</p>
         <p>#{{ item.topicName }}</p>
         <p>
-          <i />
-          <span>21100</span>
+          <span class="iconfont icon-zan" />
+          <a>21100</a>
         </p>
         <p>
-          <i />
-          <span>21100</span>
+          <span class="iconfont icon-pinglun" />
+          <a>21100</a>
         </p>
       </li>
     </ul>
   </div>
 </template>
-
 <script>
 
 export default {
@@ -42,10 +44,21 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+  .icon-zan,.icon-pinglun{
+    cursor: pointer;
+  }
   .topicHeat-container{
     box-shadow: 2px 2px 2px 2px #ddd;
-    padding: 16px;
+    padding: 12px;
     margin-bottom: 13px;
+    .topHeat-con-title{
+      display: flex;
+      justify-content: space-between;
+      a{
+        font-size: 12px;
+        color: #666;
+      }
+    }
     ul{
       margin-top: 20px;
       li{
@@ -57,11 +70,11 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          i{
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 1px solid #ccc;
+          a{
+            padding-left: 5px;
+          }
+          .icon-zan{
+            color: rgb(109, 104, 104);
           }
         }
         .top-num{

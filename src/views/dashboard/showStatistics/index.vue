@@ -3,50 +3,29 @@
     <div class="show-con-title">
       <h5>节目统计</h5>
       <p>
-        <span>更新时间：2019-06-15  12：00</span>
-        <a>刷新</a>
+        <a>更新时间：2019-06-15  12：00</a>
+        <span class="iconfont icon-shuaxin" />
       </p>
     </div>
-    <div class="show-con-progress" />
-    <div class="show-con-date">
-      <div class="times">
-        <span>昨日</span>
-        <span class="border">本周</span>
-        <span>本月</span>
-      </div>
-      <div class="date">
-        <p>
-          <span>6月17日</span>
-        </p>
-        <span> - </span>
-        <p>
-          <span>6月17日</span>
-        </p>
-      </div>
-      <P class="search">搜索</P>
+    <div class="show-con-progress">
+      <h6 :class="activeShowName === 0 ?'actived-all':''" @click="activeShowName = 0">全部</h6>
+      <span v-for="item in dataList" :key="item.id" :class="item.id === activeShowName?'actived':''" @click="handleShowName(item)">
+        {{ item.name }}
+      </span>
+      <p>更多</p>
     </div>
-    <div class="show-con-list">
-      <ul>
-        <li v-for="item in dataList" :key="item.id">
-          <h2>{{ item.num }}</h2>
-          <span>{{ item.title }}</span>
-          <p>
-            <span>环比昨日  {{ item.score }}</span>
-            <i />
-          </p>
-        </li>
-      </ul>
-      <div class="enter-icon">
-        <p> > </p>
-      </div>
-    </div>
+    <transition name="fade-transition" mode="out-in">
+      <keep-alive>
+        <component :is="activedIndex" :active-item="activedIndex === 'ShowStatList' ? '':activeItem" />
+      </keep-alive>
+    </transition>
     <div class="show-con-new">
       <ul>
         <li v-for="item in hotToptic" :key="item.id">
-          <span>{{ item.top }}</span>
+          <span class="top-ranking">{{ item.top }}</span>
           <p class="showname">#{{ item.name }}</p>
           <p>
-            <i />
+            <span :class="item.icon" :style="{color:item.icon==='iconfont icon-up'?'green':'red'}" />
             <a>热度值</a>
           </p>
         </li>
@@ -56,124 +35,106 @@
 </template>
 
 <script>
+import ShowStatList from './ShowStatList'
+import AllList from './AllList'
 
 export default {
   name: 'ShowStatistics',
+  components: { ShowStatList, AllList },
   data() {
     return {
-      dataList: [
-        { id: 1, title: '用户总数', num: 1200, score: '2%' }, { id: 2, title: '用户总数', num: 1200, score: '2%' },
-        { id: 3, title: '用户总数', num: 1200, score: '2%' }, { id: 4, title: '用户总数', num: 1200, score: '2%' }
-      ],
+      activedIndex: AllList,
       hotToptic: [
-        { id: 1, top: 'TOP1', name: '节目名称', hotValue: 200 }, { id: 2, top: 'TOP2', name: '节目名称', hotValue: 200 }, { id: 3, top: 'TOP3', name: '节目名称', hotValue: 200 },
-        { id: 4, top: 'TOP4', name: '节目名称', hotValue: 200 }, { id: 5, top: 'TOP5', name: '节目名称', hotValue: 200 }, { id: 6, top: 'TOP6', name: '节目名称', hotValue: 200 }
-      ]
+        { id: 1, top: 'Top1', name: '节目名称', hotValue: 200, icon: 'iconfont icon-up' }, { id: 2, top: 'Top2', name: '节目名称', hotValue: 200, icon: 'iconfont icon-down' }, { id: 3, top: 'Top3', name: '节目名称', hotValue: 200, icon: 'iconfont icon-down' },
+        { id: 4, top: 'Top4', name: '节目名称', hotValue: 200, icon: 'iconfont icon-up' }, { id: 5, top: 'Top5', name: '节目名称', hotValue: 200, icon: 'iconfont icon-down' }, { id: 6, top: 'Top6', name: '节目名称', hotValue: 200, icon: 'iconfont icon-down' }
+      ],
+      dataList: [
+        { id: 1, name: '节目名称', userNum: 1200, userName: '用户总数', playNum: 1000, playName: '播放总数', upNum: 1400, upNumName: '上升总数', watchNum: 900, watchName: '观看总数', score: '23%', icon: 'iconfont icon-up' },
+        { id: 2, name: '节目名称', userNum: 3200, userName: '用户总数', playNum: 800, playName: '播放总数', upNum: 1400, upNumName: '上升总数', watchNum: 900, watchName: '观看总数', score: '3%', icon: 'iconfont icon-down' },
+        { id: 3, name: '节目名称', userNum: 4200, userName: '用户总数', playNum: 900, playName: '播放总数', upNum: 1400, upNumName: '上升总数', watchNum: 900, watchName: '观看总数', score: '10%', icon: 'iconfont icon-up' },
+        { id: 4, name: '节目名称', userNum: 5000, userName: '用户总数', playNum: 1900, playName: '播放总数', upNum: 1400, upNumName: '上升总数', watchNum: 900, watchName: '观看总数', score: '11%', icon: 'iconfont icon-up' }
+      ],
+      activeShowName: 0,
+      activeItem: ''
+    }
+  },
+  watch: {
+    activeItem(newValue, oldValue) {
+      this.activeItem = newValue
+    },
+    activeShowName(newValue, oldValue) {
+      this.activeShowName = newValue
+      if (this.activeShowName === 0) {
+        this.activedIndex = AllList
+      }
+    }
+  },
+  methods: {
+    handleShowName(item) {
+      this.dataList.map((items) => {
+        if (items.id === item.id) {
+          this.activeShowName = item.id
+          this.activeItem = item
+          if (this.activeShowName !== 0) {
+            this.activedIndex = ShowStatList
+          }
+        }
+      })
     }
   }
 }
 </script>
 <style scoped lang="scss">
   .showStatistics-container{
-    padding: 15px 10px;
+    padding: 15px 10px 5px;
     box-shadow: 2px 2px 2px 2px #ddd;
     .show-con-title{
       display: flex;
       justify-content: space-between;
       p{
-        span{
+        a{
           color: #999;
           font-size: 12px;
           padding-right: 20px;
         }
-        a{
-          font-size: 13px;
+        .icon-shuaxin{
+          cursor: pointer;
         }
       }
     }
     .show-con-progress{
-      height: 30px;
-      border: 1px solid red;
-      margin: 10px 20px;
-    }
-    .show-con-date{
+      margin: 25px 20px;
       display: flex;
       align-items: center;
-      margin: 15px 20px;
-      font-size: 10px;
-      .times{
-        display: flex;
+      font-size: 13px;
+      h6{
+        color: #666;
+        padding: 5px 22px 6px;
         border: 1px solid #ccc;
-        span{
-          padding: 3px 6px;
-        }
-        .border{
-          border-left:1px solid #ccc;
-          border-right:1px solid #ccc;
-        }
+        cursor: pointer;
       }
-      .date{
-        display: flex;
-        margin: 0 25px;
-        align-items: center;
-        p{
-          border: 1px solid #ccc;
-          padding: 2px 4px;
-        }
-        span{
-          margin: 0 5px;
-        }
-      }
-      .search{
-        background: skyblue;
+      .actived-all{
+        background: rgb(199, 197, 197);
         color: #fff;
-        padding: 3px 10px;
+        padding: 5px 22px 6px;
+        border: 1px solid #ccc;
+        cursor: pointer;
       }
-    }
-    .show-con-list{
-      display: flex;
-      margin: 10px 15px;
-      ul{
-        width: 95%;
-        padding: 10px 0;
-        display: flex;
-        li{
-          width: 25%;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          font-size: 12px;
-          color: #666;
-          line-height: 21px;
-          h2{
-            color: #222;
-          }
-          p{
-            display: flex;
-            i{
-              display: inline-block;
-              width: 20px;
-              height: 20px;
-              border: 1px solid #ccc;
-            }
-          }
-        }
+      span{
+        padding: 5px 50px;
+        border: 1px solid #ccc;
+        color: #666;
+        cursor: pointer;
       }
-      .enter-icon{
-        width: 5%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        p{
-            width: 22px;
-            height: 22px;
-            border: 1px solid #ddd;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 22px;
-            box-shadow: 1px 1px 1px #ddd;
-        }
+      .actived{
+        background: rgb(241, 116, 58);
+        color: #fff;
+      }
+      p{
+        color: #888;
+        padding: 5px 20px;
+        border: 1px solid #ccc;
+        cursor: pointer;
       }
     }
     .show-con-new{
@@ -188,10 +149,10 @@ export default {
           font-size: 10px;
           color: #333;
           margin: 10px 15px 10px 0;
-          span{
-            background: red;
+          .top-ranking{
+            background: rgb(247, 72, 72);
             color: #fff;
-            border: 1px solid red;
+            border: 1px solid rgb(247, 72, 72);
             border-radius: 5px;
             padding: 1px 5px;
           }

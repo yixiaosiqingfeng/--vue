@@ -1,10 +1,10 @@
 <template>
   <div class="todolish-container">
     <div class="todolish-con-title">
-      <h5>节目统计</h5>
+      <h5>代办事项</h5>
       <p>
-        <span>更新时间：2019-06-15  12：00</span>
-        <a>刷新</a>
+        <a>更新时间：2019-06-15  12：00</a>
+        <span class="iconfont icon-shuaxin" />
       </p>
     </div>
     <ul class="todolish-con-list">
@@ -51,13 +51,13 @@ export default {
       display: flex;
       justify-content: space-between;
       p{
-        span{
+        a{
           color: #999;
           font-size: 12px;
           padding-right: 20px;
         }
-        a{
-          font-size: 13px;
+        .icon-shuaxin{
+          cursor: pointer;
         }
       }
     }
@@ -68,6 +68,7 @@ export default {
         display: flex;
         justify-content: space-between;
         margin: 16px 0;
+        color: #666;
         .todo-name{
           width: 100px;
           overflow: hidden;
