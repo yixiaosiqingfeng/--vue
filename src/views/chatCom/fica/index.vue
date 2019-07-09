@@ -58,11 +58,11 @@ export default {
         //   width: 36,
         //   type: 'selection'
         // },
-        // {
-        //   label: '序号',
-        //   width: 50,
-        //   type: 'index'
-        // },
+        {
+          label: '序号',
+          width: 50,
+          type: 'index'
+        },
         {
           width: 120,
           label: '分类图片' // （非必填）
