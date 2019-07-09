@@ -32,7 +32,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-  @import "../../styles/index.scss";
+@import "../../styles/index.scss";
   .dashboard-container{
     overflow-y:scroll;
     cursor: pointer;
