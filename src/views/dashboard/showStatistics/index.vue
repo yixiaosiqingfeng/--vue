@@ -7,7 +7,14 @@
         <a>刷新</a>
       </p>
     </div>
-    <div class="show-con-progress" />
+    <div class="show-con-progress">
+      <h6>全部</h6>
+      <span v-for="item in showName" :key="item.id">
+        {{ item.name }}
+        <a>[直播中]</a>
+      </span>
+      <p>更多</p>
+    </div>
     <div class="show-con-date">
       <div class="times">
         <span>昨日</span>
@@ -68,7 +75,8 @@ export default {
       hotToptic: [
         { id: 1, top: 'TOP1', name: '节目名称', hotValue: 200 }, { id: 2, top: 'TOP2', name: '节目名称', hotValue: 200 }, { id: 3, top: 'TOP3', name: '节目名称', hotValue: 200 },
         { id: 4, top: 'TOP4', name: '节目名称', hotValue: 200 }, { id: 5, top: 'TOP5', name: '节目名称', hotValue: 200 }, { id: 6, top: 'TOP6', name: '节目名称', hotValue: 200 }
-      ]
+      ],
+      showName: [{ id: 1, name: '节目名称' }, { id: 1, name: '节目名称' }, { id: 1, name: '节目名称' }, { id: 1, name: '节目名称' }]
     }
   }
 }
@@ -92,9 +100,32 @@ export default {
       }
     }
     .show-con-progress{
-      height: 30px;
-      border: 1px solid red;
-      margin: 10px 20px;
+      margin: 25px 20px;
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      h6{
+        background: rgb(199, 197, 197);
+        color: #fff;
+        padding: 5px 22px;
+        border: 1px solid #ddd;
+      }
+      span{
+        padding: 5px 50px;
+        border: 1px solid #ddd;
+        color: #666;
+        position: relative;
+        a{
+          position: absolute;
+          top: -10px;
+          left: 5px;
+        }
+      }
+      p{
+        color: #888;
+        padding: 5px 20px;
+        border: 1px solid #ddd;
+      }
     }
     .show-con-date{
       display: flex;
@@ -145,7 +176,7 @@ export default {
           align-items: center;
           font-size: 12px;
           color: #666;
-          line-height: 21px;
+          line-height: 22px;
           h2{
             color: #222;
           }

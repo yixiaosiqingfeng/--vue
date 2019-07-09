@@ -54,10 +54,11 @@ export default {
       count: 10,
       loading: false,
       postRank: [
-        { id: 1, top: 1, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
+        { id: 1, top: 1, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconconconconconconconconconconconconconconconconconconc', praise: '20', comments: '30', forwarding: '40', img: '' },
         { id: 2, top: 2, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
         { id: 3, top: 3, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 4, top: 4, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' }
+        { id: 4, top: 4, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
+        { id: 5, top: 5, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' }
       ]
     }
   },
