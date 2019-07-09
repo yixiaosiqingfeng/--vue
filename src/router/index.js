@@ -297,7 +297,49 @@ export const asyncRoutes = [
             component: () => import('@/views/traffic/test'),
             name: 'trafficList',
             meta: {
-              title: '测试',
+              title: '视频测试',
+              roles: ['admin', 'editor'] // or you can only set roles in sub nav
+            }
+          }
+        ]
+      },
+      {
+        path: 'lianj',
+        component: () => import('@/views/traffic'),
+        name: 'lianj',
+        redirect: '/traffic/lianj/lianjList',
+        meta: {
+          title: '测试',
+          roles: ['admin', 'editor'] // or you can only set roles in sub nav
+        },
+        children: [
+          {
+            path: 'lianjList',
+            component: () => import('@/views/traffic/test2'),
+            name: 'lianjList',
+            meta: {
+              title: '外链测试',
+              roles: ['admin', 'editor'] // or you can only set roles in sub nav
+            }
+          }
+        ]
+      },
+      {
+        path: 'biaoqin',
+        component: () => import('@/views/traffic'),
+        name: 'biaoqin',
+        redirect: '/traffic/biaoqin/biaoqinList',
+        meta: {
+          title: '测试',
+          roles: ['admin', 'editor'] // or you can only set roles in sub nav
+        },
+        children: [
+          {
+            path: 'biaoqinList',
+            component: () => import('@/views/traffic/test3'),
+            name: 'biaoqinList',
+            meta: {
+              title: '表情包测试',
               roles: ['admin', 'editor'] // or you can only set roles in sub nav
             }
           }
