@@ -85,16 +85,18 @@ export default {
   .postsRank-container{
     padding: 15px;
     box-shadow: 2px 1px 2px 2px #ddd;
+    margin-top: 2px;
     ul{
-      margin-top:20px;
+      margin-top:10px;
       li{
         display: flex;
         border-bottom: 1px solid #ddd;
         padding: 10px;
+        cursor: pointer;
         .list-content{
           padding: 0 10px;
           p{
-            padding: 6px 0;
+            padding: 4px 0;
             font-size: 15px;
           }
           .list-content-head{

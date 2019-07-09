@@ -4,9 +4,13 @@
       <div style="width:45%;border:1px solid #ddd;height:500px;overflow-y:scroll;">
         <div style="background-color:#eee;padding:6px 8px;">
           <el-checkbox v-model="rightFlag" :indeterminate="indeterminateRight">未选菜单</el-checkbox>
+          <el-input placeholder="请输入内容" prefix-icon="el-icon-search" />
         </div>
         <div v-for="(item,index) in datar" :key="index" style="padding:6px 8px;">
-          <el-checkbox v-model="item.select" @change="oneMenu(item)">{{ item.menuName }} => {{ item.name }}</el-checkbox>
+          <el-checkbox
+            v-model="item.select"
+            @change="oneMenu(item)"
+          >{{ item.menuName }} => {{ item.name }}</el-checkbox>
           <!-- <template v-if="item.children">
             <div
               v-for="(tim,index2) in item.children"
@@ -15,7 +19,7 @@
             >
               <el-checkbox v-model="tim.select" @change="twoMenu(item)">{{ tim.name }}</el-checkbox>
             </div>
-          </template> -->
+          </template>-->
         </div>
       </div>
       <div style="width:10%;display:flex;align-items:center;justify-content:center;">
@@ -43,9 +47,13 @@
       <div style="width:45%;border:1px solid #ddd;height:500px;overflow-y:scroll;">
         <div style="background-color:#eee;padding:6px 8px;">
           <el-checkbox v-model="leftFlag" :indeterminate="indeterminateLeft">已选菜单</el-checkbox>
+          <el-input placeholder="请输入内容" prefix-icon="el-icon-search" />
         </div>
         <div v-for="(item,index) in datal" :key="index" style="padding:6px 8px;">
-          <el-checkbox v-model="item.select" @change="oneMenu(item)">{{ item.menuName }} => {{ item.name }}</el-checkbox>
+          <el-checkbox
+            v-model="item.select"
+            @change="oneMenu(item)"
+          >{{ item.menuName }} => {{ item.name }}</el-checkbox>
           <!-- <template v-if="item.children">
             <div
               v-for="(tim,index2) in item.children"
@@ -54,7 +62,7 @@
             >
               <el-checkbox v-model="tim.select" @change="twoMenu(item)">{{ tim.name }}</el-checkbox>
             </div>
-          </template> -->
+          </template>-->
         </div>
       </div>
     </div>
@@ -414,5 +422,7 @@ export default {
 </script>
 
 <style scoped>
-
+.el-dialog--center {
+  width: 50% !important;
+}
 </style>
