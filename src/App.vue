@@ -10,6 +10,13 @@ export default {
 }
 </script>
 <style>
+  p,h1,h2,h3,h4,h5,h6,ul,li{
+    margin: 0;
+    padding: 0;
+  }
+  li{
+    list-style: none;
+  }
   .wt1360{
     width:1360px;
     margin:auto;
