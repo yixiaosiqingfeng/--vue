@@ -14,10 +14,8 @@
       </span>
       <p>更多</p>
     </div>
-    <transition name="fade-transition" mode="out-in">
-      <keep-alive>
-        <component :is="activedIndex" :active-item="activedIndex === 'ShowStatList' ? '':activeItem" />
-      </keep-alive>
+    <transition name="fade-transform" mode="out-in">
+      <component :is="activedIndex" :active-item="activedIndex === 'ShowStatList' ? '':activeItem" />
     </transition>
     <div class="show-con-new">
       <ul>

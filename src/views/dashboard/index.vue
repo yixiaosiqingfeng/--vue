@@ -35,7 +35,7 @@ export default {
 @import "../../styles/index.scss";
   .dashboard-container{
     overflow-y:scroll;
-    height: 100%;
+    height: calc(100vh - 51px);
     display: flex;
     justify-content: space-between;
     .con-left{
