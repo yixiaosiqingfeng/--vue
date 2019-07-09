@@ -289,17 +289,7 @@ export default {
         organization: []
       },
       // 修改提交后台创建表单的数据
-      crearForm1: {
-        note: '', // String,备注（选填）
-        name: '', // String,功能名
-        serviceUrl: '', // String,接口地址http://www.gdyunst.com/jqzy/xxxx
-        code: '', // String,功能编码
-        menuId: '', // String,菜单id
-        menuUrl: '', // String,菜单路径
-        indexOrder: '', // int,排序字段（选填）
-        id: '', // String,功能id(必填)
-        organization: []
-      },
+
       // 表单的验证方法
       rules: {
         organization: [
@@ -320,6 +310,7 @@ export default {
           this.modForm[a] = obj[a]
         }
       }
+      console.log(obj)
       this.modForm.organization = [obj.menuId]
       this.dialogVisible1 = true
     },
@@ -456,10 +447,10 @@ export default {
     },
     // 修改功能
     modifyForm(formName) {
+      console.log(this.modForm)
       this.judgeMenu_up()
       // console.log(this.crearForm,'我是上传信息')
       // 表单处理
-      this.changedata()
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$confirm('确定修改该功能?', '提示', {
@@ -471,7 +462,7 @@ export default {
               // const data = this.modForm;
               const obj = {
                 code: 2272,
-                data: this.crearForm1
+                data: this.modForm
               }
               updateFunc(obj).then(res => {
                 if (res.errorCode === 0 && res.success === true) {
@@ -537,9 +528,6 @@ export default {
     judgeMenu_up() {
       if (this.modForm.organization === undefined) {
         return
-      } else {
-        const num = this.modForm.organization.length
-        this.crearForm1.id = this.modForm.organization[num - 1]
       }
     },
     // 提交数据提交处理方法
@@ -550,17 +538,9 @@ export default {
       this.crearForm.code = this.ruleForm.code
       this.crearForm.menuUrl = this.ruleForm.menuUrl
       this.crearForm.indexOrder = this.ruleForm.indexOrder
-    },
-    // 更改数据提交处理方法
-    changedata() {
-      this.crearForm1.menuId = this.modForm.menuId
-      this.crearForm1.name = this.modForm.name
-      this.crearForm1.note = this.modForm.note
-      this.crearForm1.serviceUrl = this.modForm.serviceUrl
-      this.crearForm1.code = this.modForm.code
-      this.crearForm1.menuUrl = this.modForm.menuUrl
-      this.crearForm1.indexOrder = this.modForm.indexOrder
     }
+    // 更改数据提交处理方法
+
   }
 }
 </script>
