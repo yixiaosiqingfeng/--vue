@@ -38,6 +38,7 @@ export default {
     height: 100%;
     display: flex;
     justify-content: space-between;
+    height: calc(100vh - 51px);
     .con-left{
       width: 69%;
       display: flex;

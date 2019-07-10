@@ -1,7 +1,7 @@
 <template>
   <div class="todolish-container">
     <div class="todolish-con-title">
-      <h5>代办事项</h5>
+      <p class="ft18 fw">代办事项</p>
       <p>
         <a>更新时间：2019-06-15  12：00</a>
         <span class="iconfont icon-shuaxin" />
@@ -44,7 +44,7 @@ export default {
 </script>
 <style scoped lang="scss">
   .todolish-container{
-    margin: 15px 0;
+    margin: 10px 0 0 0;
     box-shadow: 2px 2px 2px 2px #ddd;
     padding: 15px 10px;
     .todolish-con-title{

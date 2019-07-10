@@ -1,7 +1,7 @@
 <template>
   <div class="topicHeat-container">
     <div class="topHeat-con-title">
-      <h5>话题热度</h5>
+      <p class="ft18 fw">话题热度</p>
       <a>更多</a>
     </div>
     <ul>

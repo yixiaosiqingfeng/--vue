@@ -32,9 +32,11 @@ export default {
 <style scoped lang="scss">
   .weather-container{
 	box-shadow: 2px 1px 2px 2px #ddd;
-	padding: 13px 10px;
+	height: 40px;
+	padding: 0 10px;
+	box-sizing: border-box;
 	display: flex;
-	align-items: center;
+	line-height: 40px;
 	justify-content: space-between;
 	font-size: 13px;
 	.weather-con-left{

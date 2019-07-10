@@ -1,6 +1,6 @@
 <template>
   <div class="postsRank-container">
-    <h5>帖子排名</h5>
+    <p class="ft18 fw">帖子排名</p>
     <div class="infinite-list-wrapper">
       <ul
         v-infinite-scroll="load"

@@ -24,6 +24,12 @@ export default {
   body {
     font-size: 14px;
   }
+  .ft18{
+    font-size: 18px;
+  }
+  .fw{
+    font-weight: bold;
+  }
   .tac{
     text-align:center;
   }

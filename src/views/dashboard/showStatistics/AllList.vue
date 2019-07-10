@@ -55,7 +55,7 @@
         </ul>
       </div>
       <div class="enter-icon">
-        <p> > </p>
+        <span class="iconfont icon-right" />
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="showStatistics-container">
     <div class="show-con-title">
-      <h5>节目统计</h5>
+      <p class="ft18 fw">节目统计</p>
       <p>
         <a>更新时间：2019-06-15  12：00</a>
         <span class="iconfont icon-shuaxin" />

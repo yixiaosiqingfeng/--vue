@@ -1,5 +1,16 @@
 <template>
   <div class="showStatList-container">
+
+    <!-- <div class="appss">
+  <div ref="msgDiv">{{msg}}</div>
+  <div v-if="msg1">Message got outside $nextTick: {{msg1}}</div>
+  <div v-if="msg2">Message got inside $nextTick: {{msg2}}</div>
+  <div v-if="msg3">Message got outside $nextTick: {{msg3}}</div>
+  <button @click="changeMsg">
+    Change the Message
+  </button>
+</div> -->
+
     <div class="show-con-date">
       <div class="times">
         <span>今日</span>
@@ -55,7 +66,7 @@
         </ul>
       </div>
       <div class="enter-icon">
-        <p> > </p>
+        <span class="iconfont icon-right" />
       </div>
     </div>
   </div>
@@ -69,12 +80,15 @@ export default {
   data() {
     return {
       getItem: ''
+      // msg: 'Hello Vue.',
+      // msg1: '',
+      // msg2: '',
+      // msg3: ''
     }
   },
   watch: {
     activeItem(newValue, oldValue) {
       this.getItem = newValue
-      // console.log('this.getItem',this.getItem);
     }
   },
   created() {
@@ -82,6 +96,14 @@ export default {
     console.log('getItem', this.getItem)
   },
   methods: {
+    // changeMsg() {
+    //   this.msg = "Hello world."
+    //   this.msg1 = this.$refs.msgDiv.innerHTML
+    //   this.$nextTick(() => {
+    //     this.msg2 = this.$refs.msgDiv.innerHTML
+    //   })
+    //   this.msg3 = this.$refs.msgDiv.innerHTML
+    // }
   }
 }
 </script>
@@ -158,17 +180,17 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        p{
-          width: 22px;
-          height: 22px;
-          border: 1px solid #ccc;
-          color: #888;
-          border-radius: 50%;
-          text-align: center;
-          line-height: 22px;
-          box-shadow: 3px 3px 3px 1px #ddd;
-           cursor: pointer;
-        }
+        // p{
+        //   width: 22px;
+        //   height: 22px;
+        //   border: 1px solid #ccc;
+        //   color: #888;
+        //   border-radius: 50%;
+        //   text-align: center;
+        //   line-height: 22px;
+        //   box-shadow: 3px 3px 3px 1px #ddd;
+        //   cursor: pointer;
+        // }
       }
     }
   }

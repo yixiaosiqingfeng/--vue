@@ -1,7 +1,7 @@
 <template>
   <div class="dataStatistics-container">
     <div class="dataStatistics-con-title">
-      <h5>数据统计</h5>
+      <p class="ft18 fw">数据统计</p>
       <p>
         <a>更新时间：2019-06-15  12：00</a>
         <span class="iconfont icon-shuaxin" />
@@ -19,7 +19,7 @@
         </li>
       </ul>
       <div class="enter-icon">
-        <p> > </p>
+        <span class="iconfont icon-right" />
       </div>
     </div>
   </div>
@@ -46,9 +46,11 @@ export default {
 </script>
 <style scoped lang="scss">
   .dataStatistics-container{
+    height: 156px;
 		margin: 15px 0;
 		box-shadow: 2px 2px 2px 2px #ddd;
 		padding: 15px 10px;
+    box-sizing: border-box;
     .dataStatistics-con-title{
 			display: flex;
       justify-content: space-between;
@@ -95,17 +97,6 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        p{
-            width: 22px;
-            height: 22px;
-            border: 1px solid #ccc;
-            color: #888;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 22px;
-            box-shadow: 3px 3px 3px 1px #ddd;
-            cursor: pointer;
-        }
       }
 		}
   }
