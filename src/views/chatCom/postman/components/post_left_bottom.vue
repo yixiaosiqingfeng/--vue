@@ -24,12 +24,14 @@ export default {
 </script>
 <style scoped>
 .left_my {
+  height: calc(100vh - 283px);
   margin-top: 10px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 2px 2px #eee;
   border: 1px solid #ccc;
   padding-left: 2px;
 }
 .left_my >>> .el-tabs__item {
   padding: 0 10px;
+
 }
 </style>

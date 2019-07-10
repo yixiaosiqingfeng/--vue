@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style>
     <div>
       <div
         ref="biaoqingBox"
@@ -38,9 +38,13 @@
               <i class="iconfont icon-lianjie" />&nbsp;
               <span>链接</span>
             </li>
+            <li @click="ptsta()">
+              <i class="iconfont icon-huati" />
+              <span>话题</span>
+            </li>
           </ul>
         </div>
-        <div style="width:18%;">
+        <div style="width:18%;margin-bottom: 3px;">
           <el-dropdown>
             <span class="el-dropdown-link">
               <i class="el-icon-edit" />
@@ -53,7 +57,7 @@
               <el-dropdown-item>昵称三</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-button type="primary" size="mini">发布</el-button>
+          <el-button type="primary" size="mini" @click="submit">发布</el-button>
         </div>
       </div>
       <div style="position:relative;" @click.stop="biaoqing=1">
@@ -70,17 +74,22 @@
         </div>
       </div>
     </div>
+    <!-- 控制图片 -->
     <div v-show="pfFlag" class="post_pt">
       <postPhoto />
     </div>
-
+    <!-- 控制话题 -->
+    <div v-show="ptFlag" class="post_pt">
+      <posttopic />
+    </div>
   </div>
 </template>
 <script>
 import postPhoto from './post_photo'
+import posttopic from './post_topic'
 export default {
   name: 'EditDiv',
-  components: { postPhoto },
+  components: { postPhoto, posttopic },
   props: {
     value: {
       type: String,
@@ -95,6 +104,8 @@ export default {
     return {
       // 添加图片控制
       pfFlag: false,
+      // 选择话题控制
+      ptFlag: false,
       innerText: this.value,
       isLocked: false,
       biaoqing: false,
@@ -170,7 +181,23 @@ export default {
       this.$emit('input', this.$refs.biaoqingBox.innerHTML)
     },
     getSrc(src) {
-      this.$refs.biaoqingBox.innerHTML += '<img src="' + src + '">'
+      const str = this.$refs.biaoqingBox.innerHTML
+      const isDiv = str.slice(str.length - 6, str.length)
+      const newStr = str.substring(0, str.length - 6)
+      const isBr = newStr.slice(newStr.length - 4, newStr.length)
+      const newStr2 = newStr.substring(0, newStr.length - 4)
+      if (isDiv === '</div>') {
+        if (isBr === '<br>') {
+          this.$refs.biaoqingBox.innerHTML =
+            newStr2 + '<img src="' + src + '">' + isDiv
+        } else {
+          this.$refs.biaoqingBox.innerHTML =
+            newStr + '<img src="' + src + '">' + isDiv
+        }
+      } else {
+        this.$refs.biaoqingBox.innerHTML += '<img src="' + src + '">'
+      }
+      this.$emit('input', this.$refs.biaoqingBox.innerHTML)
     },
     biaoqnFn() {
       if (this.biaoqing === 1) {
@@ -181,8 +208,14 @@ export default {
         this.biaoqing = 1
       }
     },
+    submit() {
+      this.$emit('submit')
+    },
     phsta() {
       this.pfFlag = !this.pfFlag
+    },
+    ptsta() {
+      this.ptFlag = !this.ptFlag
     }
   }
 }
@@ -243,12 +276,12 @@ export default {
 }
 
 .open {
-  animation: strat 0.5s;
+  animation: strat 0.1s;
   animation-fill-mode: forwards;
 }
 
 .hidden {
-  animation: end 0.5s;
+  animation: end 0.1s;
   animation-fill-mode: forwards;
 }
 @keyframes strat {
@@ -284,7 +317,7 @@ export default {
   justify-content: space-between;
   margin-top: -10px;
 }
-.post_pt{
+.post_pt {
   position: absolute;
   background-color: #fff;
   z-index: 9;
