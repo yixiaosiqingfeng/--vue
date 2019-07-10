@@ -310,7 +310,7 @@ export default {
           this.modForm[a] = obj[a]
         }
       }
-      console.log(obj)
+      // console.log(obj)
       this.modForm.organization = [obj.menuId]
       this.dialogVisible1 = true
     },

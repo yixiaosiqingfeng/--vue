@@ -6,154 +6,331 @@
     <div>
       <p>共找到22条数据</p>
     </div>
-    <!-- 分类列表表格 -->
-    <tableAss :table-config="tableConfig" :path="path" :query-data="queryData" :target="flag">
-      <template slot="footer" slot-scope="scope">
-        <div style="display:flex;">
-          <el-button size="medium" type="text" @click="modifyFn(scope.row)">修改</el-button>
-          <el-button size="medium" type="text" @click="deleteFunc(scope.row)">删除</el-button>
-        </div>
-      </template>
-    </tableAss>
-    <!-- 分类列表添加ul -->
-    <!-- <div class="add">
-      <transition name="slide">
-        <table class="tb" v-if="isVisible">
-          <tr>
-            <th>分类图片</th>
-            <th>名称</th>
-            <th>备注</th>
-            <th>操作</th>
-          </tr>
-          <tr>
-            <td style="width: 200px"><el-button slot="reference">上传图片</el-button></td>
-            <td style="width: 200px">
-              <el-input placeholder="请输入名称" style="width: 100%"></el-input>
-            </td>
-            <td style="width: 700px">
-              <el-input placeholder="请输入备注" style="width: 100%"></el-input>
-            </td>
-            <td>
-              <el-button size="mini" type="primary" @click="submitCreatfica()">发布</el-button>
-            </td>
-          </tr>
-        </table>
-      </transition>
-    </div> -->
 
+    <!-- 分类列表表格显示 -->
+    <div id="app">
+      <el-row>
+        <el-col>
+          <div class="el-table-add-row" style="width: 100%;" @click="addMasterUser()">
+            <span>+ 添加</span>
+          </div>
+        </el-col>
+        <el-col>
+          <el-table
+            size="mini"
+            :data="master_user.data"
+            border
+            style="width: 100%"
+            highlight-current-row
+          >
+            <el-table-column type="index" />
+
+            <el-table-column
+              v-for="(v,i) in master_user.columns"
+              :key="i"
+              :prop="v.field"
+              :label="v.title"
+              :width="v.width"
+            >
+              <template slot-scope="scope">
+                <span v-if="scope.row.isSet">
+
+                  <!-- <el-upload
+                      class="upload-demo"
+                      action="https://jsonplaceholder.typicode.com/posts/"
+                      multiple
+                    > -->
+
+                  <!-- <img
+                        v-if="master_user.data[scope.$index].img"
+                        :src="master_user.data[scope.index].img"
+                        class="avatar avatar-uploader-icon"
+                        @click="handleEdit(scope.$index,scope.row)"
+                      /> -->
+
+                  <!-- <el-button size="small" type="primary">点击上传</el-button>
+                    </el-upload> -->
+
+                  <el-input v-model="master_user.sel[v.field]" size="mini" placeholder="请输入内容" />
+
+                </span>
+                <span v-else>{{ scope.row[v.field] }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="100">
+              <template slot-scope="scope">
+                <span
+                  class="el-tag el-tag--info el-tag--mini"
+                  style="cursor: pointer;"
+                  @click="operatingFun(scope.row,scope.$index,true)"
+                >{{ scope.row.isSet?'保存':"修改" }}</span>
+                <span
+                  v-if="!scope.row.isSet"
+                  class="el-tag el-tag--danger el-tag--mini"
+                  style="cursor: pointer;"
+                  @click="delfica(scope.row)"
+                >删除</span>
+                <span
+                  v-else
+                  class="el-tag el-tag--mini"
+                  style="cursor: pointer;"
+                  @click="operatingFun(scope.row,scope.$index,false)"
+                >取消</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
 <script>
 import ficaHeader from './compontents/fica_header'
-import tableAss from '@/components/tableAss'
-// import { getAllPrivilege } from '@/api/rights'
+import {
+  addCategory,
+  categoryList,
+  delCategory,
+  updateCategory
+} from '@/api/fica'
 export default {
-  components: { tableAss, ficaHeader },
+  components: { ficaHeader },
+
   data() {
+    // id生成工具 这个不用看 示例而已 模拟后台返回的id
+    // var generateId = {
+    //   _count: 1,
+    //   get() {
+    //     return +new Date() + "_" + this._count++;
+    //   }
+    // };
     return {
-      // 表格的配置参数
-      tableConfig: [
-        // {
-        //   width: 36,
-        //   type: 'selection'
-        // },
-        {
-          label: '序号',
-          width: 50,
-          type: 'index'
-        },
-        {
-          width: 120,
-          label: '分类图片' // （非必填）
-          // prop: 'menuName',
-          // character: null // 字符转义函数
-        },
-        {
-          width: 120,
-          label: '分类名称' // （必填）
-          // prop: 'name',
-          // character: null // 字符转义函数
-        },
+      master_user: {
+        sel: null, // 选中行
+        columns: [
+          { field: 'imgPath', title: '分类图片', width: 120 },
+          { field: 'name', title: '分类名称', width: 120 },
+          { field: 'topicCount', title: '话题数', width: 120 },
+          { field: 'createrId', title: '创建人', width: 120 },
+          { field: 'createDate', title: '创建时间', width: 120 },
+          { field: 'note', title: '备注' }
+        ],
+        data: []
 
-        {
-          width: 160,
-          label: '话题数',
-          prop: 'createDate'
-          // popup: true,
-          // character: null //字符转义函数
-        },
-        {
-          width: 160,
-          label: '创建人',
-          prop: 'createDate'
-          // popup: true,
-          // character: null //字符转义函数
-        },
-        {
-          width: 160,
-          label: '创建时间',
-          prop: 'createDate'
-          // popup: true,
-          // character: null //字符转义函数
-        },
-        {
-          width: 250,
-          label: '备注' // （非必填）
-          // prop: 'code'
-          // character: null,      //字符转义函数
-        },
-        {
-          label: '操作',
-          prop: 'name',
-          type: 'btn'
-        }
-      ],
-      // 列表请求参数
-      queryData: {
-        data: {
-          // depNo: '',
-          // createTime: '',
-          // depName: '',
-          // depAdmin: '',
-          // sort: '',
-          // orgId: ''
-        },
-        limit: 10,
-        page: 1,
-        code: 2274
-      },
-      // 更新数据改变他的值就可以了
-      flag: false,
-      // 列表查询请求的路径
-      path: '/admin_auth/select_menu_func_v1'
-      // isVisible: false,
-      // visible:false,
-
+      }
     }
   },
+  mounted() {
+    this.getficaList() // 初始化获取分类管理列表
+  },
   methods: {
-    // 新建分类
 
+    // 表格数据获取列表
+    getficaList() {
+      const b = {
+        code: 2286,
+        data: {},
+        page: 1,
+        limit: 15
+      }
+      categoryList(b).then(res => {
+        if (res.errorCode === 0 && res.success === true) {
+          // console.log(res.data);
+          const list = res.data
+          this.master_user.data = list
+        } else {
+          this.$message.error('获取失败' + res.msg)
+        }
+      })
+    },
+    // 读取表格数据
+    readMasterUser() {
+      // 根据实际情况，自己改下啊
+      this.master_user.data.map(i => {
+        // i.id = generateId.get(); //模拟后台插入成功后有了id
+        i.isSet = false // 给后台返回数据添加`isSet`标识
+        return i
+      })
+    },
+    // 添加分类
+    addMasterUser() {
+      for (const i of this.master_user.data) {
+        if (i.isSet) return this.$message.warning('请先保存当前编辑项')
+      }
+
+      const j = {
+        id: 0,
+        topicCategoryPath: '',
+        name: '',
+        topicCount: '',
+        createrId: '',
+        createDate: '',
+        note: '',
+        isSet: true,
+        _temporary: true
+      }
+
+      this.master_user.data.unshift(j)
+      this.master_user.sel = JSON.parse(JSON.stringify(j))
+
+      // this.isVisible =true;
+    },
+    // 修改
+    operatingFun(row, index, cg) {
+      // 点击修改 判断是否已经保存所有操作
+      for (const i of this.master_user.data) {
+        if (i.isSet && i.id !== row.id) {
+          this.$message.warning('请先保存当前编辑项')
+          return false
+        }
+      }
+      // 是否是取消操作
+      if (!cg) {
+        if (!this.master_user.sel.id) this.master_user.data.splice(index, 1)
+        return (row.isSet = !row.isSet)
+      }
+      // 新增提交数据
+      if (row.isSet) {
+        // 项目是模拟请求操作  自己修改下
+        // (function() {
+        //   let data = JSON.parse(JSON.stringify(this.master_user.sel));
+        //   for (let k in data) row[k] = data[k];
+        //   app.$message({
+        //     type: "success",
+        //     message: "保存成功!"
+        //   });
+        //   //然后这边重新读取表格数据
+        //   app.readMasterUser();
+        //   row.isSet = false;
+        // })();
+        //  console.log(row.id)
+        //  console.log(666)
+        const data1 = JSON.parse(JSON.stringify(this.master_user.sel))
+        // for (let k in data) row[k] = data[k];
+        const obj = {
+          data: data1,
+          code: 2289
+        }
+        addCategory(obj).then(res => {
+          if (res.errorCode === 0 && res.success === true) {
+            // this.flag = !this.flag
+            // this.dialogVisible = false
+            // console.log(res.data);
+            this.$message({
+              type: 'success',
+              message: '修改成功!'
+            })
+            // this.resetForm('ruleForm')
+            // 然后这边重新读取表格数据
+            this.getficaList()
+            row.isSet = false
+          } else {
+            this.$message.error('修改失败' + res.msg)
+          }
+        })
+      } else {
+        this.master_user.sel = JSON.parse(JSON.stringify(row))
+        row.isSet = true
+      }
+
+      // 修改提交数据
+      if (row.id && row.id.length > 0) {
+        // console.log(row.id)
+        if (row.isSet === '保存') {
+          const data2 = JSON.parse(JSON.stringify(this.master_user.sel))
+          const obj = {
+            data: data2,
+            code: 2288
+          }
+          updateCategory(obj).then(res => {
+            if (res.errorCode === 0 && res.success === true) {
+              // this.flag = !this.flag
+              // this.dialogVisible = false
+              // console.log(res.data);
+              this.$message({
+                type: 'success',
+                message: '创建成功!'
+              })
+              // this.resetForm('ruleForm')
+              // 然后这边重新读取表格数据
+              this.getficaList()
+              row.isSet = false
+            } else {
+              this.$message.error('创建失败' + res.msg)
+            }
+          })
+        }
+      }
+    },
+    // 删除
+    delfica(obj) {
+      this.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          const data1 = {
+            code: 2287,
+            data: {
+              id: obj.id
+            }
+          }
+          delCategory(data1).then(res => {
+            if (res.errorCode === 0 && res.success === true) {
+              // console.log(666)
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.flag = !this.flag
+            } else {
+              this.$message.error('删除失败' + res.msg)
+            }
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    }
   }
 }
 </script>
 
-<style scoped>
-/* .tb {
-  border-collapse: collapse;
-  width: 100%;
-  border: 1px solid #dfe6ec;
-  background: #fff;
-  position: absolute;
-  top: 129px;
-  left: 0;
-}
+  <style scoped>
+  .el-table-add-row {
+    margin-top: 10px;
+    width: 100%;
+    height: 34px;
+    border: 1px dashed #c1c1cd;
+    border-radius: 3px;
+    cursor: pointer;
+    justify-content: center;
+    display: flex;
+    line-height: 34px;
+  }
 
-.tb td,
-.tb th {
-  padding: 5px;
-  text-align: center;
-  border: 1px solid #dfe6ec !important;
-} */
-</style>
+  .tb {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #dfe6ec;
+    background: #fff;
+    position: absolute;
+    top: 129px;
+    left: 0;
+  }
+
+  .tb td,
+  .tb th {
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #dfe6ec !important;
+  }
+  </style>
