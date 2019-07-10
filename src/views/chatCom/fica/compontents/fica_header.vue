@@ -51,7 +51,7 @@
     </div>
     <!-- 分类列表Popover 弹出框 -->
 
-    <div style="width:500px; float:right; display:flex;flex-wrap:wrap;">
+    <!-- <div style="width:500px; float:right; display:flex;flex-wrap:wrap;">
 
       <el-popover v-model="visible" placement="bottom" width="700" popper-class="animate">
         <el-upload
@@ -79,7 +79,7 @@
         <el-button slot="reference">+新建</el-button>
       </el-popover>
 
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -91,8 +91,8 @@ export default {
         // code: '', // 功能编码
         // menuId: '',
         // visible: false,
-      },
-      visible: false
+      }
+    //   visible: false
     }
   },
   methods: {
