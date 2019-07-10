@@ -15,9 +15,6 @@
 import topicTable from './components/topic_table.vue'
 import topicCensus from './components/topic_census.vue'
 import topicMine from './components/topic_mine.vue'
-import {
-  topic
-} from '@/api/topic.js'
 
 export default {
   name: 'Index',
@@ -41,20 +38,6 @@ export default {
     }, false)
   },
 
-  created() {
-    const data = {
-      data: {
-        name: ''
-      },
-      limit: 10,
-      page: 1,
-      code: '2286'
-    }
-    topic(data).then(res => {
-      console.log(res)
-    })
-  },
-
   methods: {
     // 子组件用于改变父组件中的showCreate
     changeStatus(status) {
@@ -68,6 +51,5 @@ export default {
 	.content {
 		display: flex;
 		padding-top: 15px;
-		/* justify-content: space-around; */
 	}
 </style>

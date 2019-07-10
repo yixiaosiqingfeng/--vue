@@ -9,7 +9,7 @@ const service = axios.create({
   baseURL: 'http://192.168.0.19:8084', // 宇驰
   // baseURL: 'http://192.168.0.14:8084', // 帅哥
   // baseURL: 'http://192.168.0.18:8084', // 胡超
-  //  baseURL: 'http://192.168.0.17:8084', // 展鹏
+  // baseURL: 'http://192.168.0.17:8084', // 展鹏
   // baseURL: 'http://192.168.0.254:8084', // 服务器
   timeout: 5000 // request timeout
 })
