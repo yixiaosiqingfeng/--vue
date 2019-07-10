@@ -9,7 +9,8 @@ const state = {
   avatar: '',
   introduction: '',
   muneRoles: null,
-  roles: []
+  roles: [],
+  userInFo: null
 }
 
 const mutations = {
@@ -19,8 +20,8 @@ const mutations = {
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
   },
-  SET_NAME: (state, name) => {
-    state.name = name
+  SET_USERINFO: (state, userInFo) => {
+    state.userInFo = userInFo
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
@@ -44,13 +45,11 @@ const actions = {
           if (!data) {
             reject()
           } else {
-            console.log(777)
             commit('SET_TOKEN', data)
             setToken(data)
             resolve()
           }
         } else {
-          console.log(666)
           reject(response.msg)
         }
       }).catch(error => {
@@ -75,6 +74,7 @@ const actions = {
           return
         }
         commit('SET_MUNEROLES', menus)
+        commit('SET_USERINFO', data.employee)
         resolve(menus)
       }).catch(error => {
         reject(error)
