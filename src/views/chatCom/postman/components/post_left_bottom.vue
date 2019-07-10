@@ -24,9 +24,9 @@ export default {
 </script>
 <style scoped>
 .left_my {
-  height: calc(100vh - 283px);
+  height: calc(100vh - 350px);
   margin-top: 10px;
-  box-shadow: 2px 2px 2px 2px #eee;
+  box-shadow:0 0 15px #eee;
   border: 1px solid #ccc;
   padding-left: 2px;
 }

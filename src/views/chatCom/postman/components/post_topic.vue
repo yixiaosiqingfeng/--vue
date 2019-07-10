@@ -10,7 +10,8 @@
     <div>
       <ul>
         <li v-for="item in topicList" :key="item.id" class="topic_list" @click="selection(item.id,item.title)">
-          <span>#{{ item.title }}#</span>
+          <span> <el-tag type="danger">#{{ item.title }}#</el-tag></span>
+
           <span>热度：{{ item.hot }}</span>
         </li>
       </ul>
@@ -23,10 +24,15 @@ export default {
   data() {
     return {
       selectTopic: '',
-      topicList: []
+      topicList: [],
+      topicData: {
+        id: '',
+        title: ''
+      }
     }
   },
   methods: {
+    // 得到话题
     getTopic() {
       const t = {
         code: 2291,
@@ -45,8 +51,9 @@ export default {
       })
     },
     selection(i, t) {
-      console.log(i, t, 9999999)
-      this.$emit('topic', i, t)
+      this.topicData.id = i
+      this.topicData.title = t
+      this.$emit('topic', this.topicData)
     }
   }
 }
@@ -55,7 +62,7 @@ export default {
 .topic_maxbox {
   width: 230px;
   min-height: 100px;
-  background-color: #eee;
+  background-color: #fff;
   text-align: center;
 }
 .topic_input {
