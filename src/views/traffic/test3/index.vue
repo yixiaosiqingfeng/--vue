@@ -20,8 +20,6 @@ export default {
       console.log(11)
     }
   },
-  mounted() {
-  },
   methods: {
     submit() {
       console.log(this.value, 222)
