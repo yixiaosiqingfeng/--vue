@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export function login(data) {
   // const data=obj;
   return request({
-    url: '/admin_public/loginV1',
+    url: '/admin_public/login_v1',
     method: 'post',
     data
   })

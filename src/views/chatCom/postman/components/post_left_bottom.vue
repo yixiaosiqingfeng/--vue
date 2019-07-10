@@ -27,6 +27,7 @@ export default {
   margin-top: 10px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #ccc;
+  padding-left: 2px;
 }
 .left_my >>> .el-tabs__item {
   padding: 0 10px;

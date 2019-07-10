@@ -4,6 +4,7 @@
       ref="biaoqingBox"
       class="edit-div"
       :contenteditable="canEdit"
+      placeholder="分享点好东西"
       @focus="isLocked = true"
       @blur="isLocked = false"
       @input="changeText"
@@ -147,7 +148,7 @@ export default {
   }
 
   .biaoqin_box {
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 0;
     box-shadow: 0 0 10px #eee;
