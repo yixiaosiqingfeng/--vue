@@ -1,16 +1,5 @@
 <template>
   <div class="showStatList-container">
-
-    <!-- <div class="appss">
-  <div ref="msgDiv">{{msg}}</div>
-  <div v-if="msg1">Message got outside $nextTick: {{msg1}}</div>
-  <div v-if="msg2">Message got inside $nextTick: {{msg2}}</div>
-  <div v-if="msg3">Message got outside $nextTick: {{msg3}}</div>
-  <button @click="changeMsg">
-    Change the Message
-  </button>
-</div> -->
-
     <div class="show-con-date">
       <div class="times">
         <span>今日</span>
@@ -18,13 +7,19 @@
         <span>本月</span>
       </div>
       <div class="date">
-        <p>
-          <span>6月17日</span>
-        </p>
+        <el-date-picker
+          v-model="value1"
+          type="date"
+          size="mini"
+          placeholder="选择日期"
+        />
         <span> - </span>
-        <p>
-          <span>6月17日</span>
-        </p>
+        <el-date-picker
+          v-model="value2"
+          type="date"
+          size="mini"
+          placeholder="选择日期"
+        />
       </div>
       <P class="search">搜索</P>
     </div>
@@ -76,14 +71,20 @@
 
 export default {
   name: 'ShowStatList',
-  props: ['activeItem'],
+  props: {
+    activeItem: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   data() {
     return {
-      getItem: ''
-      // msg: 'Hello Vue.',
-      // msg1: '',
-      // msg2: '',
-      // msg3: ''
+      getItem: '', // 接收从父组件传过来的当条数值
+      value1: '', // 日期框
+      value2: '',
+      times: ['']
     }
   },
   watch: {
@@ -93,17 +94,9 @@ export default {
   },
   created() {
     this.getItem = this.activeItem
-    console.log('getItem', this.getItem)
   },
   methods: {
-    // changeMsg() {
-    //   this.msg = "Hello world."
-    //   this.msg1 = this.$refs.msgDiv.innerHTML
-    //   this.$nextTick(() => {
-    //     this.msg2 = this.$refs.msgDiv.innerHTML
-    //   })
-    //   this.msg3 = this.$refs.msgDiv.innerHTML
-    // }
+
   }
 }
 </script>
@@ -116,33 +109,28 @@ export default {
       font-size: 10px;
       .times{
         display: flex;
-        border: 1px solid #ccc;
+        border: 1px solid #ddd;
         cursor: pointer;
         span{
-          padding: 3px 6px;
+          padding: 5px 9px;
         }
         .border{
-          border-left:1px solid #ccc;
-          border-right:1px solid #ccc;
+          border-left:1px solid #ddd;
+          border-right:1px solid #ddd;
         }
       }
       .date{
         display: flex;
         margin: 0 25px;
         align-items: center;
-        p{
-          border: 1px solid #ccc;
-          padding: 2px 4px;
-        }
         span{
-          margin: 0 5px;
-          cursor: pointer;
+          padding: 0 8px;
         }
       }
       .search{
         background: skyblue;
         color: #fff;
-        padding: 3px 10px;
+        padding: 5px 11px;
         cursor: pointer;
       }
     }
@@ -180,17 +168,6 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        // p{
-        //   width: 22px;
-        //   height: 22px;
-        //   border: 1px solid #ccc;
-        //   color: #888;
-        //   border-radius: 50%;
-        //   text-align: center;
-        //   line-height: 22px;
-        //   box-shadow: 3px 3px 3px 1px #ddd;
-        //   cursor: pointer;
-        // }
       }
     }
   }

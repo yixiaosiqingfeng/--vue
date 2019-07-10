@@ -7,13 +7,19 @@
         <span>本月</span>
       </div>
       <div class="date">
-        <p>
-          <span>6月17日</span>
-        </p>
+        <el-date-picker
+          v-model="value1"
+          type="date"
+          size="mini"
+          placeholder="选择日期"
+        />
         <span> - </span>
-        <p>
-          <span>6月17日</span>
-        </p>
+        <el-date-picker
+          v-model="value2"
+          type="date"
+          size="mini"
+          placeholder="选择日期"
+        />
       </div>
       <P class="search">搜索</P>
     </div>
@@ -68,7 +74,9 @@ export default {
     return {
       allData: [
         { id: 0, userNum: 9200, userName: '用户总数', playNum: 1000, playName: '播放总数', upNum: 1400, upNumName: '上升总数', watchNum: 900, watchName: '观看总数', score: '23%', icon: 'iconfont icon-up' }
-      ]
+      ],
+      value1: '',
+      value2: ''
     }
   }
 }
@@ -85,7 +93,7 @@ export default {
         border: 1px solid #ccc;
         cursor: pointer;
         span{
-          padding: 3px 6px;
+          padding: 5px 9px;
         }
         .border{
           border-left:1px solid #ccc;
@@ -96,19 +104,14 @@ export default {
         display: flex;
         margin: 0 25px;
         align-items: center;
-        p{
-          border: 1px solid #ccc;
-          padding: 2px 4px;
-        }
         span{
-          margin: 0 5px;
-          cursor: pointer;
+          padding: 0 8px;
         }
       }
       .search{
         background: skyblue;
         color: #fff;
-        padding: 3px 10px;
+        padding: 5px 10px;
         cursor: pointer;
       }
     }

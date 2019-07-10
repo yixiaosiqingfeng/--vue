@@ -4,7 +4,8 @@
       <p class="ft18 fw">节目统计</p>
       <p>
         <a>更新时间：2019-06-15  12：00</a>
-        <span class="iconfont icon-shuaxin" />
+        <span v-if="!isUpdate" class="iconfont icon-shuaxin" @click="updataShowStetis" />
+        <i v-if="isUpdate" class="el-icon-loading" />
       </p>
     </div>
     <div class="show-con-progress">
@@ -14,7 +15,7 @@
       </span>
       <p>更多</p>
     </div>
-    <transition name="fade-transition" mode="out-in">
+    <transition name="fade-transform" mode="out-in">
       <keep-alive>
         <component :is="activedIndex" :active-item="activedIndex === 'ShowStatList' ? '':activeItem" />
       </keep-alive>
@@ -37,6 +38,7 @@
 <script>
 import ShowStatList from './ShowStatList'
 import AllList from './AllList'
+import { setTimeout } from 'timers'
 
 export default {
   name: 'ShowStatistics',
@@ -55,7 +57,8 @@ export default {
         { id: 4, name: '节目名称', userNum: 5000, userName: '用户总数', playNum: 1900, playName: '播放总数', upNum: 1400, upNumName: '上升总数', watchNum: 900, watchName: '观看总数', score: '11%', icon: 'iconfont icon-up' }
       ],
       activeShowName: 0,
-      activeItem: ''
+      activeItem: '',
+      isUpdate: false
     }
   },
   watch: {
@@ -80,6 +83,12 @@ export default {
           }
         }
       })
+    },
+    updataShowStetis() {
+      this.isUpdate = true
+      setTimeout(() => {
+        this.isUpdate = false
+      }, 300)
     }
   }
 }
@@ -109,19 +118,18 @@ export default {
       font-size: 13px;
       h6{
         color: #666;
-        padding: 5px 22px 6px;
+        padding: 6px 22px 6px;
         border: 1px solid #ccc;
         cursor: pointer;
       }
       .actived-all{
-        background: rgb(199, 197, 197);
+        background: rgb(241, 116, 58);
         color: #fff;
-        padding: 5px 22px 6px;
-        border: 1px solid #ccc;
+        border: 1px solid rgb(241, 116, 58);
         cursor: pointer;
       }
       span{
-        padding: 5px 50px;
+        padding: 6px 46px;
         border: 1px solid #ccc;
         color: #666;
         cursor: pointer;
@@ -129,10 +137,11 @@ export default {
       .actived{
         background: rgb(241, 116, 58);
         color: #fff;
+        border: 1px solid rgb(241, 116, 58);
       }
       p{
         color: #888;
-        padding: 5px 20px;
+        padding: 6px 20px;
         border: 1px solid #ccc;
         cursor: pointer;
       }

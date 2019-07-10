@@ -51,6 +51,8 @@ export default {
     box-shadow: 2px 2px 2px 2px #ddd;
     padding: 12px;
     margin-bottom: 13px;
+    height: 211px;
+    box-sizing: border-box;
     .topHeat-con-title{
       display: flex;
       justify-content: space-between;

@@ -4,7 +4,8 @@
       <p class="ft18 fw">数据统计</p>
       <p>
         <a>更新时间：2019-06-15  12：00</a>
-        <span class="iconfont icon-shuaxin" />
+        <span v-if="!isUpdate" class="iconfont icon-shuaxin" @click="updataDataStetis" />
+        <i v-if="isUpdate" class="el-icon-loading" />
       </p>
     </div>
     <div class="dataStatistics-con-list">
@@ -34,13 +35,20 @@ export default {
       dataList: [
         { id: 1, title: '用户总数', num: 1200, score: '2%', icon: 'iconfont icon-up' }, { id: 2, title: '用户总数', num: 1200, score: '4%', icon: 'iconfont icon-down' },
         { id: 3, title: '用户总数', num: 1200, score: '2%', icon: 'iconfont icon-down' }, { id: 4, title: '用户总数', num: 1200, score: '11%', icon: 'iconfont icon-up' }
-      ]
+      ],
+      isUpdate: false
     }
-  },
-  method: {
   },
   created() {
 
+  },
+  methods: {
+    updataDataStetis() {
+      this.isUpdate = true
+      setTimeout(() => {
+        this.isUpdate = false
+      }, 300)
+    }
   }
 }
 </script>

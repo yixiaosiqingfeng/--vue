@@ -39,6 +39,7 @@ export default {
 	line-height: 40px;
 	justify-content: space-between;
 	font-size: 13px;
+	color: #333;
 	.weather-con-left{
 		display: flex;
 		p{
@@ -54,6 +55,7 @@ export default {
 		}
 		.title-text{
 			padding: 0 15px;
+			color: #333;
 		}
 		a{
 			color: #999;

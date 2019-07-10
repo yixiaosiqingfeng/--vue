@@ -34,18 +34,18 @@ export default {
 <style scoped lang="scss">
 @import "../../styles/index.scss";
   .dashboard-container{
-    overflow-y:scroll;
-    height: 100%;
     display: flex;
     justify-content: space-between;
-    height: calc(100vh - 51px);
+    height: calc(100vh - 53px);
+    overflow-y: scroll;
     .con-left{
-      width: 69%;
+      width: 70%;
       display: flex;
       flex-direction: column;
     }
     .con-right{
-      width: 30%;
+      margin-left: 15px;
+      height: 880px;
       display: flex;
       flex-direction: column;
     }
