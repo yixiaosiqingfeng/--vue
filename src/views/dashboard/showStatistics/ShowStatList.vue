@@ -7,13 +7,19 @@
         <span>本月</span>
       </div>
       <div class="date">
-        <p>
-          <span>6月17日</span>
-        </p>
+        <el-date-picker
+          v-model="value1"
+          type="date"
+          size="mini"
+          placeholder="选择日期"
+        />
         <span> - </span>
-        <p>
-          <span>6月17日</span>
-        </p>
+        <el-date-picker
+          v-model="value2"
+          type="date"
+          size="mini"
+          placeholder="选择日期"
+        />
       </div>
       <P class="search">搜索</P>
     </div>
@@ -55,7 +61,7 @@
         </ul>
       </div>
       <div class="enter-icon">
-        <p> > </p>
+        <span class="iconfont icon-right" />
       </div>
     </div>
   </div>
@@ -65,23 +71,32 @@
 
 export default {
   name: 'ShowStatList',
-  props: ['activeItem'],
+  props: {
+    activeItem: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   data() {
     return {
-      getItem: ''
+      getItem: '', // 接收从父组件传过来的当条数值
+      value1: '', // 日期框
+      value2: '',
+      times: ['']
     }
   },
   watch: {
     activeItem(newValue, oldValue) {
       this.getItem = newValue
-      // console.log('this.getItem',this.getItem);
     }
   },
   created() {
     this.getItem = this.activeItem
-    console.log('getItem', this.getItem)
   },
   methods: {
+
   }
 }
 </script>
@@ -94,33 +109,28 @@ export default {
       font-size: 10px;
       .times{
         display: flex;
-        border: 1px solid #ccc;
+        border: 1px solid #ddd;
         cursor: pointer;
         span{
-          padding: 3px 6px;
+          padding: 5px 9px;
         }
         .border{
-          border-left:1px solid #ccc;
-          border-right:1px solid #ccc;
+          border-left:1px solid #ddd;
+          border-right:1px solid #ddd;
         }
       }
       .date{
         display: flex;
         margin: 0 25px;
         align-items: center;
-        p{
-          border: 1px solid #ccc;
-          padding: 2px 4px;
-        }
         span{
-          margin: 0 5px;
-          cursor: pointer;
+          padding: 0 8px;
         }
       }
       .search{
         background: skyblue;
         color: #fff;
-        padding: 3px 10px;
+        padding: 5px 11px;
         cursor: pointer;
       }
     }
@@ -158,17 +168,6 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        p{
-          width: 22px;
-          height: 22px;
-          border: 1px solid #ccc;
-          color: #888;
-          border-radius: 50%;
-          text-align: center;
-          line-height: 22px;
-          box-shadow: 3px 3px 3px 1px #ddd;
-           cursor: pointer;
-        }
       }
     }
   }

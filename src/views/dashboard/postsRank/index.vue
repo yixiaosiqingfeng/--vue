@@ -1,12 +1,8 @@
 <template>
   <div class="postsRank-container">
-    <h5>帖子排名</h5>
+    <p class="ft18 fw">帖子排名</p>
     <div class="infinite-list-wrapper">
-      <ul
-        v-infinite-scroll="load"
-        class="list"
-        infinite-scroll-disabled="disabled"
-      >
+      <ul>
         <li v-for="item in postRank" :key="item.id" class="infinite-list-item">
           <h4>{{ item.top }}</h4>
           <div class="list-content">
@@ -39,8 +35,6 @@
           </div>
         </li>
       </ul>
-      <p v-if="loading">加载中...</p>
-      <p v-if="noMore">没有更多了</p>
     </div>
   </div>
 </template>
@@ -58,7 +52,12 @@ export default {
         { id: 2, top: 2, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
         { id: 3, top: 3, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
         { id: 4, top: 4, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 5, top: 5, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' }
+        { id: 5, top: 5, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
+        { id: 6, top: 6, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconconconconc', praise: '20', comments: '30', forwarding: '40', img: '' },
+        { id: 7, top: 7, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
+        { id: 8, top: 8, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
+        { id: 9, top: 9, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
+        { id: 10, top: 10, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' }
       ]
     }
   },
@@ -83,9 +82,12 @@ export default {
 </script>
 <style scoped lang="scss">
   .postsRank-container{
-    padding: 15px;
+    margin-top: 3px;
+    padding: 15px 10px;
     box-shadow: 2px 1px 2px 2px #ddd;
-    margin-top: 2px;
+    height: 648px !important;
+    // height: calc( 100vh - 211px);
+    overflow-y: scroll;
     ul{
       margin-top:10px;
       li{

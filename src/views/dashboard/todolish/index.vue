@@ -1,10 +1,11 @@
 <template>
   <div class="todolish-container">
     <div class="todolish-con-title">
-      <h5>代办事项</h5>
+      <p class="ft18 fw">代办事项</p>
       <p>
         <a>更新时间：2019-06-15  12：00</a>
-        <span class="iconfont icon-shuaxin" />
+        <span v-if="!isUpdate" class="iconfont icon-shuaxin" @click="updataTodolist" />
+        <i v-if="isUpdate" class="el-icon-loading" />
       </p>
     </div>
     <ul class="todolish-con-list">
@@ -32,22 +33,33 @@ export default {
         { id: 3, title: '报题审核', name: '', proposer: '申请人', time: '提审时间', reviewer: '张一，张二', status: '待审' },
         { id: 4, title: '报题审核', name: '', proposer: '申请人', time: '提审时间', reviewer: '张一，张二', status: '待审' },
         { id: 5, title: '报题审核', name: '', proposer: '申请人', time: '提审时间', reviewer: '张一，张二', status: '待审' }
-      ]
+      ],
+      isUpdate: false
     }
-  },
-  method: {
   },
   created() {
 
+  },
+  methods: {
+    updataTodolist() {
+      this.isUpdate = true
+      setTimeout(() => {
+        this.isUpdate = false
+      }, 300)
+    }
   }
 }
 </script>
 <style scoped lang="scss">
   .todolish-container{
-    margin: 15px 0;
+    margin: 10px 0 0;
     box-shadow: 2px 2px 2px 2px #ddd;
-    padding: 15px 10px;
+    padding: 10px 10px;
+    height: 249px;
+    // height: calc( 100vh - 622px);
+    // overflow-y: scroll;
     .todolish-con-title{
+      margin-top: 5px;
       display: flex;
       justify-content: space-between;
       p{
