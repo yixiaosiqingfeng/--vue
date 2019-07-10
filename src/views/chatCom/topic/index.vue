@@ -1,5 +1,5 @@
 <template>
-  <div class="content" @click="showCreate = false">
+  <div class="content">
     <!-- 表格部分 -->
     <topicTable :show-create="showCreate" @changeStatus="changeStatus" />
     <div>
@@ -30,6 +30,12 @@ export default {
       // 是否展示新建或编辑框
       showCreate: false
     }
+  },
+
+  mounted() {
+    document.addEventListener('click', () => {
+      this.showCreate = false
+    }, false)
   },
 
   methods: {

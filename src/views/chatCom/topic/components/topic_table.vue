@@ -478,5 +478,7 @@ export default {
 	.avatar {
 		vertical-align: middle;
 		margin: 5px 10px 5px 0;
+		height: 28px;
+		width: 28px;
 	}
 </style>
