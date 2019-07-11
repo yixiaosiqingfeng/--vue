@@ -55,66 +55,73 @@
           <p v-show="isEdit" style="font-size: 18px;margin: 10px;">编辑话题</p>
           <!-- 填写表单 -->
           <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
-            <el-form-item label="分类" prop="classify">
-              <el-dropdown trigger="click" @command="selectClassify">
-                <span class="el-dropdown-link">
-                  {{ ruleForm.classify || '请选择分类' }}<i class="el-icon-arrow-down el-icon--right" />
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="(item, index) in classifyList" :key="index" :command="item">
-                    {{ item.name }}
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
+            <el-form-item label="分类" prop="socialId">
+              <el-select v-model="ruleForm.socialId" placeholder="请选择分类" style="width: 120px;">
+                <el-option v-for="(item, index) in classifyList" :key="index" :label="item.name" :value="item.id" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="话题名称" prop="name">
-              <el-input v-model="ruleForm.name" />
+            <el-form-item label="话题名称" prop="title">
+              <el-input v-model="ruleForm.title" />
             </el-form-item>
-            <el-form-item label="简介" prop="desc">
-              <el-input v-model="ruleForm.desc" type="textarea" />
+            <el-form-item label="简介" prop="intoduce">
+              <el-input v-model="ruleForm.intoduce" type="textarea" />
             </el-form-item>
-            <el-form-item label="时间" required>
+            <el-form-item label="时间">
               <el-col :span="11">
-                <el-form-item prop="startTime">
-                  <el-date-picker v-model="ruleForm.startTime" type="datetime" placeholder="生效时间" style="width: 100%;" />
+                <el-form-item prop="createDate">
+                  <el-date-picker
+                    v-model="ruleForm.createDate"
+                    type="datetime"
+                    placeholder="生效时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    style="width: 100%;"
+                  />
                 </el-form-item>
               </el-col>
               <el-col style="text-align: center;" :span="2">-</el-col>
               <el-col :span="11">
-                <el-form-item prop="endTime">
-                  <el-date-picker v-model="ruleForm.endTime" type="datetime" placeholder="失效时间" style="width: 100%;" />
+                <el-form-item prop="invalidDate">
+                  <el-date-picker
+                    v-model="ruleForm.invalidDate"
+                    type="datetime"
+                    placeholder="失效时间"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    style="width: 100%;"
+                  />
                 </el-form-item>
               </el-col>
             </el-form-item>
-            <el-form-item label="发起人" prop="initiator">
-              <el-avatar size="small" :src="ruleForm.avatar" class="avatar" />
+            <el-form-item label="发起人" prop="ownerName">
+              <el-avatar size="small" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" class="avatar" />
               <el-dropdown trigger="click" style="vertical-align: middle;" @command="selectInitiator">
                 <span class="el-dropdown-link">
-                  {{ ruleForm.initiator || '发起人' }}<i class="el-icon-arrow-down el-icon--right" />
+                  {{ ruleForm.ownerId }}<i class="el-icon-arrow-down el-icon--right" />
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-for="(item, index) in userList" :key="index" :command="item">
-                    <el-avatar size="small" :src="item.avatar" class="avatar" />
-                    {{ item.name }}
+                    <el-avatar size="small" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" class="avatar" />
+                    {{ item.id }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-form-item>
-            <el-form-item label="发帖权限" prop="power">
-              <el-radio-group v-model="ruleForm.power">
-                <el-radio label="10">任何人</el-radio>
-                <el-radio label="20">需关注</el-radio>
+            <el-form-item label="发帖权限" prop="jurisdiction">
+              <el-radio-group v-model="ruleForm.jurisdiction">
+                <el-radio :label="parseInt(10)">任何人</el-radio>
+                <el-radio :label="parseInt(20)">需关注</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="封面图" prop="cover">
+            <el-form-item label="封面图" prop="background">
               <el-upload
                 class="cover-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="http://192.168.0.18:8084/common/upload_v1"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
+                :headers="headers"
+                :data="resData"
               >
-                <img v-if="ruleForm.cover" :src="ruleForm.cover" class="cover">
+                <img v-if="ruleForm.background" :src="ruleForm.background" class="cover">
                 <i v-else class="el-icon-plus cover-uploader-icon" />
               </el-upload>
             </el-form-item>
@@ -128,18 +135,20 @@
         </div>
       </transition>
       <!-- 表格 -->
-      <el-table v-loading="isLoading" :data="tableData" stripe :border="false" height="calc(100vh - 286px)">
+      <!-- height="calc(100vh - 286px)" -->
+      <el-table v-loading="isLoading" :data="tableData" stripe :border="false" :default-sort="{prop: 'createDate', order: 'descending'}">
         <el-table-column label="封面图">
           <template slot-scope="scope">
-            <el-image :src="scope.row.cover" fit="cover" />
+            <el-image :src="scope.row.background" fit="cover" />
+            <el-tag v-show="scope.row.isTop" type="success" size="mini" style="position: absolute;top: 0;right: 0;">置顶</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="话题名称" />
-        <el-table-column prop="initiator" label="发起人" />
-        <el-table-column prop="startDate" label="生效时间" />
-        <el-table-column prop="endDate" label="失效时间" />
-        <el-table-column prop="follow" label="关注数" />
-        <el-table-column prop="comment" label="互动数" />
+        <el-table-column prop="title" label="话题名称" />
+        <el-table-column prop="ownerName" label="发起人" />
+        <el-table-column prop="createDate" label="生效时间" sortable />
+        <el-table-column prop="invalidDate" label="失效时间" />
+        <el-table-column prop="goodClickCount" label="关注数" />
+        <el-table-column prop="commentCount" label="互动数" />
         <el-table-column label="操作">
           <!-- v-show="scope.$index < currentPage*pageSize && scope.$index >= (currentPage-1)*pageSize" -->
           <template slot-scope="scope">
@@ -158,8 +167,16 @@
 
 <script>
 import {
-  topic_select
+  topic_select,
+  topic_add,
+  topic_update,
+  topic_delete,
+  classify_select
 } from '@/api/topic.js'
+
+import {
+  getToken
+} from '@/utils/auth.js'
 
 export default {
   name: 'TopicTable',
@@ -190,200 +207,117 @@ export default {
       screen: '全部',
       // 排序
       sorts: '最新',
-      // 用户列表
-      userList: [{
-        avatar: 'http://img3.imgtn.bdimg.com/it/u=2599515051,2970322804&fm=26&gp=0.jpg',
-        name: '毛泽东'
+      // 上传图片
+      headers: {
+        token: getToken()
       },
-      {
-        avatar: 'http://img3.imgtn.bdimg.com/it/u=1494497637,3585709450&fm=26&gp=0.jpg',
-        name: '周恩来'
-      }
-      ],
+      resData: {
+        type: 1
+      },
+      // 用户列表
+      userList: [],
       // 分类列表
       classifyList: [{
         name: '这个类',
-        id: 123
+        id: '86502a62d5fc4349a0fa2ed93667a7bf'
       }, {
         name: '那个类',
-        id: 456
+        id: '86502a62d5fc4349a0fa2ed93667a7bf'
       }],
       // 表单数据
       ruleForm: {
-        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-        name: '',
-        desc: '',
-        cover: '',
-        startTime: new Date(),
-        endTime: new Date(),
-        startDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
-        endDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
-        initiator: '',
-        classify: '',
-        power: 0,
-        follow: 0,
-        comment: 0
+        background: '',
+        clickCount: '',
+        commentCount: '',
+        createDate: '',
+        createrId: '',
+        forumCount: '',
+        goodClickCount: '',
+        hot: '',
+        id: '',
+        ids: '',
+        intoduce: '',
+        invalidDate: '',
+        isDelete: false,
+        isTop: false,
+        jurisdiction: '',
+        locationName: '',
+        logo: '',
+        note: '',
+        operateDate: '',
+        operaterId: '',
+        ownerId: '',
+        ownerName: '',
+        shareCount: '',
+        socialId: '',
+        title: '',
+        trunCount: ''
       },
       // 表单验证
       rules: {
-        name: [{
+        title: [{
           required: true,
           message: '名称不能为空'
         }],
-        desc: [{
+        intoduce: [{
           required: true,
           message: '简介不能为空'
         }],
-        cover: [{
-          required: true,
+        background: [{
+          required: false,
           message: '请上传封面图'
         }],
-        startTime: [{
-          type: 'date',
-          required: true,
-          message: '请选择时间'
-        }],
-        endTime: [{
-          type: 'date',
-          required: true,
-          message: '请选择时间'
-        }],
-        initiator: [{
-          required: true,
+        // createDate: [{
+        // 	type: 'date',
+        // 	required: false,
+        // 	message: '请选择时间'
+        // }],
+        // invalidDate: [{
+        // 	type: 'date',
+        // 	required: false,
+        // 	message: '请选择时间'
+        // }],
+        ownerName: [{
+          required: false,
           message: '请选择发起人'
         }],
-        classify: [{
+        socialId: [{
           required: true,
           message: '请选择分类'
         }],
-        power: [{
+        jurisdiction: [{
           required: true,
           message: '请选择发帖权限'
         }]
       },
-      // 静态数据
-      tableData: [{
-        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-        cover: 'http://pic29.nipic.com/20130507/8952533_183922555000_2.jpg',
-        name: '话题一',
-        desc: '简介一',
-        initiator: '周伟鹏',
-        startTime: new Date(),
-        endTime: new Date(),
-        startDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
-        endDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
-        classify: 'a类',
-        follow: 0,
-        comment: 0,
-        power: '20'
-      }, {
-        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-        cover: 'http://pic29.nipic.com/20130507/8952533_183922555000_2.jpg',
-        name: '话题二',
-        desc: '简介二',
-        initiator: '周伟鹏',
-        startTime: new Date(),
-        endTime: new Date(),
-        startDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
-        endDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
-        classify: 'b类',
-        follow: 0,
-        comment: 0,
-        power: '10'
-      }, {
-        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-        cover: 'http://pic29.nipic.com/20130507/8952533_183922555000_2.jpg',
-        name: '话题三',
-        desc: '简介三',
-        initiator: '周伟鹏',
-        startTime: new Date(),
-        endTime: new Date(),
-        startDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
-        endDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
-        classify: 'a类',
-        follow: 0,
-        comment: 0,
-        power: '20'
-      }, {
-        avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-        cover: 'http://pic29.nipic.com/20130507/8952533_183922555000_2.jpg',
-        name: '话题四',
-        desc: '简介四',
-        initiator: '周伟鹏',
-        startTime: new Date(),
-        endTime: new Date(),
-        startDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
-        endDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
-        classify: 'a类',
-        follow: 0,
-        comment: 0,
-        power: '10'
-      }]
+      // 话题数据
+      tableData: []
     }
   },
   created() {
-    this.isLoading = true
-    setTimeout(() => {
-      this.isLoading = false
-    }, 500)
+    this.selectTopic(true)
+    this.selectClassify()
+    this.userList.push(this.$store.getters.userInFo)
+    console.log(this.$store.getters.userInFo)
   },
   methods: {
-    // 格式化日期
-    formatDate(time, fmt) {
-      var o = {
-        'M+': time.getMonth() + 1, // 月份
-        'd+': time.getDate(), // 日
-        'h+': time.getHours(), // 小时
-        'm+': time.getMinutes(), // 分
-        's+': time.getSeconds(), // 秒
-        'q+': Math.floor((time.getMonth() + 3) / 3), // 季度
-        'S': time.getMilliseconds() // 毫秒
-      }
-      if (/(y+)/.test(fmt)) {
-        fmt = fmt.replace(RegExp.$1, (time.getFullYear() + '').substr(4 - RegExp.$1.length))
-      }
-      for (var k in o) {
-        if (new RegExp('(' + k + ')').test(fmt)) {
-          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
-        }
-      }
-      return fmt
-    },
     // 提交
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var now = new Date().getTime()
-          var start = this.ruleForm.startTime.getTime()
-          var end = this.ruleForm.endTime.getTime()
-          if (now > start || end <= start) {
-            this.$message('日期格式错误!!')
-            return false
-          }
-          var newData = {
-            name: this.ruleForm.name,
-            desc: this.ruleForm.desc,
-            cover: this.ruleForm.cover,
-            avatar: this.ruleForm.avatar,
-            startTime: this.ruleForm.startTime,
-            endTime: this.ruleForm.endTime,
-            startDate: this.formatDate(this.ruleForm.startTime, 'yyyy-MM-dd'),
-            endDate: this.formatDate(this.ruleForm.endTime, 'yyyy-MM-dd'),
-            initiator: this.ruleForm.initiator,
-            classify: this.ruleForm.classify,
-            power: this.ruleForm.power,
-            follow: this.ruleForm.follow,
-            comment: this.ruleForm.comment
-          }
+          // var now = new Date().getTime()
+          // var start = new Date(this.ruleForm.createDate).getTime()
+          // var end = new Date(this.ruleForm.invalidDate).getTime()
+          // if (now > start || end <= start) {
+          // 	this.$message('日期格式错误!!')
+          // 	return false
+          // }
+          // 编辑
           if (this.isEdit) {
-            for (const i in newData) {
-              this.tableData[this.editIndex][i] = newData[i]
-            }
-            this.isEdit = false
-            this.editIndex = -1
-            this.$emit('changeStatus', false)
+            this.updateTopic()
           } else {
-            this.tableData.push(newData)
+            // 新增
+            this.addTopic()
           }
           this.resetForm('ruleForm', true)
         } else {
@@ -399,10 +333,11 @@ export default {
         this.$emit('changeStatus', false)
       }
     },
-    // 编辑
+    // 进入编辑状态
     handleEdit(index, info) {
       this.editIndex = index
-      for (const i in info) {
+      // this.ruleForm = info
+      for (const i in this.ruleForm) {
         this.ruleForm[i] = info[i]
       }
       this.isEdit = true
@@ -412,20 +347,18 @@ export default {
     handleDelete(index, info) {
       this.$confirm('真的要删除吗？')
         .then(r => {
-          this.tableData.splice(index, 1)
-          this.$message('已删除')
+          this.deleteTopic(info.id)
         })
         .catch(_ => {})
     },
     // 上传的图片路径
     handleAvatarSuccess(res, file) {
-      this.ruleForm.cover = URL.createObjectURL(file.raw)
+      this.ruleForm.background = URL.createObjectURL(file.raw)
     },
     // 图片格式验证
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
       const isLt2M = file.size / 1024 / 1024 < 2
-
       if (!isJPG) {
         this.$message.error('上传封面图片只能是 JPG 格式!')
       }
@@ -436,52 +369,131 @@ export default {
     },
     // 选择发起人
     selectInitiator(item) {
-      this.ruleForm.avatar = item.avatar
-      this.ruleForm.initiator = item.name
+      this.ruleForm.ownerId = item.id
+      this.ruleForm.ownerName = item.username
     },
-    // 选择分类
-    selectClassify(item) {
-      this.ruleForm.classify = item.name
-    },
-    // 搜索话题
-    searchTopic() {
-      if (this.keyWord === '') {
-        return this.$message({
-          showClose: true,
-          message: '关键字为空!',
-          type: 'warning'
-        })
-      }
+    // 查询分类
+    selectClassify() {
       this.isLoading = true
-      const data = {
+      const requestSelect = {
+        data: {},
+        code: '2286'
+      }
+      classify_select(requestSelect).then(res => {
+        if (res.errorCode === 0 && res.success) {
+          this.classifyList = res.data
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 新增话题
+    addTopic() {
+      this.isLoading = true
+      const requestAdd = {
         data: {
-          title: this.keyWord
+          title: this.ruleForm.title,
+          background: this.ruleForm.background,
+          ownerId: this.ruleForm.ownerId,
+          ownerName: this.ruleForm.ownerName,
+          socialId: this.ruleForm.socialId,
+          intoduce: this.ruleForm.intoduce,
+          invalidDate: this.ruleForm.invalidDate,
+          jurisdiction: this.ruleForm.jurisdiction
         },
-        limit: 10,
-        page: 0,
+        code: '2295'
+      }
+      topic_add(requestAdd).then(res => {
+        if (res.errorCode === 0 && res.success) {
+          console.log(res)
+          this.isLoading = false
+          this.$emit('changeStatus', false)
+          this.selectTopic(true)
+          this.$message('已添加！')
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 删除话题
+    deleteTopic(deleteId) {
+      this.isLoading = true
+      const requestDelete = {
+        data: {
+          id: deleteId
+        },
+        code: '2294'
+      }
+      topic_delete(requestDelete).then(res => {
+        if (res.errorCode === 0 && res.success) {
+          console.log(res)
+          this.isLoading = false
+          this.selectTopic(true)
+          this.$message('已删除')
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 修改话题
+    updateTopic() {
+      this.isLoading = true
+      const requestUpdate = {
+        data: {
+          title: this.ruleForm.title,
+          background: this.ruleForm.background,
+          socialId: this.ruleForm.socialId,
+          intoduce: this.ruleForm.intoduce,
+          invalidDate: this.ruleForm.invalidDate,
+          jurisdiction: this.ruleForm.jurisdiction,
+          id: this.ruleForm.id
+        },
+        code: '2293'
+      }
+      topic_update(requestUpdate).then(res => {
+        if (res.errorCode === 0 && res.success) {
+          this.isLoading = false
+          this.isEdit = false
+          this.editIndex = -1
+          this.selectTopic(true)
+          this.$emit('changeStatus', false)
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 查询话题
+    selectTopic(flag) {
+      this.isLoading = true
+      const requestSelect = {
+        data: flag ? {} : {
+          title: this.keyWord.trim()
+        },
+        limit: this.pageSize,
+        page: this.currentPage,
         code: '2291'
       }
-      topic_select(data).then(res => {
+      topic_select(requestSelect).then(res => {
         if (res.errorCode === 0 && res.success) {
           this.tableData = []
-          for (let i = 0; i < res.data.length; i++) {
-            var result = {
-              avatar: res.data[i].background,
-              cover: res.data[i].background,
-              name: res.data[i].title,
-              desc: res.data[i].intoduce,
-              initiator: res.data[i].ownerName,
-              startTime: new Date(res.data[i].createDate),
-              endTime: new Date(res.data[i].operateDate),
-              startDate: this.formatDate(new Date(res.data[i].createDate), 'yyyy-MM-dd'),
-              endDate: this.formatDate(new Date(res.data[i].operateDate), 'yyyy-MM-dd'),
-              classify: res.data[i].socialId,
-              follow: res.data[i].hot,
-              comment: res.data[i].commentCount,
-              power: String(res.data[i].jurisdiction)
-            }
-            this.tableData.push(result)
-          }
+          console.log(res)
+          this.tableData = res.data
           this.isLoading = false
         } else {
           this.$message({
@@ -492,6 +504,14 @@ export default {
         }
       })
     },
+    // 搜索
+    searchTopic() {
+      if (this.keyWord === '' || this.keyWord.trim() === '') {
+        this.selectTopic(true)
+      } else {
+        this.selectTopic()
+      }
+    },
     // 回车搜索
     enterSearch() {
       document.onkeyup = event => {
@@ -500,7 +520,7 @@ export default {
         }
       }
     },
-    // 取消回车
+    // input失去焦点时取消回车
     catchEnter() {
       document.onkeyup = () => {}
     },
@@ -518,10 +538,9 @@ export default {
 
 <style scoped>
 	.content1 {
-		width: 70%;
+		width: 73%;
 		height: calc(100vh - 130px);
 		overflow-y: scroll;
-		margin-left: 15px;
 		box-shadow: 0 0 10px #f0f0f0;
 	}
 

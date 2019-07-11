@@ -51,5 +51,6 @@ export default {
 	.content {
 		display: flex;
 		padding-top: 15px;
+		justify-content: space-between;
 	}
 </style>
