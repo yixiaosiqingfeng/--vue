@@ -35,14 +35,10 @@ export default {
 }
 </script>
 <style scoped>
-p{
-  margin: 0;
-  padding: 0;
-}
 .box{
-  height: 140px;
+  height: 143px;
   border: 1px solid #ccc;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 2px 2px #eee;
   margin-top: 5px;
 }
 .top_header{
@@ -59,5 +55,8 @@ p{
 }
 .top_data>div{
  margin-top: 10px;
+}
+.top_data p{
+  margin-top: 2px;
 }
 </style>

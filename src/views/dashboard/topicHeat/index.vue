@@ -1,7 +1,7 @@
 <template>
   <div class="topicHeat-container">
     <div class="topHeat-con-title">
-      <h5>话题热度</h5>
+      <p class="ft18 fw">话题热度</p>
       <a>更多</a>
     </div>
     <ul>
@@ -51,6 +51,8 @@ export default {
     box-shadow: 2px 2px 2px 2px #ddd;
     padding: 12px;
     margin-bottom: 13px;
+    height: 211px;
+    box-sizing: border-box;
     .topHeat-con-title{
       display: flex;
       justify-content: space-between;

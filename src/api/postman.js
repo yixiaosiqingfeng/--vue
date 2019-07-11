@@ -35,3 +35,12 @@ export function changePost(data) {
     data
   })
 }
+
+// 获取话题列表
+export function addTopic(data) {
+  return request({
+    url: 'admin_auth/select_topic_v1',
+    method: 'post',
+    data
+  })
+}

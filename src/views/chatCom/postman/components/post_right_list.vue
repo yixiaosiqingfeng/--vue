@@ -54,15 +54,18 @@
             <el-dropdown-item>分享数</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+        <el-tooltip class="item" effect="dark" content="升序" placement="top">
+          <span class="iconfont icon-shengjiangxu" style="cursor: pointer;" />
+        </el-tooltip>
 
-        <span class="iconfont icon-shengjiangxu" style="cursor: pointer;" />
       </div>
     </div>
 
     <!-- 帖子 -->
     <div class="right_list_post">
-      <p style="color:#82848a;">共找到{{ listData.length }}条互动，222条评论</p>
-      <div style="overflow-y:auto; overflow-x:hidden; height:600px;">
+      <p style="color:#82848a;margin-bottom:5px;">共找到{{ listData.length }}条互动，222条评论</p>
+      <div style="height:10px;background-color: #FBFBFB;" />
+      <div style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 360px);">
         <div class="infinite-list-wrapper">
           <ul v-infinite-scroll="load" class="list" infinite-scroll-disabled="disabled">
             <li v-for="(i,index) in listData" :key="i.id" :ref="index" class="infinite-list-item">
@@ -142,7 +145,6 @@
               </div>
               <!-- 评论页面 -->
               <postComment style="display: none" />
-              <hr>
             </li>
           </ul>
           <p v-if="loading" style="text-align: center;">加载中...</p>
@@ -154,7 +156,6 @@
 </template>
 <script>
 import postComment from './post_right_comment'
-import { getList } from '../../../../api/postman'
 export default {
   components: {
     postComment
@@ -199,6 +200,7 @@ export default {
   mounted() {
     this.getPostList()
   },
+
   methods: {
     handleIconClick(ev) {
       console.log(ev)
@@ -222,21 +224,16 @@ export default {
     },
     // 获取帖子列表
     getPostList() {
-      const l = {
-        code: 2270,
-        data: {},
-        limit: 10,
-        page: 1
-      }
-      getList(l).then(res => {
-        console.log(res, '列表内容')
-        this.listData = res.data
-      })
+      console.log(333)
     }
   }
 }
 </script>
 <style scoped>
+.infinite-list-item{
+  border-top: 1px solid #eee;
+  margin-bottom: 10px;
+}
 .right_list_top {
   margin-top: 10px;
   height: 30px;
@@ -298,6 +295,5 @@ export default {
 }
 .el-sl /deep/ .el-input__inner{
   width: 115px;
-
 }
 </style>
