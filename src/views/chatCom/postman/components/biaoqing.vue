@@ -13,7 +13,7 @@
       />
 
       <div class="input_btn">
-        <el-tag type="danger" size="mini">#今天吃什么</el-tag>
+        <el-tag type="danger" size="mini">#{{ topicText }}</el-tag>
         <el-tag type="danger" size="mini">
           <i class="el-icon-location-information" /> 位置信息
         </el-tag>
@@ -75,13 +75,17 @@
       </div>
     </div>
     <!-- 控制图片 -->
-    <div v-show="pfFlag" class="post_pt">
-      <postPhoto />
-    </div>
+    <el-collapse-transition>
+      <div v-show="phFlag" class="post_ph">
+        <postPhoto @changClose="changClose" />
+      </div>
+    </el-collapse-transition>
     <!-- 控制话题 -->
-    <div v-show="ptFlag" class="post_pt">
-      <posttopic />
-    </div>
+    <el-collapse-transition>
+      <div v-show="ptFlag" class="post_pt">
+        <posttopic @topic="topic" />
+      </div>
+    </el-collapse-transition>
   </div>
 </template>
 <script>
@@ -103,12 +107,20 @@ export default {
   data() {
     return {
       // 添加图片控制
-      pfFlag: false,
+      phFlag: false,
       // 选择话题控制
       ptFlag: false,
+      // 输入框内容
       innerText: this.value,
+      // 光标
       isLocked: false,
+      // 控制表情
       biaoqing: false,
+      // 话题标签
+      topicText: '',
+      // 话题
+      topicData: {},
+      // 表情
       biaoqingArr: [
         {
           title: '色色',
@@ -204,18 +216,37 @@ export default {
         this.biaoqing = 2
       } else if (this.biaoqing === 2) {
         this.biaoqing = 1
+        this.phFlag = false
+        this.ptFlag = false
       } else {
         this.biaoqing = 1
       }
     },
     submit() {
-      this.$emit('submit')
+      this.$emit('submit', this.topicData)
     },
     phsta() {
-      this.pfFlag = !this.pfFlag
+      if (this.biaoqing === 1) {
+        this.biaoqing = 2
+      }
+      this.ptFlag = false
+      this.phFlag = !this.phFlag
     },
     ptsta() {
+      if (this.biaoqing === 1) {
+        this.biaoqing = 2
+      }
+      this.phFlag = false
       this.ptFlag = !this.ptFlag
+    },
+    //
+    topic(topicData) {
+      this.topicText = topicData.title
+      this.topicData = topicData
+      this.ptFlag = !this.ptFlag
+    },
+    changClose() {
+      this.phFlag = false
     }
   }
 }
@@ -252,9 +283,9 @@ export default {
 
 .biaoqin_box {
   position: absolute;
-  width: 40%;
+  width: 36%;
   height: 0;
-  box-shadow: 0 0 10px #eee;
+  box-shadow: 0 0 15px #eee;
   overflow: hidden;
   z-index: 9;
   background-color: #fff;
@@ -276,12 +307,12 @@ export default {
 }
 
 .open {
-  animation: strat 0.1s;
+  animation: strat 0.3s;
   animation-fill-mode: forwards;
 }
 
 .hidden {
-  animation: end 0.1s;
+  animation: end 0.3s;
   animation-fill-mode: forwards;
 }
 @keyframes strat {
@@ -317,8 +348,15 @@ export default {
   justify-content: space-between;
   margin-top: -10px;
 }
+.post_ph {
+  position: absolute;
+  background-color: #fff;
+  z-index: 9;
+}
 .post_pt {
   position: absolute;
+  top: 144px;
+  left: 162px;
   background-color: #fff;
   z-index: 9;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="box-shadow: 0 0 15px #eee;" class="ml5">
     <!-- 顶部搜索 -->
     <div class="right_list_top">
       <div class="list_top_select">
@@ -65,7 +65,7 @@
     <div class="right_list_post">
       <p style="color:#82848a;margin-bottom:5px;">共找到{{ listData.length }}条互动，222条评论</p>
       <div style="height:10px;background-color: #FBFBFB;" />
-      <div style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 360px);">
+      <div style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 350px);">
         <div class="infinite-list-wrapper">
           <ul v-infinite-scroll="load" class="list" infinite-scroll-disabled="disabled">
             <li v-for="(i,index) in listData" :key="i.id" :ref="index" class="infinite-list-item">
@@ -233,6 +233,7 @@ export default {
 .infinite-list-item{
   border-top: 1px solid #eee;
   margin-bottom: 10px;
+
 }
 .right_list_top {
   margin-top: 10px;
@@ -248,9 +249,7 @@ export default {
   height: 36px;
 }
 .right_list_post {
-  height: 300px;
   margin-top: 5px;
-  background-color: #fff;
 }
 /* 帖子 */
 .postdata_left {
@@ -295,5 +294,6 @@ export default {
 }
 .el-sl /deep/ .el-input__inner{
   width: 115px;
+
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="photo_maxbox">
     <div style="display: flex;justify-content: space-between;margin-bottom: 10px;">
       <span>本地上传</span>
-      <span class="el-icon-close" />
+      <span class="el-icon-close" style=" font-size: 18px;font-weight: 800;color:#696E78" @click.stop="changClose" />
     </div>
     <div style="margin-bottom: 10px;">
       <p>最多可选择9张图片进行上传</p>
@@ -39,6 +39,9 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url
       this.dialogVisible = true
+    },
+    changClose() {
+      this.$emit('changClose')
     }
   }
 }
@@ -47,7 +50,7 @@ export default {
 .photo_maxbox{
   width: 286px;
   background-color: #fff;
-  box-shadow: 5px 5px 2px #ccc;
+  box-shadow: 0 0 15px #eee;
   max-height: 322px;
   overflow: hidden;
 }
@@ -70,5 +73,6 @@ export default {
 .maxbox_up /deep/.el-upload-list--picture-card .el-upload-list__item{
   width: 80px;
   height: 80px;
+
 }
 </style>
