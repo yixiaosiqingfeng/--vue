@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 	.content2 {
-		width: 300px;
+		width: 315px;
 		box-shadow: 0 0 10px #f0f0f0;
 		padding: 20px;
 	}

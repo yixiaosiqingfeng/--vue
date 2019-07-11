@@ -3,39 +3,41 @@
     <div class="searchBox">
       <!-- 搜索框 -->
       <div style="width: 40%;margin-left: 10px;">
-        <el-input v-model="keyWord" placeholder="请输入关键字" class="input-with-select">
-          <el-select slot="prepend" v-model="searchSelect" placeholder="全部">
-            <el-option label="名称" value="1" />
-            <el-option label="发起人" value="2" />
-            <el-option label="分类" value="3" />
+        <el-input ref="searchInput" v-model="keyWord" placeholder="请输入关键字" @focus="enterSearch" @blur="catchEnter">
+          <el-select slot="prepend" v-model="searchSelect" placeholder="名称" style="width: 90px;">
+            <el-option label="名称" value="名称" />
+            <el-option label="发起人" value="发起人" />
+            <el-option label="分类" value="分类" />
           </el-select>
-          <el-button slot="append" icon="el-icon-search" />
+          <el-button slot="append" icon="el-icon-search" @click="searchTopic" />
         </el-input>
       </div>
       <!-- 筛选 -->
       <div style="margin-right: 10px;">
         筛选:
-        <el-dropdown style="margin-right: 10px;">
+        <el-dropdown style="margin-right: 10px;" @command="screenSelect">
           <span class="el-dropdown-link">
-            全部<i class="el-icon-arrow-down el-icon--right" />
+            {{ screen }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>热门</el-dropdown-item>
-            <el-dropdown-item>非热门</el-dropdown-item>
-            <el-dropdown-item>置顶</el-dropdown-item>
-            <el-dropdown-item>非置顶</el-dropdown-item>
+            <el-dropdown-item command="全部">全部</el-dropdown-item>
+            <el-dropdown-item command="热门">热门</el-dropdown-item>
+            <el-dropdown-item command="非热门">非热门</el-dropdown-item>
+            <el-dropdown-item command="置顶">置顶</el-dropdown-item>
+            <el-dropdown-item command="非置顶">非置顶</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-dropdown style="margin-right: 10px;">
+        排序:
+        <el-dropdown style="margin-right: 10px;" @command="sortsSelect">
           <span class="el-dropdown-link">
-            排序方式<i class="el-icon-arrow-down el-icon--right" />
+            {{ sorts }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>最新</el-dropdown-item>
-            <el-dropdown-item>倒序</el-dropdown-item>
-            <el-dropdown-item>热度</el-dropdown-item>
-            <el-dropdown-item>关注数</el-dropdown-item>
-            <el-dropdown-item>互动数</el-dropdown-item>
+            <el-dropdown-item command="最新">最新</el-dropdown-item>
+            <el-dropdown-item command="倒序">倒序</el-dropdown-item>
+            <el-dropdown-item command="热度">热度</el-dropdown-item>
+            <el-dropdown-item command="关注数">关注数</el-dropdown-item>
+            <el-dropdown-item command="互动数">互动数</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-button type="text" @click.stop="$emit('changeStatus', !showCreate);isEdit=false;resetForm('ruleForm')">新建</el-button>
@@ -53,6 +55,18 @@
           <p v-show="isEdit" style="font-size: 18px;margin: 10px;">编辑话题</p>
           <!-- 填写表单 -->
           <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="80px">
+            <el-form-item label="分类" prop="classify">
+              <el-dropdown trigger="click" @command="selectClassify">
+                <span class="el-dropdown-link">
+                  {{ ruleForm.classify || '请选择分类' }}<i class="el-icon-arrow-down el-icon--right" />
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="(item, index) in classifyList" :key="index" :command="item">
+                    {{ item.name }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-form-item>
             <el-form-item label="话题名称" prop="name">
               <el-input v-model="ruleForm.name" />
             </el-form-item>
@@ -74,7 +88,7 @@
             </el-form-item>
             <el-form-item label="发起人" prop="initiator">
               <el-avatar size="small" :src="ruleForm.avatar" class="avatar" />
-              <el-dropdown trigger="click" style="vertical-align: middle;" @command="command">
+              <el-dropdown trigger="click" style="vertical-align: middle;" @command="selectInitiator">
                 <span class="el-dropdown-link">
                   {{ ruleForm.initiator || '发起人' }}<i class="el-icon-arrow-down el-icon--right" />
                 </span>
@@ -86,16 +100,10 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </el-form-item>
-            <el-form-item label="分类" prop="classify">
-              <el-radio-group v-model="ruleForm.classify">
-                <el-radio label="a类" />
-                <el-radio label="b类" />
-              </el-radio-group>
-            </el-form-item>
             <el-form-item label="发帖权限" prop="power">
               <el-radio-group v-model="ruleForm.power">
-                <el-radio label="任何人" />
-                <el-radio label="需关注" />
+                <el-radio label="10">任何人</el-radio>
+                <el-radio label="20">需关注</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="封面图" prop="cover">
@@ -120,7 +128,7 @@
         </div>
       </transition>
       <!-- 表格 -->
-      <el-table :data="tableData" stripe :border="false">
+      <el-table v-loading="isLoading" :data="tableData" stripe :border="false" height="calc(100vh - 286px)">
         <el-table-column label="封面图">
           <template slot-scope="scope">
             <el-image :src="scope.row.cover" fit="cover" />
@@ -149,6 +157,10 @@
 </template>
 
 <script>
+import {
+  topic_select
+} from '@/api/topic.js'
+
 export default {
   name: 'TopicTable',
 
@@ -163,7 +175,7 @@ export default {
       // 搜索关键字
       keyWord: '',
       // 搜索分类
-      searchSelect: '',
+      searchSelect: '名称',
       // 是否为编辑状态
       isEdit: false,
       // 编辑条目下标
@@ -172,6 +184,12 @@ export default {
       currentPage: 1,
       // 每页显示的条数
       pageSize: 7,
+      // 是否处于加载状态
+      isLoading: false,
+      // 筛选
+      screen: '全部',
+      // 排序
+      sorts: '最新',
       // 用户列表
       userList: [{
         avatar: 'http://img3.imgtn.bdimg.com/it/u=2599515051,2970322804&fm=26&gp=0.jpg',
@@ -182,6 +200,14 @@ export default {
         name: '周恩来'
       }
       ],
+      // 分类列表
+      classifyList: [{
+        name: '这个类',
+        id: 123
+      }, {
+        name: '那个类',
+        id: 456
+      }],
       // 表单数据
       ruleForm: {
         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
@@ -194,7 +220,7 @@ export default {
         endDate: this.formatDate(new Date(), 'yyyy-MM-dd'),
         initiator: '',
         classify: '',
-        power: '',
+        power: 0,
         follow: 0,
         comment: 0
       },
@@ -249,7 +275,7 @@ export default {
         classify: 'a类',
         follow: 0,
         comment: 0,
-        power: '需关注'
+        power: '20'
       }, {
         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
         cover: 'http://pic29.nipic.com/20130507/8952533_183922555000_2.jpg',
@@ -263,7 +289,7 @@ export default {
         classify: 'b类',
         follow: 0,
         comment: 0,
-        power: '任何人'
+        power: '10'
       }, {
         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
         cover: 'http://pic29.nipic.com/20130507/8952533_183922555000_2.jpg',
@@ -277,7 +303,7 @@ export default {
         classify: 'a类',
         follow: 0,
         comment: 0,
-        power: '需关注'
+        power: '20'
       }, {
         avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
         cover: 'http://pic29.nipic.com/20130507/8952533_183922555000_2.jpg',
@@ -291,9 +317,15 @@ export default {
         classify: 'a类',
         follow: 0,
         comment: 0,
-        power: '需关注'
+        power: '10'
       }]
     }
+  },
+  created() {
+    this.isLoading = true
+    setTimeout(() => {
+      this.isLoading = false
+    }, 500)
   },
   methods: {
     // 格式化日期
@@ -403,9 +435,82 @@ export default {
       return isJPG && isLt2M
     },
     // 选择发起人
-    command(user) {
-      this.ruleForm.avatar = user.avatar
-      this.ruleForm.initiator = user.name
+    selectInitiator(item) {
+      this.ruleForm.avatar = item.avatar
+      this.ruleForm.initiator = item.name
+    },
+    // 选择分类
+    selectClassify(item) {
+      this.ruleForm.classify = item.name
+    },
+    // 搜索话题
+    searchTopic() {
+      if (this.keyWord === '') {
+        return this.$message({
+          showClose: true,
+          message: '关键字为空!',
+          type: 'warning'
+        })
+      }
+      this.isLoading = true
+      const data = {
+        data: {
+          title: this.keyWord
+        },
+        limit: 10,
+        page: 0,
+        code: '2291'
+      }
+      topic_select(data).then(res => {
+        if (res.errorCode === 0 && res.success) {
+          this.tableData = []
+          for (let i = 0; i < res.data.length; i++) {
+            var result = {
+              avatar: res.data[i].background,
+              cover: res.data[i].background,
+              name: res.data[i].title,
+              desc: res.data[i].intoduce,
+              initiator: res.data[i].ownerName,
+              startTime: new Date(res.data[i].createDate),
+              endTime: new Date(res.data[i].operateDate),
+              startDate: this.formatDate(new Date(res.data[i].createDate), 'yyyy-MM-dd'),
+              endDate: this.formatDate(new Date(res.data[i].operateDate), 'yyyy-MM-dd'),
+              classify: res.data[i].socialId,
+              follow: res.data[i].hot,
+              comment: res.data[i].commentCount,
+              power: String(res.data[i].jurisdiction)
+            }
+            this.tableData.push(result)
+          }
+          this.isLoading = false
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
+    // 回车搜索
+    enterSearch() {
+      document.onkeyup = event => {
+        if (event.keyCode === 13) {
+          this.searchTopic()
+        }
+      }
+    },
+    // 取消回车
+    catchEnter() {
+      document.onkeyup = () => {}
+    },
+    // 筛选
+    screenSelect(command) {
+      this.screen = command
+    },
+    // 排序
+    sortsSelect(command) {
+      this.sorts = command
     }
   }
 }
@@ -414,7 +519,14 @@ export default {
 <style scoped>
 	.content1 {
 		width: 70%;
+		height: calc(100vh - 130px);
+		overflow-y: scroll;
+		margin-left: 15px;
 		box-shadow: 0 0 10px #f0f0f0;
+	}
+
+	.content1::-webkit-scrollbar {
+		display: none
 	}
 
 	.searchBox {
@@ -478,5 +590,7 @@ export default {
 	.avatar {
 		vertical-align: middle;
 		margin: 5px 10px 5px 0;
+		height: 28px;
+		width: 28px;
 	}
 </style>

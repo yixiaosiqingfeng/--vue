@@ -4,13 +4,10 @@
       <div style="width:45%;border:1px solid #ddd;height:500px;overflow-y:scroll;">
         <div style="background-color:#eee;padding:6px 8px;">
           <el-checkbox v-model="rightFlag" :indeterminate="indeterminateRight">未选菜单</el-checkbox>
-          <el-input placeholder="请输入内容" prefix-icon="el-icon-search" />
+          <el-input v-model="search_unselect" placeholder="请输入内容" prefix-icon="el-icon-search" @focus="searchUnselect" />
         </div>
         <div v-for="(item,index) in datar" :key="index" style="padding:6px 8px;">
-          <el-checkbox
-            v-model="item.select"
-            @change="oneMenu(item)"
-          >{{ item.menuName }} => {{ item.name }}</el-checkbox>
+          <el-checkbox v-model="item.select" @change="oneMenu(item)">{{ item.menuName }} => {{ item.name }}</el-checkbox>
           <!-- <template v-if="item.children">
             <div
               v-for="(tim,index2) in item.children"
@@ -25,35 +22,20 @@
       <div style="width:10%;display:flex;align-items:center;justify-content:center;">
         <div>
           <div style="padding:5px;">
-            <el-button
-              :type="rightCheck?'info':'primary'"
-              :disabled="rightCheck"
-              icon="el-icon-arrow-right"
-              circle
-              @click="btnRightFn"
-            />
+            <el-button :type="rightCheck?'info':'primary'" :disabled="rightCheck" icon="el-icon-arrow-right" circle @click="btnRightFn" />
           </div>
           <div style="padding:5px;">
-            <el-button
-              :type="leftCheck?'info':'primary'"
-              :disabled="leftCheck"
-              icon="el-icon-arrow-left"
-              circle
-              @click="btnLeftFn"
-            />
+            <el-button :type="leftCheck?'info':'primary'" :disabled="leftCheck" icon="el-icon-arrow-left" circle @click="btnLeftFn" />
           </div>
         </div>
       </div>
       <div style="width:45%;border:1px solid #ddd;height:500px;overflow-y:scroll;">
         <div style="background-color:#eee;padding:6px 8px;">
           <el-checkbox v-model="leftFlag" :indeterminate="indeterminateLeft">已选菜单</el-checkbox>
-          <el-input placeholder="请输入内容" prefix-icon="el-icon-search" />
+          <el-input v-model="search_select" placeholder="请输入内容" prefix-icon="el-icon-search" @focus="searchSelect" />
         </div>
         <div v-for="(item,index) in datal" :key="index" style="padding:6px 8px;">
-          <el-checkbox
-            v-model="item.select"
-            @change="oneMenu(item)"
-          >{{ item.menuName }} => {{ item.name }}</el-checkbox>
+          <el-checkbox v-model="item.select" @change="oneMenu(item)">{{ item.menuName }} => {{ item.name }}</el-checkbox>
           <!-- <template v-if="item.children">
             <div
               v-for="(tim,index2) in item.children"
@@ -96,7 +78,11 @@ export default {
       indeterminateLeft: false,
       indeterminateRight: false,
       datal: [],
-      datar: []
+      datar: [],
+      // 未选内容搜索框
+      search_unselect: '',
+      // 已选内容搜索框
+      search_select: ''
     }
   },
   watch: {
@@ -416,13 +402,29 @@ export default {
       this.indeterminateRight = false
       this.rightCheck = true
       this.$emit('getData', this.datal, this.datar)
+    },
+    // 搜索未选内容
+    searchUnselect() {
+      document.onkeyup = event => {
+        if (event.keyCode === 13) {
+          console.log(this.datal)
+        }
+      }
+    },
+    // 搜索已选内容
+    searchSelect() {
+      document.onkeyup = event => {
+        if (event.keyCode === 13) {
+          console.log(this.datar)
+        }
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.el-dialog--center {
-  width: 50% !important;
-}
+	.el-dialog--center {
+		width: 50% !important;
+	}
 </style>

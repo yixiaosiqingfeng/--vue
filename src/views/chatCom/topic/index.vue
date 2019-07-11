@@ -1,8 +1,8 @@
 <template>
-  <div class="content" @click="showCreate = false">
+  <div class="content">
     <!-- 表格部分 -->
     <topicTable :show-create="showCreate" @changeStatus="changeStatus" />
-    <div>
+    <div style="margin-left: 15px;">
       <!-- 右上部分（统计） -->
       <topicCensus />
       <!-- 右下部分（我的） -->
@@ -32,6 +32,12 @@ export default {
     }
   },
 
+  mounted() {
+    document.addEventListener('click', () => {
+      this.showCreate = false
+    }, false)
+  },
+
   methods: {
     // 子组件用于改变父组件中的showCreate
     changeStatus(status) {
@@ -44,7 +50,6 @@ export default {
 <style scoped>
 	.content {
 		display: flex;
-		padding: 20px;
-		justify-content: space-around;
+		padding-top: 15px;
 	}
 </style>
