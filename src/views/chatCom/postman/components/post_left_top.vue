@@ -37,9 +37,10 @@ export default {
 <style scoped>
 .box{
   height: 210px;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   box-shadow:0 0 15px #eee;
   margin-top: 5px;
+  padding-top: 5px;
 }
 .top_header{
   display: flex;
