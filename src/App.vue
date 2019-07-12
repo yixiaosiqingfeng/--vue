@@ -30,6 +30,9 @@ export default {
   .fw{
     font-weight: bold;
   }
+  .boxShadow{
+    box-shadow: 0 0 15px #ccc;
+  }
   .tac{
     text-align:center;
   }

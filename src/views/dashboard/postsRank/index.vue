@@ -1,5 +1,5 @@
 <template>
-  <div class="postsRank-container">
+  <div class="postsRank-container boxShadow">
     <p class="ft18 fw">帖子排名</p>
     <div class="infinite-list-wrapper">
       <ul>
@@ -84,7 +84,6 @@ export default {
   .postsRank-container{
     margin-top: 3px;
     padding: 15px 10px;
-    box-shadow: 2px 1px 2px 2px #ddd;
     height: 648px !important;
     // height: calc( 100vh - 211px);
     overflow-y: scroll;

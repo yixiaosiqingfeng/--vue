@@ -2,9 +2,7 @@
   <div class="allList-container">
     <div class="show-con-date">
       <div class="times">
-        <span>今日</span>
-        <span class="border">本周</span>
-        <span>本月</span>
+        <span v-for="item in date" :key="item.id" :class="activeDate === item.id ? 'actived':''" @click="checkDate(item)">{{ item.title }}</span>
       </div>
       <div class="date">
         <el-date-picker
@@ -76,7 +74,18 @@ export default {
         { id: 0, userNum: 9200, userName: '用户总数', playNum: 1000, playName: '播放总数', upNum: 1400, upNumName: '上升总数', watchNum: 900, watchName: '观看总数', score: '23%', icon: 'iconfont icon-up' }
       ],
       value1: '',
-      value2: ''
+      value2: '',
+      date: [{ id: 1, title: '今日' }, { id: 2, title: '本周' }, { id: 3, title: '本月' }],
+      activeDate: 1
+    }
+  },
+  methods: {
+    checkDate(item) {
+      this.date.map((items) => {
+        if (items.id === item.id) {
+          this.activeDate = item.id
+        }
+      })
     }
   }
 }
@@ -91,13 +100,15 @@ export default {
       .times{
         display: flex;
         border: 1px solid #ccc;
+        border-right: none;
         cursor: pointer;
         span{
           padding: 5px 9px;
+          border-right: 1px solid #ccc;
         }
-        .border{
-          border-left:1px solid #ccc;
-          border-right:1px solid #ccc;
+        .actived{
+          background: #eeecec;
+          border: 1px solid #eeecec;
         }
       }
       .date{

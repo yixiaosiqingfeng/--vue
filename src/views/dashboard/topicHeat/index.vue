@@ -1,12 +1,12 @@
 <template>
-  <div class="topicHeat-container">
+  <div class="topicHeat-container boxShadow">
     <div class="topHeat-con-title">
       <p class="ft18 fw">话题热度</p>
       <a>更多</a>
     </div>
     <ul>
       <li v-for="item in heatToptic" :key="item.id">
-        <p class="top-num" :style="{background:item.color}">{{ item.topicNum }}</p>
+        <p class="top-num"><span :class="item.icon" :style="{color:item.color,fontSize:item.fontS}" /></p>
         <p>#{{ item.topicName }}</p>
         <p>
           <span class="iconfont icon-zan" />
@@ -28,11 +28,11 @@ export default {
     return {
       color: '#333',
       heatToptic: [
-        { id: 1, topicName: '话题名称话题名称话题名称', topicNum: 'Top1', postsNum: 21110, reduNum: 2100, color: 'red' },
-        { id: 2, topicName: '话题名称话题名称话题名称', topicNum: 'Top2', postsNum: 21110, reduNum: 2100, color: 'orange' },
-        { id: 3, topicName: '话题名称话题名称话题名称', topicNum: 'Top3', postsNum: 21110, reduNum: 2100, color: 'orange' },
-        { id: 4, topicName: '话题名称话题名称话题名称', topicNum: '4', postsNum: 21110, reduNum: 2100, color: '#ccc' },
-        { id: 5, topicName: '话题名称话题名称话题名称', topicNum: '5', postsNum: 21110, reduNum: 2100, color: '#ccc' }
+        { id: 1, topicName: '话题名称话题名称话题名称', fontS: '30', icon: 'iconfont icon-paihang1 top-num1', postsNum: 21110, reduNum: 2100, color: 'rgb(242,192,86)' },
+        { id: 2, topicName: '话题名称话题名称话题名称', fontS: '19', icon: 'iconfont icon-paihang top-num2', postsNum: 21110, reduNum: 2100, color: 'rgb(233,233,216)' },
+        { id: 3, topicName: '话题名称话题名称话题名称', fontS: '18', icon: 'iconfont icon-paihang4 top-num3', postsNum: 21110, reduNum: 2100, color: 'rgb(186,110,64)' },
+        { id: 4, topicName: '话题名称话题名称话题名称', fontS: '16', icon: 'iconfont icon-paiming6 top-num4', postsNum: 21110, reduNum: 2100, color: 'rgb(102, 102, 102)' },
+        { id: 5, topicName: '话题名称话题名称话题名称', fontS: '16', icon: 'iconfont icon-paiming5 top-num4', postsNum: 21110, reduNum: 2100, color: 'rgb(102, 102, 102)' }
       ]
     }
   },
@@ -48,17 +48,16 @@ export default {
     cursor: pointer;
   }
   .topicHeat-container{
-    box-shadow: 2px 2px 2px 2px #ddd;
-    padding: 12px;
-    margin-bottom: 13px;
-    height: 211px;
+    padding: 12px 12px 5px 12px;
+    margin-bottom: 7px;
+    height: 209px;
     box-sizing: border-box;
     .topHeat-con-title{
       display: flex;
       justify-content: space-between;
       a{
         font-size: 12px;
-        color: #666;
+        color: rgb(102, 102, 102);
       }
     }
     ul{
@@ -80,12 +79,23 @@ export default {
           }
         }
         .top-num{
-          width: 33px;
-          color: #fff;
-          border: 1px solid #ccc;
-          border-radius: 8px;
-          padding:2px;
+          width: 29px;
+          height: 20px;
+          line-height: 20px;
+          .top-num1{
+            font-size: 22px;
+          }
+          .top-num2{
+            font-size: 21px;
+          }
+          .top-num3{
+            font-size: 19px;
+          }
+          .top-num4{
+            font-size: 14px;
+          }
         }
+
       }
     }
   }

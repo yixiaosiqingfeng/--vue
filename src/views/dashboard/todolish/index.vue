@@ -1,11 +1,11 @@
 <template>
-  <div class="todolish-container">
+  <div class="todolish-container boxShadow">
     <div class="todolish-con-title">
       <p class="ft18 fw">代办事项</p>
       <p>
         <a>更新时间：2019-06-15  12：00</a>
-        <span v-if="!isUpdate" class="iconfont icon-shuaxin" @click="updataTodolist" />
-        <i v-if="isUpdate" class="el-icon-loading" />
+        <span v-if="!isUpdate" class="iconfont icon-shuaxin updata-icon" @click="updataTodolist" />
+        <i v-if="isUpdate" class="el-icon-loading updata-icon" />
       </p>
     </div>
     <ul class="todolish-con-list">
@@ -53,7 +53,6 @@ export default {
 <style scoped lang="scss">
   .todolish-container{
     margin: 10px 0 0;
-    box-shadow: 2px 2px 2px 2px #ddd;
     padding: 10px 10px;
     height: 249px;
     // height: calc( 100vh - 622px);
@@ -63,6 +62,8 @@ export default {
       display: flex;
       justify-content: space-between;
       p{
+        padding-right: 20px;
+        position: relative;
         a{
           color: #999;
           font-size: 12px;
@@ -70,6 +71,11 @@ export default {
         }
         .icon-shuaxin{
           cursor: pointer;
+        }
+        .updata-icon{
+          position: absolute;
+          right: 0;
+          top: -2px;
         }
       }
     }
