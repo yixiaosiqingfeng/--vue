@@ -49,31 +49,31 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
     <!-- 分类列表Popover 弹出框 -->
-
     <div style="width:500px; float:right; display:flex;flex-wrap:wrap;">
-
       <el-popover v-model="visible" placement="bottom" width="700" popper-class="animate">
         <el-upload
           class="upload-demo"
           action="https://jsonplaceholder.typicode.com/posts/"
           multiple
           :limit="3"
+          :on-success="handleAvatarSuccess"
         >
           <el-button size="small" type="primary">点击上传图片</el-button>
         </el-upload>
 
         <div style="width:100%;">
-          <el-input placeholder="请输入名称" style="margin-top:20px" />
+          <el-input v-model="createData.name" placeholder="请输入名称" style="margin-top:20px" size="mini" />
         </div>
 
         <div style="width:100%;">
-          <el-input placeholder="请输入备注" type="textarea" style="margin-top:20px" />
+          <el-input v-model="createData.desc" placeholder="请输入备注" style="margin-top:20px" type="textarea" />
         </div>
 
         <div style="text-align: right; margin-top:10px">
           <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-          <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
+          <el-button type="primary" size="mini" @click="handleCreatRow">确定</el-button>
         </div>
 
         <el-button slot="reference">+新建</el-button>
@@ -92,13 +92,33 @@ export default {
         // menuId: '',
         // visible: false,
       },
-      visible: false
+      imageUrl: '',
+      visible: false,
+      createData: {
+        name: '',
+        desc: ''
+      }
     }
   },
   methods: {
-    // createFn() {
-    //   this.$emit("create", this.searchData);
-    // },
+    handleCreatRow() {
+      this.visible = false
+      const id = 10
+      const rowData = {
+        id: id + 1,
+        isEdit: false,
+        imageUrl: this.imageUrl,
+        ...this.createData
+      }
+      this.$emit('rowData', rowData)
+      this.imageUrl = ''
+      this.createData.name = ''
+      this.createData.desc = ''
+    },
+    // 上传的文件路径
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
+    }
   }
 }
 </script>

@@ -2,9 +2,7 @@
   <div class="showStatList-container">
     <div class="show-con-date">
       <div class="times">
-        <span>今日</span>
-        <span class="border">本周</span>
-        <span>本月</span>
+        <span v-for="item in date" :key="item.id" :class="activeDate === item.id ? 'actived':''" @click="checkDate(item)">{{ item.title }}</span>
       </div>
       <div class="date">
         <el-date-picker
@@ -84,7 +82,9 @@ export default {
       getItem: '', // 接收从父组件传过来的当条数值
       value1: '', // 日期框
       value2: '',
-      times: ['']
+      times: [''],
+      date: [{ id: 1, title: '今日' }, { id: 2, title: '本周' }, { id: 3, title: '本月' }],
+      activeDate: 1
     }
   },
   watch: {
@@ -109,14 +109,16 @@ export default {
       font-size: 10px;
       .times{
         display: flex;
-        border: 1px solid #ddd;
+        border: 1px solid #ccc;
+        border-right: none;
         cursor: pointer;
         span{
           padding: 5px 9px;
+          border-right: 1px solid #ccc;
         }
-        .border{
-          border-left:1px solid #ddd;
-          border-right:1px solid #ddd;
+        .actived{
+          background: #eeecec;
+          border: 1px solid #eeecec;
         }
       }
       .date{

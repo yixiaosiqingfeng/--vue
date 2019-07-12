@@ -1,11 +1,11 @@
 <template>
-  <div class="dataStatistics-container">
+  <div class="dataStatistics-container boxShadow">
     <div class="dataStatistics-con-title">
       <p class="ft18 fw">数据统计</p>
       <p>
         <a>更新时间：2019-06-15  12：00</a>
-        <span v-if="!isUpdate" class="iconfont icon-shuaxin" @click="updataDataStetis" />
-        <i v-if="isUpdate" class="el-icon-loading" />
+        <span v-if="!isUpdate" class="iconfont icon-shuaxin updata-icon" @click="updataDataStetis" />
+        <i v-if="isUpdate" class="el-icon-loading updata-icon" />
       </p>
     </div>
     <div class="dataStatistics-con-list">
@@ -55,14 +55,15 @@ export default {
 <style scoped lang="scss">
   .dataStatistics-container{
     height: 156px;
-		margin: 15px 0;
-		box-shadow: 2px 2px 2px 2px #ddd;
+		margin: 12px 0;
 		padding: 15px 10px;
     box-sizing: border-box;
     .dataStatistics-con-title{
 			display: flex;
       justify-content: space-between;
       p{
+        padding-right: 20px;
+        position: relative;
         a{
           color: #999;
           font-size: 12px;
@@ -70,6 +71,11 @@ export default {
         }
         .icon-shuaxin{
           cursor: pointer;
+        }
+        .updata-icon{
+          position: absolute;
+          right: 0;
+          top: -2px;
         }
       }
 		}

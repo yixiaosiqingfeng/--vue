@@ -1,11 +1,11 @@
 <template>
-  <div class="showStatistics-container">
+  <div class="showStatistics-container boxShadow">
     <div class="show-con-title">
       <p class="ft18 fw">节目统计</p>
       <p>
         <a>更新时间：2019-06-15  12：00</a>
-        <span v-if="!isUpdate" class="iconfont icon-shuaxin" @click="updataShowStetis" />
-        <i v-if="isUpdate" class="el-icon-loading" />
+        <span v-if="!isUpdate" class="iconfont icon-shuaxin updata-icon" @click="updataShowStetis" />
+        <i v-if="isUpdate" class="el-icon-loading updata-icon" />
       </p>
     </div>
     <div class="show-con-progress">
@@ -16,9 +16,7 @@
       <p>更多</p>
     </div>
     <transition name="fade-transform" mode="out-in">
-      <keep-alive>
-        <component :is="activedIndex" :active-item="activedIndex === 'ShowStatList' ? '':activeItem" />
-      </keep-alive>
+      <component :is="activedIndex" :active-item="activedIndex === 'ShowStatList' ? '':activeItem" />
     </transition>
     <div class="show-con-new">
       <ul>
@@ -38,11 +36,14 @@
 <script>
 import ShowStatList from './ShowStatList'
 import AllList from './AllList'
-import { setTimeout } from 'timers'
+import ShowList1 from './showList/ShowList1'
+import ShowList2 from './showList/ShowList2'
+import ShowList3 from './showList/ShowList3'
+import ShowList4 from './showList/ShowList4'
 
 export default {
   name: 'ShowStatistics',
-  components: { ShowStatList, AllList },
+  components: { ShowStatList, AllList, ShowList1, ShowList2, ShowList3, ShowList4 },
   data() {
     return {
       activedIndex: AllList,
@@ -96,11 +97,12 @@ export default {
 <style scoped lang="scss">
   .showStatistics-container{
     padding: 15px 10px 5px;
-    box-shadow: 2px 2px 2px 2px #ddd;
     .show-con-title{
       display: flex;
       justify-content: space-between;
       p{
+        padding-right: 20px;
+        position: relative;
         a{
           color: #999;
           font-size: 12px;
@@ -108,6 +110,11 @@ export default {
         }
         .icon-shuaxin{
           cursor: pointer;
+        }
+        .updata-icon{
+          position: absolute;
+          right: 0;
+          top: -2px;
         }
       }
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="weather-container">
+  <div class="weather-container boxShadow">
     <div class="weather-con-left">
       <p />
       <span>2019-07-08 星期一 天气晴，适宜外出</span>
@@ -31,7 +31,6 @@ export default {
 </script>
 <style scoped lang="scss">
   .weather-container{
-	box-shadow: 2px 1px 2px 2px #ddd;
 	height: 40px;
 	padding: 0 10px;
 	box-sizing: border-box;
