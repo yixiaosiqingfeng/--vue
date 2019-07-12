@@ -1,32 +1,19 @@
 <template>
   <div>
-    <div style="display:flex">
-      <div class="index_right">
-        <postRight />
-      </div>
-      <div class="index_left">
-        <postLeft />
-      </div>
+    <div class="index_right">
+      <postRight />
     </div>
   </div>
 </template>
 
 <script>
 import postRight from './components/post_right'
-import postLeft from './components/post_left'
 export default {
   name: 'Index',
-  components: { postRight, postLeft }
+  components: { postRight }
 }
 </script>
 
 <style scoped>
-.index_right {
-  width: 75%;
-  margin: 5px 5px 5px 0;
-}
-.index_left {
-  width: 25%;
-  margin: 5px;
-}
+
 </style>

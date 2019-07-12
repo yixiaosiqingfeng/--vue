@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     queryUrl() {
-      return 'http://192.168.0.18:8084/common/upload_v1'
+      return 'http://192.168.0.254:8084/common/upload_v1'
       // return process.env.VUE_APP_BASE_API+'/common/upload_v1'
     }
   },

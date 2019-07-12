@@ -98,6 +98,7 @@ export default {
   min-height: 100px;
   background-color: #fff;
   text-align: center;
+  box-shadow: 0 0 15px #eee;
 }
 .topic_input {
   margin: 10px;

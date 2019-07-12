@@ -69,7 +69,7 @@
     <div class="right_list_post">
       <p
         style="color:#82848a;margin:8px 5px;"
-      >共找到{{ listData.length }}条互动，{{ listData.replyTotal }}条评论</p>
+      >共找到{{ listData.length }}条互动</p>
       <div style="height:10px;background-color: #FBFBFB;" />
       <div style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 360px);">
         <div class="infinite-list-wrapper">
@@ -85,7 +85,7 @@
                 <!-- 帖子右侧 -->
                 <div class="postdata_right">
                   <div style="display:flex;">
-                    <div style="width:90%;">
+                    <div style="width:88%;">
                       <div>
                         <span>{{ i.createName }}</span>
                         <el-tooltip class="item" effect="dark" content="置顶" placement="top-end">
@@ -106,7 +106,7 @@
                     </div>
 
                     <!-- 帖子管理功能 -->
-                    <div style="width:10%;margin-top:5px;">
+                    <div style="width:12%;margin-top:5px;">
                       <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                           帖子管理
@@ -454,7 +454,7 @@ export default {
   margin-bottom: 10px;
 }
 .right_list_top {
-  margin-top: 10px;
+  margin: 10px 5px;
   height: 30px;
   display: flex;
   justify-content: space-between;

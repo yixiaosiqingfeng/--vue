@@ -20,7 +20,7 @@
       </div>
 
       <div class="right_header_end">
-        <div style="width:82%;">
+        <div style="width:81%;">
           <ul class="aliicon">
             <li @click.stop="biaoqnFn">
               <i class="iconfont icon-biaoqing1" />&nbsp;
@@ -44,7 +44,7 @@
             </li>
           </ul>
         </div>
-        <div style="width:18%;margin-bottom: 3px;">
+        <div style="width:19%;margin-bottom: 3px;">
           <el-dropdown>
             <span class="el-dropdown-link">
               <i class="el-icon-edit" />
@@ -63,7 +63,7 @@
       <!-- 存放表情节目 -->
       <div style="position:relative;" @click.stop="biaoqing=1">
         <div class="biaoqin_box" :class="{open:biaoqing===1,hidden:biaoqing===2}">
-          <ul class="oul" style="display:flex;flex-wrap:wrap;">
+          <ul class="oul" style="display:flex;flex-wrap:wrap; padding:10px;">
             <li
               v-for="(item,index) in biaoqingArr"
               :key="index"
@@ -306,11 +306,13 @@ export default {
 }
 
 .oul {
-  padding: 5px;
+  padding: 10px;
   border-radius: 5px;
   height: 108px;
   overflow-y: scroll;
   overflow-x: hidden;
+  align-content: flex-start;
+
 }
 
 .biaoqin_box ul,
