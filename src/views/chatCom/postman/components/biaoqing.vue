@@ -1,5 +1,5 @@
 <template>
-  <div style>
+  <div>
     <div>
       <div
         ref="biaoqingBox"
@@ -77,13 +77,13 @@
     <!-- 控制图片 -->
     <el-collapse-transition>
       <div v-show="phFlag" class="post_ph">
-        <postPhoto @changClose="changClose" />
+        <postPhoto @changClose="changClose" @upSuccess="upSuccess" />
       </div>
     </el-collapse-transition>
     <!-- 控制话题 -->
     <el-collapse-transition>
       <div v-show="ptFlag" class="post_pt">
-        <posttopic @topic="topic" />
+        <posttopic :go-topic="goTopic" @topic="topic" />
       </div>
     </el-collapse-transition>
   </div>
@@ -106,6 +106,7 @@ export default {
   },
   data() {
     return {
+      goTopic: 1,
       // 添加图片控制
       phFlag: false,
       // 选择话题控制
@@ -120,6 +121,8 @@ export default {
       topicText: '',
       // 话题
       topicData: {},
+      // 上传的图片
+      photoData: {},
       // 表情
       biaoqingArr: [
         {
@@ -211,6 +214,7 @@ export default {
       }
       this.$emit('input', this.$refs.biaoqingBox.innerHTML)
     },
+    // 表情页面控制
     biaoqnFn() {
       if (this.biaoqing === 1) {
         this.biaoqing = 2
@@ -222,9 +226,11 @@ export default {
         this.biaoqing = 1
       }
     },
+    // 发布
     submit() {
-      this.$emit('submit', this.topicData)
+      this.$emit('submit', this.topicData, this.photoData)
     },
+    // 上传图片界面控制
     phsta() {
       if (this.biaoqing === 1) {
         this.biaoqing = 2
@@ -232,21 +238,28 @@ export default {
       this.ptFlag = false
       this.phFlag = !this.phFlag
     },
+    // 选择话题界面控制
     ptsta() {
       if (this.biaoqing === 1) {
         this.biaoqing = 2
       }
       this.phFlag = false
       this.ptFlag = !this.ptFlag
+      this.goTopic++
     },
-    //
+    // 话题标签
     topic(topicData) {
       this.topicText = topicData.title
       this.topicData = topicData
       this.ptFlag = !this.ptFlag
     },
+    // 关闭上传图片
     changClose() {
       this.phFlag = false
+    },
+    // 上传图片成功后
+    upSuccess(photoData) {
+      this.photoData = photoData
     }
   }
 }

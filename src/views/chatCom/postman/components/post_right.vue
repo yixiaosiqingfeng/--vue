@@ -1,7 +1,7 @@
 <template>
   <div>
-    <rightHeader />
-    <rightList />
+    <rightHeader @addPost="addPost" />
+    <rightList :post="post" />
   </div>
 </template>
 <script>
@@ -10,7 +10,18 @@ import rightList from './post_right_list'
 
 export default {
   name: 'PostRight',
-  components: { rightHeader, rightList }
+  components: { rightHeader, rightList },
+  data() {
+    return {
+      post: 1
+    }
+  },
+  methods: {
+    addPost() {
+      this.post++
+      console.log(this.post, 44444444)
+    }
+  }
 
 }
 </script>

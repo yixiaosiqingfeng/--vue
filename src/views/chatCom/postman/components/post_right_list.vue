@@ -1,9 +1,9 @@
 <template>
-  <div style="box-shadow: 0 0 15px #eee;" class="ml5">
+  <div style="box-shadow: 0 0 15px #eee;">
     <!-- 顶部搜索 -->
     <div class="right_list_top">
       <div class="list_top_select">
-        <div style="display:flex;">
+        <div style="display:flex;margin-top: 8px;">
           <div class="el-sl">
             <el-select v-model="value" placeholder="请选择" size="mini">
               <el-option
@@ -15,7 +15,12 @@
             </el-select>
           </div>
           <div class="el_in">
-            <el-input v-model="selectType" placeholder="请输入内容" class="input-with-select" size="mini">
+            <el-input
+              v-model="selectType"
+              placeholder="请输入内容"
+              class="input-with-select"
+              size="mini"
+            >
               <i slot="suffix" class="el-icon-search el-input__icon" @click="handleIconClick" />
             </el-input>
           </div>
@@ -57,15 +62,16 @@
         <el-tooltip class="item" effect="dark" content="升序" placement="top">
           <span class="iconfont icon-shengjiangxu" style="cursor: pointer;" />
         </el-tooltip>
-
       </div>
     </div>
 
     <!-- 帖子 -->
     <div class="right_list_post">
-      <p style="color:#82848a;margin-bottom:5px;">共找到{{ listData.length }}条互动，222条评论</p>
+      <p
+        style="color:#82848a;margin:8px 5px;"
+      >共找到{{ listData.length }}条互动，{{ listData.replyTotal }}条评论</p>
       <div style="height:10px;background-color: #FBFBFB;" />
-      <div style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 350px);">
+      <div style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 360px);">
         <div class="infinite-list-wrapper">
           <ul v-infinite-scroll="load" class="list" infinite-scroll-disabled="disabled">
             <li v-for="(i,index) in listData" :key="i.id" :ref="index" class="infinite-list-item">
@@ -82,28 +88,45 @@
                     <div style="width:90%;">
                       <div>
                         <span>{{ i.createName }}</span>
+                        <el-tooltip class="item" effect="dark" content="置顶" placement="top-end">
+                          <i
+                            v-show="i.stick===20"
+                            class="iconfont icon-zhiding"
+                            style="color:#F98700;font-size:20px;"
+                          />
+                        </el-tooltip>
                         <el-button type="text">复制</el-button>
                       </div>
 
                       <div>
-                        <span style="color:red;">节目名称&nbsp;</span>
+                        <span v-show="!i.programName" style="color:red;">无对应节目&nbsp;</span>
+                        <span v-show="i.programName" style="color:red;">{{ i.programName }}&nbsp;</span>
                         <span style="color:#666;">{{ i.createDate }}</span>
                       </div>
                     </div>
 
                     <!-- 帖子管理功能 -->
                     <div style="width:10%;margin-top:5px;">
-                      <el-dropdown @command="handleCommand">
+                      <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                           帖子管理
                           <i class="el-icon-arrow-down el-icon--right" />
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                          <el-dropdown-item command="a">置顶该贴</el-dropdown-item>
-                          <el-dropdown-item command="b">标记热门</el-dropdown-item>
-                          <el-dropdown-item command="c">修改帖子</el-dropdown-item>
-                          <el-dropdown-item command="d">删除帖子</el-dropdown-item>
-                          <el-dropdown-item command="e">收藏帖子</el-dropdown-item>
+                          <el-dropdown-item
+                            v-show="i.stick===10"
+                            :command="{id:i.id,stick:i.stick,value:postFunction.qxzd}"
+                          >置顶该贴</el-dropdown-item>
+                          <el-dropdown-item
+                            v-show="i.stick===20"
+                            :command="{id:i.id,stick:i.stick,value:postFunction.zd}"
+                          >取消置顶</el-dropdown-item>
+                          <el-dropdown-item :command="{id:i.id,value:postFunction.rm}">标记热门</el-dropdown-item>
+                          <el-dropdown-item
+                            :command="{id:i.id,value:postFunction.xg,content:i.content}"
+                          >修改帖子</el-dropdown-item>
+                          <el-dropdown-item :command="{id:i.id,value:postFunction.cc}">删除帖子</el-dropdown-item>
+                          <el-dropdown-item :command="{id:i.id,value:postFunction.sc}">收藏帖子</el-dropdown-item>
                         </el-dropdown-menu>
                       </el-dropdown>
                     </div>
@@ -111,10 +134,21 @@
 
                   <!-- 帖子内容 -->
                   <div
+                    ref="cont"
                     style="margin-top:10px;color:#666;font-size:14px;line-height: 20px;"
-                  >{{ i.content }}</div>
+                    :contenteditable="ediText==='1'"
+                  >
+                    <el-input
+                      v-model="i.content"
+                      type="textarea"
+                      :disabled="ediFlag"
+                      :autosize="{ minRows: 2, maxRows: 4}"
+                      outline
+                      @blur="fun()"
+                    />
+                  </div>
 
-                  <div style="color:red;margin-top:5px;">#我要上热门</div>
+                  <div style="color:red;margin-top:5px;">#{{ i.title }}</div>
 
                   <div v-show="i.type==='20'" class="postdata_right_photo">
                     <img src alt>
@@ -156,12 +190,35 @@
 </template>
 <script>
 import postComment from './post_right_comment'
+import axios from 'axios'
 export default {
   components: {
     postComment
   },
+  props: {
+    post: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
+      // 帖子管理功能
+      postFunction: {
+        cc: '删除',
+        zd: '置顶',
+        rm: '热门',
+        xg: '修改',
+        sc: '收藏',
+        qxzd: '取消置顶'
+      },
+      // 控制是否可以编辑
+      ediText: '',
+      ediFlag: true,
+      // 当前被编辑的帖子ID
+      textId: '',
+      content: '',
+      // 搜索内容
       selectType: '',
       searchSelect: '',
       // 异步加载
@@ -171,25 +228,32 @@ export default {
       currentTab: '',
       // 帖子列表数据
       listData: [],
-      options: [{
-        value: '选项1',
-        label: '节目'
-      }, {
-        value: '选项2',
-        label: '话题'
-      }, {
-        value: '选项3',
-        label: '内容'
-      }, {
-        value: '选项4',
-        label: '账号'
-      }],
-      value: ''
+      options: [
+        {
+          value: '选项1',
+          label: '节目'
+        },
+        {
+          value: '选项2',
+          label: '话题'
+        },
+        {
+          value: '选项3',
+          label: '内容'
+        },
+        {
+          value: '选项4',
+          label: '账号'
+        }
+      ],
+      value: '全部'
     }
   },
   computed: {
     noMore() {
-      if (this.listData.length === 0) { return } else {
+      if (this.listData.length === 0) {
+        return
+      } else {
         return this.count >= this.listData.length
       }
     },
@@ -197,13 +261,39 @@ export default {
       return this.loading || this.noMore
     }
   },
+  watch: {
+    post() {
+      this.getPostList()
+    }
+  },
   mounted() {
     this.getPostList()
   },
 
   methods: {
-    handleIconClick(ev) {
-      console.log(ev)
+    // 搜索功能
+    handleIconClick() {
+      if (this.selectType === '') {
+        this.$message.warning('请输入需要搜索的内容')
+      }
+      const l = {
+        code: '1807',
+        data: {
+          content: this.selectType
+        },
+        limit: 99,
+        page: 1
+      }
+      axios
+        .post('http://192.168.0.18:3366/community_auth/select_forum_list_v1', l)
+        .then(res => {
+          if (res.data.success && res.data.errorCode === 0) {
+            console.log(res.data.data, '我是帖子列表数据')
+            this.listData = res.data.data
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
     },
     load() {
       this.loading = true
@@ -212,8 +302,122 @@ export default {
         this.loading = false
       }, 2000)
     },
+    // 帖子管理功能
     handleCommand(command) {
-      this.$message('click on item ' + command)
+      // 删除
+      if (command.value === '删除') {
+        this.$confirm('是否删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        })
+          .then(() => {
+            const c = {
+              code: '1806',
+              data: {
+                id: command.id
+              }
+            }
+            axios
+              .post(
+                'http://192.168.0.18:3366/community_auth/remove_forum_v1',
+                c
+              )
+              .then(res => {
+                console.log(res, 111111)
+                if (res.data.success && res.data.errorCode === 0) {
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功!'
+                  })
+                  this.getPostList()
+                  this.ediText = ''
+                } else {
+                  this.$message.error(res.data.msg)
+                }
+              })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            })
+          })
+      } else if (command.value === '修改') {
+        // 修改功能
+        this.ediText = '1'
+        this.ediFlag = false
+        this.textId = command.id
+        // this.content = command.content;
+      } else if (command.value === '置顶') {
+        // 置顶功能
+        this.$confirm('是否置顶?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        })
+          .then(() => {
+            const c = {
+              code: '1803',
+              data: {
+                id: command.id,
+                stick: command.stick
+              }
+            }
+            axios
+              .post('http://192.168.0.18:3366/community_auth/stick_v1', c)
+              .then(res => {
+                console.log(res, 111111)
+                if (res.data.success && res.data.errorCode === 0) {
+                  this.$message({
+                    type: 'success',
+                    message: '置顶成功!'
+                  })
+                  this.getPostList()
+                } else {
+                  this.$message.error(res.data.msg)
+                }
+              })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            })
+          })
+      } else if (command.value === '取消置顶') {
+        // 置顶功能
+        this.$confirm('是否取消置顶?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        })
+          .then(() => {
+            const c = {
+              code: '1803',
+              data: {
+                id: command.id,
+                stick: command.stick
+              }
+            }
+            axios
+              .post('http://192.168.0.18:3366/community_auth/stick_v1', c)
+              .then(res => {
+                if (res.data.success && res.data.errorCode === 0) {
+                  this.$message({
+                    type: 'success',
+                    message: '已取消置顶!'
+                  })
+                  this.getPostList()
+                } else {
+                  this.$message.error(res.data.msg)
+                }
+              })
+          })
+      }
     },
     showNav(index) {
       if (this.$refs[index][0].childNodes[2].style.display === 'none') {
@@ -224,16 +428,71 @@ export default {
     },
     // 获取帖子列表
     getPostList() {
-      console.log(333)
+      const l = {
+        code: '1807',
+        data: {},
+        limit: 99,
+        page: 1
+      }
+      axios
+        .post('http://192.168.0.18:3366/community_auth/select_forum_list_v1', l)
+        .then(res => {
+          if (res.data.success && res.data.errorCode === 0) {
+            console.log(res.data.data, '我是帖子列表数据')
+            this.listData = res.data.data
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+    },
+    // 失去焦点事件
+    fun() {
+      // console.log(this.$refs.cont[0].innerText,'我是失去焦点后得到的数据');
+      this.$confirm('是否修改?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      })
+        .then(() => {
+          const c = {
+            code: '1805',
+            data: {
+              id: this.textId,
+              content: this.content
+            }
+          }
+          axios
+            .post('http://192.168.0.18:3366/community_auth/update_forum_v1', c)
+            .then(res => {
+              console.log(res, 111111)
+              if (res.data.success && res.data.errorCode === 0) {
+                this.$message({
+                  type: 'success',
+                  message: '已修改!'
+                })
+                this.getPostList()
+                this.ediText = ''
+              } else {
+                this.$message.error(res.data.msg)
+              }
+            })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+          this.ediText = ''
+        })
     }
   }
 }
 </script>
 <style scoped>
-.infinite-list-item{
+.infinite-list-item {
   border-top: 1px solid #eee;
   margin-bottom: 10px;
-
 }
 .right_list_top {
   margin-top: 10px;
@@ -289,11 +548,10 @@ export default {
 .el-icon-arrow-down {
   font-size: 12px;
 }
-.input{
+.input {
   width: 135px;
 }
-.el-sl /deep/ .el-input__inner{
+.el-sl /deep/ .el-input__inner {
   width: 115px;
-
 }
 </style>
