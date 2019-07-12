@@ -196,7 +196,7 @@ export default {
       // 验证规则
       rules: {
         name: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' }
+          { required: true, message: '请输入分类名称', trigger: 'blur' }
         ]
       },
       // 修改数据
