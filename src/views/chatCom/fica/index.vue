@@ -22,7 +22,7 @@
                 <el-input v-model="ruleForm.data.note" type="textarea" />
               </el-form-item>
               <el-form-item label="图片" prop="imgPath">
-                <div style="width:82px;overflow:hidden;">
+                <div class="huatiClass_add">
                   <el-upload
                     class="avatar-uploader"
                     :action="queryUrl"
@@ -33,7 +33,9 @@
                   >
                     <img
                       v-if="ruleForm.data.imgPath"
-                      :src="getUrl(ruleForm.data.imgPath)"
+                      width="80"
+                      height="80"
+                      :src="ruleForm.data.imgPath"
                       class="avatar"
                     >
                     <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -76,7 +78,7 @@
                 >
                   <img
                     v-if="scope.row.imgPath"
-                    :src="getUrl(scope.row.imgPath)"
+                    :src="scope.row.imgPath"
                     class="avatar"
                     style="width:75px;height:75px;"
                   >
@@ -84,7 +86,15 @@
                 </el-upload>
               </div>
               <div v-show="!scope.row.flag" style="width:69px;height:80px;">
-                <img v-if="scope.row.imgPath" :src="scope.row.imgPath" class="avatar" width="100%" height="100%">
+                <img
+                  v-if="scope.row.imgPath"
+                  :src="scope.row.imgPath"
+                  class="avatar"
+                  width="100%"
+                  height="100%"
+                  style="cursor:pointer;"
+                  @click="queryImgFn(scope.row.imgPath)"
+                >
                 <div v-else style="width:69px;height:80px;" />
               </div>
             </div>
@@ -150,6 +160,9 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     />
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
   </div>
 </template>
 
@@ -167,6 +180,10 @@ export default {
   components: { ficaHeader, pagin },
   data() {
     return {
+      dialogVisible: false,
+      dialogImageUrl: '',
+      // 服务器地址
+      yunUrl: 'http://192.168.0.254/changjia/static/',
       urlsuccess: false,
       // 表格参数
       total: 0,
@@ -206,8 +223,8 @@ export default {
   },
   computed: {
     queryUrl() {
-      // return process.env.VUE_APP_BASE_API + '/common/upload_v1'
-      return 'http://192.168.0.14:8084/common/upload_v1'
+      return process.env.VUE_APP_BASE_API + '/common/upload_v1'
+      // return 'http://192.168.0.14:8084/common/upload_v1'
     }
   },
   created() {
@@ -215,7 +232,7 @@ export default {
   },
   methods: {
     getQueryData(obj) {
-      obj.data.name = obj.data.name === '' ? null : obj.data.name
+      obj.data.name = obj.data.name === '' ? null : obj.data.name.trim()
       categoryList(obj).then(res => {
         if (res.success && res.errorCode === 0) {
           this.total = res.total
@@ -233,10 +250,9 @@ export default {
     },
     // 上传函数
     handleAvatarSuccess(res, file) {
-      console.log(res, 666)
       if (res.success && res.errorCode === 0) {
         this.urlsuccess = true
-        this.ruleForm.data.imgPath = res.data ? res.data.realPath : ''
+        this.ruleForm.data.imgPath = res.data ? this.yunUrl + res.data.realPath + res.data.fileName : ''
       }
     },
     beforeAvatarUpload(file) {
@@ -252,7 +268,7 @@ export default {
     },
     handleAvatarSuccess1(res, file) {
       if (res.success && res.errorCode === 0) {
-        this.modifyData.imgPath = res.data ? process.env.VUE_APP_BASE_API + res.data.realPath : ''
+        this.modifyData.imgPath = res.data ? this.yunUrl + res.data.realPath + res.data.fileName : ''
       }
     },
     // 创建函数
@@ -260,7 +276,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.ruleForm.data.createrName = this.$store.getters.userInFo.username + 'qwdq'
-          console.log(this.ruleForm, 55555)
           addCategory(this.ruleForm).then(res => {
             if (res.success && res.errorCode === 0) {
               this.popover = false
@@ -268,7 +283,6 @@ export default {
               this.resetForm('ruleForm')
               this.initData()
             }
-            console.log(res)
           })
         } else {
           console.log('error submit!!')
@@ -304,10 +318,10 @@ export default {
       for (const a in data.data) {
         data.data[a] = obj[a]
       }
-      var re = new RegExp('^' + process.env.VUE_APP_BASE_API)
-      if (data.data.imgPath) {
-        data.data.imgPath = data.data.imgPath.replace(re, '')
-      }
+      // var re = new RegExp('^' + this.yunUrl)
+      // if (data.data.imgPath) {
+      //   data.data.imgPath = data.data.imgPath.replace(re, '')
+      // }
       if (data.data.name === '') {
         this.$message.error('分类名称不能为空哦！')
         return
@@ -385,11 +399,13 @@ export default {
         this.loading = false
       }, 400)
     },
-    getUrl(url) {
-      return process.env.VUE_APP_BASE_API + url
-    },
-    searchFn() {
+    searchFn(val) {
+      this.queryData.data.name = val
       this.initData()
+    },
+    queryImgFn(url) {
+      this.dialogImageUrl = url
+      this.dialogVisible = true
     }
   }
 }
@@ -402,44 +418,46 @@ export default {
     align-items: center;
   }
 </style>
-<style lang="scss">
-  .huatiClass {
-    .avatar-uploader .el-upload {
-      border: 1px dashed #d9d9d9;
-      border-radius: 6px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .avatar-uploader .el-upload:hover {
-      border-color: #409EFF;
-    }
-
-    .avatar-uploader-icon {
-      font-size: 28px;
-      color: #8c939d;
-      width: 80px;
-      height: 80px;
-      line-height: 80px;
-      text-align: center;
-    }
-
-    .avatar {
-      width: 80px;
-      height: 80px;
-      display: block;
-    }
-
-    .modify {
-      .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 60px;
-        height: 60px;
-        line-height: 60px;
-        text-align: center;
-      }
-    }
+<style>
+  .huatiClass .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
   }
+
+  .huatiClass .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+
+  .huatiClass .avatar {
+    width: 80px;
+    height: 80px;
+    display: block;
+  }
+
+  .huatiClass_add .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+  }
+
+  .huatiClass_add .el-upload--text {
+    border: 1px dashed #ccc;
+    border-radius: 6px;
+  }
+
+  .huatiClass .modify .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+  }
+
 </style>

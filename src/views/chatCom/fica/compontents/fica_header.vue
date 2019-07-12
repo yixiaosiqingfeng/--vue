@@ -12,36 +12,6 @@
         </el-input>
       </div>
     </div>
-
-    <!--<div style="flex:1;">-->
-    <!--<span>筛选:</span>-->
-
-    <!--<el-dropdown :hide-on-click="false" style="margin-left:20px ">-->
-    <!--<span class="el-dropdown-link">-->
-    <!--全部-->
-    <!--<i class="el-icon-arrow-down el-icon&#45;&#45;right" />-->
-    <!--</span>-->
-    <!--<el-dropdown-menu slot="dropdown">-->
-    <!--<el-dropdown-item>黄金糕</el-dropdown-item>-->
-    <!--<el-dropdown-item>狮子头</el-dropdown-item>-->
-    <!--<el-dropdown-item>螺蛳粉</el-dropdown-item>-->
-    <!--<el-dropdown-item disabled>双皮奶</el-dropdown-item>-->
-    <!--<el-dropdown-item divided>蚵仔煎</el-dropdown-item>-->
-    <!--</el-dropdown-menu>-->
-    <!--</el-dropdown>-->
-
-    <!--<el-dropdown :hide-on-click="false" style="margin-left:20px ">-->
-    <!--<span class="el-dropdown-link">-->
-    <!--排序方式-->
-    <!--<i class="el-icon-arrow-down el-icon&#45;&#45;right" />-->
-    <!--</span>-->
-    <!--<el-dropdown-menu slot="dropdown">-->
-    <!--<el-dropdown-item>按最新</el-dropdown-item>-->
-    <!--<el-dropdown-item>按倒序</el-dropdown-item>-->
-    <!--<el-dropdown-item>按话题数</el-dropdown-item>-->
-    <!--</el-dropdown-menu>-->
-    <!--</el-dropdown>-->
-    <!--</div>-->
   </div>
 </template>
 <script>
@@ -54,7 +24,7 @@ export default {
   },
   methods: {
     submit() {
-      this.$emit('searchFn')
+      this.$emit('searchFn', this.value)
     }
   }
 }
