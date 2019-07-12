@@ -53,7 +53,7 @@ export default {
             }
           }
           axios
-            .post('http://192.168.0.18:3366/community_auth/update_forum_v1', p)
+            .post('http://192.168.0.254:3366/community_auth/update_forum_v1', p)
             .then(res => {
               if (res.data.success && res.data.errorCode === 0) {
                 this.$message({
