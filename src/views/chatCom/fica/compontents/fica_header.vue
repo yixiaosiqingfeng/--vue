@@ -1,139 +1,77 @@
 <template>
-  <div class="fica_header">
-    <div style="width:100px;">
-      <el-dropdown :hide-on-click="false">
-        <span class="el-dropdown-link">
-          全部
-          <i class="el-icon-arrow-down el-icon--right" />
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>黄金糕</el-dropdown-item>
-          <el-dropdown-item>狮子头</el-dropdown-item>
-          <el-dropdown-item>螺蛳粉</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
-
-    <div style="width:100px;">
+  <div class="fica_header mt10">
+    <div style="width:200px;" class="ml5">
       <div class="el-input">
-        <el-input size="mini" placeholder="请输入关键字" suffix-icon="el-icon-search" />
+        <el-input v-model="value" size="mini" placeholder="请输入内容" class="input-with-select">
+          <el-select slot="prepend" v-model="select1" placeholder="请选择">
+            <el-option label="全部" value="1" />
+            <el-option label="订单号" value="2" />
+            <el-option label="用户电话" value="3" />
+          </el-select>
+          <el-button slot="append" icon="el-icon-search" @click="submit" />
+        </el-input>
       </div>
     </div>
 
-    <div style="width:300px; margin-left:300px !important">
-      <span>筛选:</span>
+    <!--<div style="flex:1;">-->
+    <!--<span>筛选:</span>-->
 
-      <el-dropdown :hide-on-click="false" style="margin-left:20px ">
-        <span class="el-dropdown-link">
-          全部
-          <i class="el-icon-arrow-down el-icon--right" />
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>黄金糕</el-dropdown-item>
-          <el-dropdown-item>狮子头</el-dropdown-item>
-          <el-dropdown-item>螺蛳粉</el-dropdown-item>
-          <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-          <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+    <!--<el-dropdown :hide-on-click="false" style="margin-left:20px ">-->
+    <!--<span class="el-dropdown-link">-->
+    <!--全部-->
+    <!--<i class="el-icon-arrow-down el-icon&#45;&#45;right" />-->
+    <!--</span>-->
+    <!--<el-dropdown-menu slot="dropdown">-->
+    <!--<el-dropdown-item>黄金糕</el-dropdown-item>-->
+    <!--<el-dropdown-item>狮子头</el-dropdown-item>-->
+    <!--<el-dropdown-item>螺蛳粉</el-dropdown-item>-->
+    <!--<el-dropdown-item disabled>双皮奶</el-dropdown-item>-->
+    <!--<el-dropdown-item divided>蚵仔煎</el-dropdown-item>-->
+    <!--</el-dropdown-menu>-->
+    <!--</el-dropdown>-->
 
-      <el-dropdown :hide-on-click="false" style="margin-left:20px ">
-        <span class="el-dropdown-link">
-          排序方式
-          <i class="el-icon-arrow-down el-icon--right" />
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>按最新</el-dropdown-item>
-          <el-dropdown-item>按倒序</el-dropdown-item>
-          <el-dropdown-item>按话题数</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
-    <!-- 分类列表Popover 弹出框 -->
-
-    <!-- <div style="width:500px; float:right; display:flex;flex-wrap:wrap;">
-
-      <el-popover v-model="visible" placement="bottom" width="700" popper-class="animate">
-        <el-upload
-          class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          multiple
-          :limit="3"
-        >
-          <el-button size="small" type="primary">点击上传图片</el-button>
-        </el-upload>
-
-        <div style="width:100%;">
-          <el-input placeholder="请输入名称" style="margin-top:20px" />
-        </div>
-
-        <div style="width:100%;">
-          <el-input placeholder="请输入备注" type="textarea" style="margin-top:20px" />
-        </div>
-
-        <div style="text-align: right; margin-top:10px">
-          <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-          <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
-        </div>
-
-        <el-button slot="reference">+新建</el-button>
-      </el-popover>
-
-    </div> -->
+    <!--<el-dropdown :hide-on-click="false" style="margin-left:20px ">-->
+    <!--<span class="el-dropdown-link">-->
+    <!--排序方式-->
+    <!--<i class="el-icon-arrow-down el-icon&#45;&#45;right" />-->
+    <!--</span>-->
+    <!--<el-dropdown-menu slot="dropdown">-->
+    <!--<el-dropdown-item>按最新</el-dropdown-item>-->
+    <!--<el-dropdown-item>按倒序</el-dropdown-item>-->
+    <!--<el-dropdown-item>按话题数</el-dropdown-item>-->
+    <!--</el-dropdown-menu>-->
+    <!--</el-dropdown>-->
+    <!--</div>-->
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      searchData: {
-        // name: '', // 功能名称
-        // code: '', // 功能编码
-        // menuId: '',
-        // visible: false,
-      }
-    //   visible: false
+      value: '',
+      select1: '全部'
     }
   },
   methods: {
-    // createFn() {
-    //   this.$emit("create", this.searchData);
-    // },
+    submit() {
+      this.$emit('searchFn')
+    }
   }
 }
 </script>
-<style scoped>
-.el-dropdown-link {
-  cursor: pointer;
-  /* color: #409EFF; */
+<style>
+  .fica_header{
+    display:flex;
+    align-items: center;
+  }
+.el-select .el-input {
+  width: 80px;
 }
-.el-icon-arrow-down {
-  font-size: 12px;
+.input-with-select{
+  width:350px;
 }
-.fica_header {
-  display: flex;
-  margin: 20px;
+.input-with-select .el-input-group__prepend {
+  background-color: #fff;
 }
-.fica_header > div {
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
-}
-.el-input {
-  width: 200px !important;
-  height: 28px;
-  line-height: 28px;
-}
-/* .slide-enter-active {
-  transition: all 4s;
-}
-.slide-leave-active {
-  transition: all 4s;
-} */
-
-/* .animate{
-    width: 50px;
-    transition: all 2s;
-} */
 </style>
 

@@ -66,6 +66,8 @@ export default {
   mounted() {
     this.pagData.pageSize = this.pageSize
     this.pagData.currentPage = this.currentPage
+    // 做帖子分类新加的 如果出现问题就是这里
+    this.pagData.total = this.total
   },
   methods: {
     handleSizeChange(val) {
