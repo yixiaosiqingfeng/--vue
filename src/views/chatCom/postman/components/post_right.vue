@@ -19,7 +19,6 @@ export default {
   methods: {
     addPost() {
       this.post++
-      console.log(this.post, 44444444)
     }
   }
 
