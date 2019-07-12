@@ -57,7 +57,7 @@
               <el-dropdown-item>昵称三</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-button type="primary" size="mini" @click="submit">修改</el-button>
+          <el-button type="primary" size="mini" @click="changePost">修改</el-button>
         </div>
       </div>
       <!-- 存放表情 -->
@@ -184,15 +184,7 @@ export default {
       if (!this.isLocked || !this.innerText) {
         this.innerText = this.value
       }
-    },
-    changeData: {
-      handler(n,) {
-        console.log(n, '我是接收方')
-        this.innerText = n.content
-      },
-      deep: true
     }
-
   },
 
   mounted() {
@@ -243,9 +235,8 @@ export default {
       }
     },
     // 修改
-    submit() {
-      console.log(888)
-      this.$emit('submit', this.topicData, this.photoData, this.changeData)
+    changePost() {
+      this.$emit('changePost', this.topicData, this.photoData)
     },
     // 上传图片界面控制
     phsta() {

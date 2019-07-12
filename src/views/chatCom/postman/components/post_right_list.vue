@@ -124,7 +124,7 @@
                           <el-dropdown-item :command="{id:i.id,value:postFunction.rm}">标记热门</el-dropdown-item>
 
                           <el-popover placement="left" width="100%" trigger="click">
-                            <postChange :change-data="changeData" />
+                            <change :change-data="changeData" @changePost="changePost" />
                             <el-dropdown-item
                               slot="reference"
                               :command="{changeData:i,value:postFunction.xg,}"
@@ -187,12 +187,12 @@
 </template>
 <script>
 import postComment from './post_right_comment'
-import postChange from './post_change'
+import change from './change'
 import axios from 'axios'
 export default {
   components: {
     postComment,
-    postChange
+    change
   },
   props: {
     post: {
@@ -289,7 +289,6 @@ export default {
         .post('http://192.168.0.18:3366/community_auth/select_forum_list_v1', l)
         .then(res => {
           if (res.data.success && res.data.errorCode === 0) {
-            console.log(res.data.data, '我是帖子列表数据')
             this.listData = res.data.data
           } else {
             this.$message.error(res.data.msg)
@@ -437,53 +436,14 @@ export default {
         .post('http://192.168.0.18:3366/community_auth/select_forum_list_v1', l)
         .then(res => {
           if (res.data.success && res.data.errorCode === 0) {
-            console.log(res.data.data, '我是帖子列表数据')
             this.listData = res.data.data
           } else {
             this.$message.error(res.data.msg)
           }
         })
     },
-    // 失去焦点事件
-    fun() {
-      // console.log(this.$refs.cont[0].innerText,'我是失去焦点后得到的数据');
-      this.$confirm('是否修改?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        center: true
-      })
-        .then(() => {
-          const c = {
-            code: '1805',
-            data: {
-              id: this.textId,
-              content: this.content
-            }
-          }
-          axios
-            .post('http://192.168.0.18:3366/community_auth/update_forum_v1', c)
-            .then(res => {
-              console.log(res, 111111)
-              if (res.data.success && res.data.errorCode === 0) {
-                this.$message({
-                  type: 'success',
-                  message: '已修改!'
-                })
-                this.getPostList()
-                this.ediText = ''
-              } else {
-                this.$message.error(res.data.msg)
-              }
-            })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })
-          this.ediText = ''
-        })
+    changePost() {
+      this.post++
     }
   }
 }
