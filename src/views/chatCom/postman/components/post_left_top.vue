@@ -1,30 +1,30 @@
 <template>
   <div class="box">
     <div class="top_header">
-      <span>数据统计</span>
+      <span style="font-weight:800;font-size: 16px;">数据统计</span>
       <span>更多</span>
     </div>
 
     <div class="top_data">
       <div style="width:50%;">
-        <p>1200</p>
+        <p style="font-weight:800;font-size: 16px;">1200</p>
         <p>总话题数</p>
-        <p>环比昨日 2% <i class="el-icon-top" /> </p>
+        <p>环比昨日 2% <i class="iconfont icon-up" style="color:green" /> </p>
       </div>
       <div style="width:50%;">
-        <p>1200</p>
+        <p style="font-weight:800;font-size: 16px;">1200</p>
         <p>总话题数</p>
-        <p>环比昨日 2%<i class="el-icon-top" /></p>
+        <p>环比昨日 2%<i class="iconfont icon-down" style="color:red" /></p>
       </div>
       <div style="width:50%;">
-        <p>1200</p>
+        <p style="font-weight:800;font-size: 16px;">1200</p>
         <p>总话题数</p>
-        <p>环比昨日 2%<i class="el-icon-top" /></p>
+        <p>环比昨日 2%<i class="iconfont icon-up" style="color:green" /></p>
       </div>
       <div style="width:50%;">
-        <p>1200</p>
+        <p style="font-weight:800;font-size: 16px;">1200</p>
         <p>总话题数</p>
-        <p>环比昨日 2%<i class="el-icon-top" /></p>
+        <p>环比昨日 2%<i class="iconfont icon-down" style="color:red" /></p>
       </div>
     </div>
   </div>
@@ -35,15 +35,11 @@ export default {
 }
 </script>
 <style scoped>
-p{
-  margin: 0;
-  padding: 0;
-}
 .box{
-  height: 140px;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  height: 210px;
+  box-shadow:0 0 15px #eee;
   margin-top: 5px;
+  padding-top: 5px;
 }
 .top_header{
   display: flex;
@@ -55,9 +51,11 @@ p{
   flex-wrap: wrap;
   text-align: center;
   font-size: 10px;
-
 }
 .top_data>div{
- margin-top: 10px;
+ margin-top: 14px;
+}
+.top_data p{
+  margin-top: 5px;
 }
 </style>

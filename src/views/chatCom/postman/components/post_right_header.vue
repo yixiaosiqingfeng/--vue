@@ -1,97 +1,85 @@
 <template>
-  <div>
-    <!-- 顶部发布区域 -->
-    <div class="right_header">
-      <el-input
-        v-model="textarea"
-        type="textarea"
-        placeholder="分享点好东西"
-        :autosize="{ minRows: 3, maxRows: 55}"
-      />
-      <div class="input_btn">
-        <el-tag type="danger" size="mini">#今天吃什么</el-tag>
-        <el-tag type="danger" size="mini">
-          <i class="el-icon-location-information" /> 位置信息
-        </el-tag>
-      </div>
-      <div class="right_header_end">
-        <div style="width:82%;">
-          <ul class="aliicon">
-            <li>
-              <i class="iconfont icon-biaoqing1" />&nbsp;表情
-            </li>
-            <li>
-              <i class="iconfont icon-tupian" />&nbsp;图片
-            </li>
-            <li>
-              <i class="iconfont icon-shipin-m" />&nbsp;视频
-            </li>
-            <li>
-              <i class="iconfont icon-lianjie" />&nbsp;链接
-            </li>
-          </ul>
-        </div>
-        <div style="width:18%;">
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              <i class="el-icon-edit" />
-              发布昵称
-              <i class="el-icon-arrow-down el-icon--right" />
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>昵称一</el-dropdown-item>
-              <el-dropdown-item>昵称二</el-dropdown-item>
-              <el-dropdown-item>昵称三</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <el-button type="primary" size="mini">发布</el-button>
-        </div>
-      </div>
-    </div>
+  <div style="box-shadow:0 0 15px #eee;">
+    <biaoqin v-model="value" @submit="submit" />
   </div>
 </template>
 <script>
+import biaoqin from './biaoqing'
+import axios from 'axios'
 export default {
+  components: { biaoqin },
   data() {
     return {
-      textarea: ''
+      value: ' ',
+      ty: 10,
+      img_url: []
+    }
+  },
+  watch: {
+    value() {
+      console.log(11)
+    }
+  },
+  methods: {
+    submit(topicData, photoData) {
+      if (this.value === ' ') {
+        this.$message.warning('请输入文本内容')
+        return
+      }
+      // 说明存在图片
+      if (photoData.length !== 0) {
+        this.ty = 20
+        for (const a in photoData) {
+          console.log(photoData[a].realPath + photoData[a].fileName, 99999999)
+          this.img_url.push(photoData[a].realPath + photoData[a].fileName)
+        }
+      }
+      this.$confirm('是否发布?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      })
+        .then(() => {
+          const p = {
+            code: '1804',
+            data: {
+              subjectId: topicData.id, // 话题id 必填
+              appAccountId: this.$store.getters.userInFo.appAccountId, // app账号id 必填
+              userInfoId: '5065c133e64d4973a9ae504868aaa766', // 用户信息id 必填
+              create_name: '张小三', // 马甲名字
+              content: this.value, // 内容
+              img_url: this.img_url.join(','), // 图片路径 选填
+              video_url: '', // 视频路径 选填
+              link_url: '', // 外链地址 选填
+              Type: this.ty, // 预览类型10纯文字；20图文；30小视频
+              program_id: '' // 节目id 选填
+            }
+          }
+          axios
+            .post('http://192.168.0.18:3366/community_auth/post_forum_v1', p)
+            .then(res => {
+              if (res.data.success && res.data.errorCode === 0) {
+                this.$message({
+                  type: 'success',
+                  message: '发布成功!'
+                })
+                this.value = ''
+                this.$emit('addPost')
+              } else {
+                this.$message.error(res.data.msg)
+              }
+            })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+        })
     }
   }
 }
 </script>
 <style scoped>
-.right_header {
-  margin: 5px;
-}
-.input_btn {
-  position: relative;
-  top: -33px;
-  left: 13px;
-}
-ul,
-li {
-  margin: 0;
-  padding: 0;
-}
-.aliicon > li {
-  list-style: none;
-  display: inline-block;
-  margin-left: 5px;
-  cursor: pointer;
-}
-.el-dropdown-link {
-  cursor: pointer;
-}
-.el-icon-arrow-down {
-  font-size: 12px;
-}
-.right_header_end {
-  display: flex;
-  justify-content: space-between;
-  margin-top: -10px;
-}
-.right_header /deep/ .el-textarea__inner{
-  padding: 0 15px 35px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-}
 </style>

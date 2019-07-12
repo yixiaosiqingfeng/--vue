@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import ShowStatList from '../ShowStatList'
+import ShowStatList from './ShowStatList'
 
 export default {
-  name: 'ShowList4',
+  name: 'ShowList3',
   components: { ShowStatList }
 }
 </script>

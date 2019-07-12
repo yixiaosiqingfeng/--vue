@@ -93,7 +93,8 @@ export default {
     }
   },
   created() {
-    this.getItem = this.activeItem
+    const activeItem = JSON.parse(localStorage.getItem('activeItem'))
+    this.getItem = activeItem
   },
   methods: {
 

@@ -27,6 +27,9 @@
 </template>
 
 <script>
+import {
+  allStatistics
+} from '@/api/index'
 
 export default {
   name: 'DataStatistics',
@@ -36,13 +39,25 @@ export default {
         { id: 1, title: '用户总数', num: 1200, score: '2%', icon: 'iconfont icon-up' }, { id: 2, title: '用户总数', num: 1200, score: '4%', icon: 'iconfont icon-down' },
         { id: 3, title: '用户总数', num: 1200, score: '2%', icon: 'iconfont icon-down' }, { id: 4, title: '用户总数', num: 1200, score: '11%', icon: 'iconfont icon-up' }
       ],
-      isUpdate: false
+      isUpdate: false,
+      // 请求参数
+      queryData: {
+        data: {}
+        // code:'2602'
+      }
     }
   },
   created() {
-
+    this.getData(this.queryData)
   },
   methods: {
+    getData(obj) {
+      allStatistics(obj).then(res => {
+        if (res.success && res.errorCode === 0) {
+          console.log('res', res)
+        }
+      })
+    },
     updataDataStetis() {
       this.isUpdate = true
       setTimeout(() => {

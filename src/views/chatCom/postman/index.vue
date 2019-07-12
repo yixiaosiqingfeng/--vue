@@ -23,7 +23,7 @@ export default {
 <style scoped>
 .index_right {
   width: 75%;
-  margin: 5px;
+  margin: 5px 5px 5px 0;
 }
 .index_left {
   width: 25%;
