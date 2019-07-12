@@ -115,17 +115,23 @@
                         <el-dropdown-menu slot="dropdown">
                           <el-dropdown-item
                             v-show="i.stick===10"
-                            :command="{id:i.id,stick:i.stick,value:postFunction.qxzd}"
+                            :command="{id:i.id,stick:i.stick,value:postFunction.zd}"
                           >置顶该贴</el-dropdown-item>
                           <el-dropdown-item
                             v-show="i.stick===20"
-                            :command="{id:i.id,stick:i.stick,value:postFunction.zd}"
+                            :command="{id:i.id,stick:i.stick,value:postFunction.qxzd}"
                           >取消置顶</el-dropdown-item>
                           <el-dropdown-item :command="{id:i.id,value:postFunction.rm}">标记热门</el-dropdown-item>
-                          <el-dropdown-item
-                            :command="{id:i.id,value:postFunction.xg,content:i.content}"
-                          >修改帖子</el-dropdown-item>
-                          <el-dropdown-item :command="{id:i.id,value:postFunction.cc}">删除帖子</el-dropdown-item>
+
+                          <el-popover placement="left" width="100%" trigger="click">
+                            <postChange :change-data="changeData" />
+                            <el-dropdown-item
+                              slot="reference"
+                              :command="{changeData:i,value:postFunction.xg,}"
+                            > 修改帖子</el-dropdown-item>
+                          </el-popover>
+
+                          <el-dropdown-item :command="{id:i.id,value:postFunction.cc}" v-html="'删除帖子'" />
                           <el-dropdown-item :command="{id:i.id,value:postFunction.sc}">收藏帖子</el-dropdown-item>
                         </el-dropdown-menu>
                       </el-dropdown>
@@ -137,19 +143,10 @@
                     ref="cont"
                     style="margin-top:10px;color:#666;font-size:14px;line-height: 20px;"
                     :contenteditable="ediText==='1'"
-                  >
-                    <el-input
-                      v-model="i.content"
-                      type="textarea"
-                      :disabled="ediFlag"
-                      :autosize="{ minRows: 2, maxRows: 4}"
-                      outline
-                      @blur="fun()"
-                    />
-                  </div>
-
+                    v-html="i.content"
+                  />
                   <div style="color:red;margin-top:5px;">#{{ i.title }}</div>
-
+                  <!-- 帖子图片 -->
                   <div v-show="i.type==='20'" class="postdata_right_photo">
                     <img src alt>
                   </div>
@@ -190,10 +187,12 @@
 </template>
 <script>
 import postComment from './post_right_comment'
+import postChange from './post_change'
 import axios from 'axios'
 export default {
   components: {
-    postComment
+    postComment,
+    postChange
   },
   props: {
     post: {
@@ -203,6 +202,8 @@ export default {
   },
   data() {
     return {
+      // 传递数据
+      changeData: {},
       // 帖子管理功能
       postFunction: {
         cc: '删除',
@@ -346,10 +347,9 @@ export default {
           })
       } else if (command.value === '修改') {
         // 修改功能
-        this.ediText = '1'
-        this.ediFlag = false
         this.textId = command.id
-        // this.content = command.content;
+        this.changeData = command.changeData
+        console.log(this.changeData, '修改数据')
       } else if (command.value === '置顶') {
         // 置顶功能
         this.$confirm('是否置顶?', '提示', {
@@ -394,29 +394,28 @@ export default {
           cancelButtonText: '取消',
           type: 'warning',
           center: true
-        })
-          .then(() => {
-            const c = {
-              code: '1803',
-              data: {
-                id: command.id,
-                stick: command.stick
-              }
+        }).then(() => {
+          const c = {
+            code: '1803',
+            data: {
+              id: command.id,
+              stick: command.stick
             }
-            axios
-              .post('http://192.168.0.18:3366/community_auth/stick_v1', c)
-              .then(res => {
-                if (res.data.success && res.data.errorCode === 0) {
-                  this.$message({
-                    type: 'success',
-                    message: '已取消置顶!'
-                  })
-                  this.getPostList()
-                } else {
-                  this.$message.error(res.data.msg)
-                }
-              })
-          })
+          }
+          axios
+            .post('http://192.168.0.18:3366/community_auth/stick_v1', c)
+            .then(res => {
+              if (res.data.success && res.data.errorCode === 0) {
+                this.$message({
+                  type: 'success',
+                  message: '已取消置顶!'
+                })
+                this.getPostList()
+              } else {
+                this.$message.error(res.data.msg)
+              }
+            })
+        })
       }
     },
     showNav(index) {
@@ -553,5 +552,10 @@ export default {
 }
 .el-sl /deep/ .el-input__inner {
   width: 115px;
+}
+.post_change {
+  position: absolute;
+  top: 380px;
+  left: 138px;
 }
 </style>
