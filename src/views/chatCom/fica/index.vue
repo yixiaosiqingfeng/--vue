@@ -26,6 +26,7 @@
                   <el-upload
                     class="avatar-uploader"
                     :action="queryUrl"
+                    :accept="accept"
                     :show-file-list="false"
                     :data="{type:1}"
                     :on-success="handleAvatarSuccess"
@@ -73,6 +74,7 @@
                   :action="queryUrl"
                   :show-file-list="false"
                   :data="{type:1}"
+                  :accept="accept"
                   :on-success="handleAvatarSuccess1"
                   :before-upload="beforeAvatarUpload"
                 >
@@ -180,6 +182,7 @@ export default {
   components: { ficaHeader, pagin },
   data() {
     return {
+      accept: '.png,.jpg',
       dialogVisible: false,
       dialogImageUrl: '',
       // 服务器地址
@@ -232,7 +235,8 @@ export default {
   },
   methods: {
     getQueryData(obj) {
-      obj.data.name = obj.data.name === '' ? null : obj.data.name.trim()
+      console.log(obj.data.name, 4545)
+      obj.data.name = obj.data.name ? obj.data.name.trim() : null
       categoryList(obj).then(res => {
         if (res.success && res.errorCode === 0) {
           this.total = res.total
