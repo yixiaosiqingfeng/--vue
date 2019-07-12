@@ -286,7 +286,7 @@ export default {
         page: 1
       }
       axios
-        .post('http://192.168.0.18:3366/community_auth/select_forum_list_v1', l)
+        .post('http://192.168.0.254:3366/community_auth/select_forum_list_v1', l)
         .then(res => {
           if (res.data.success && res.data.errorCode === 0) {
             this.listData = res.data.data
@@ -321,7 +321,7 @@ export default {
             }
             axios
               .post(
-                'http://192.168.0.18:3366/community_auth/remove_forum_v1',
+                'http://192.168.0.254:3366/community_auth/remove_forum_v1',
                 c
               )
               .then(res => {
@@ -366,7 +366,7 @@ export default {
               }
             }
             axios
-              .post('http://192.168.0.18:3366/community_auth/stick_v1', c)
+              .post('http://192.168.0.254:3366/community_auth/stick_v1', c)
               .then(res => {
                 console.log(res, 111111)
                 if (res.data.success && res.data.errorCode === 0) {
@@ -402,7 +402,7 @@ export default {
             }
           }
           axios
-            .post('http://192.168.0.18:3366/community_auth/stick_v1', c)
+            .post('http://192.168.0.254:3366/community_auth/stick_v1', c)
             .then(res => {
               if (res.data.success && res.data.errorCode === 0) {
                 this.$message({
@@ -433,7 +433,7 @@ export default {
         page: 1
       }
       axios
-        .post('http://192.168.0.18:3366/community_auth/select_forum_list_v1', l)
+        .post('http://192.168.0.254:3366/community_auth/select_forum_list_v1', l)
         .then(res => {
           if (res.data.success && res.data.errorCode === 0) {
             this.listData = res.data.data
