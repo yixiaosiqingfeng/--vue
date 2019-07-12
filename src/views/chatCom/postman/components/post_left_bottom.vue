@@ -27,7 +27,7 @@ export default {
   height: calc(100vh - 355px);
   margin-top: 10px;
   box-shadow:0 0 15px #eee;
-  padding-left: 2px;
+  padding-left: 3px;
 }
 .left_my >>> .el-tabs__item {
   padding: 0 10px;

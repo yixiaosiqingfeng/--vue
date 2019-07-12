@@ -53,7 +53,7 @@ export default {
   font-size: 10px;
 }
 .top_data>div{
- margin-top: 20px;
+ margin-top: 14px;
 }
 .top_data p{
   margin-top: 5px;
