@@ -3,7 +3,7 @@
     <div class="searchBox">
       <!-- 搜索框 -->
       <div style="width: 40%;margin-left: 10px;">
-        <el-input ref="searchInput" v-model="keyWord" placeholder="请输入关键字" @focus="enterSearch" @blur="catchEnter">
+        <el-input ref="searchInput" v-model="keyWord" size="mini" placeholder="请输入关键字" @focus="enterSearch" @blur="catchEnter">
           <el-select slot="prepend" v-model="searchSelect" placeholder="名称" style="width: 90px;">
             <el-option label="名称" value="名称" />
             <el-option label="发起人" value="发起人" />
@@ -111,7 +111,7 @@
                 <el-radio :label="parseInt(20)">需关注</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="封面图" prop="imgPath">
+            <el-form-item label="封面图" prop="background">
               <el-upload
                 class="cover-uploader"
                 :action="queryUrl"
@@ -121,7 +121,7 @@
                 :headers="headers"
                 :data="resData"
               >
-                <img v-if="ruleForm.imgPath" :src="ruleForm.imgPath" class="cover">
+                <img v-if="ruleForm.background" :src="ruleForm.background" class="cover">
                 <i v-else class="el-icon-plus cover-uploader-icon" />
               </el-upload>
             </el-form-item>
@@ -136,16 +136,16 @@
       </transition>
       <!-- 表格 -->
       <!-- height="calc(100vh - 286px)" -->
-      <el-table v-loading="isLoading" :data="tableData" stripe :border="false" :default-sort="{prop: 'createDate', order: 'descending'}">
+      <el-table v-loading="isLoading" :data="tableData" stripe :border="false">
         <el-table-column label="封面图">
           <template slot-scope="scope">
-            <el-image :src="url + scope.row.imgPath" fit="cover" />
+            <el-image :src="scope.row.background" fit="cover" />
             <el-tag v-show="scope.row.isTop" type="success" size="mini" style="position: absolute;top: 0;right: 0;">置顶</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="title" label="话题名称" />
         <el-table-column prop="ownerName" label="发起人" />
-        <el-table-column prop="createDate" label="生效时间" sortable />
+        <el-table-column prop="createDate" label="生效时间" />
         <el-table-column prop="invalidDate" label="失效时间" />
         <el-table-column prop="goodClickCount" label="关注数" />
         <el-table-column prop="commentCount" label="互动数" />
@@ -226,7 +226,7 @@ export default {
       classifyList: [],
       // 表单数据
       ruleForm: {
-        imgPath: '',
+        background: '',
         clickCount: '',
         commentCount: '',
         createDate: '',
@@ -263,7 +263,7 @@ export default {
           required: true,
           message: '简介不能为空'
         }],
-        imgPath: [{
+        background: [{
           required: false,
           message: '请上传封面图'
         }],
@@ -300,7 +300,7 @@ export default {
       // return 'http://192.168.0.14:8084/common/upload_v1'
     },
     url() {
-      return 'http://192.168.0.254/changjia/static'
+      return 'http://192.168.0.254/changjia/static/'
     }
   },
   created() {
@@ -313,13 +313,13 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // var now = new Date().getTime()
-          // var start = new Date(this.ruleForm.createDate).getTime()
-          // var end = new Date(this.ruleForm.invalidDate).getTime()
-          // if (now > start || end <= start) {
-          // 	this.$message('日期格式错误!!')
-          // 	return false
-          // }
+          var now = new Date().getTime()
+          var start = new Date(this.ruleForm.createDate).getTime()
+          var end = new Date(this.ruleForm.invalidDate).getTime()
+          if (now > start || end <= start) {
+            this.$message.error('日期格式错误!!')
+            return false
+          }
           // 编辑
           if (this.isEdit) {
             this.updateTopic()
@@ -329,7 +329,7 @@ export default {
           }
           this.resetForm('ruleForm', true)
         } else {
-          this.$message('error submit!!')
+          this.$message.error('error submit!!')
           return false
         }
       })
@@ -361,8 +361,9 @@ export default {
     },
     // 上传的图片路径
     handleAvatarSuccess(res, file) {
-      console.log(res)
-      // this.ruleForm.imgPath = res.data ? process.env.VUE_APP_BASE_API + res.data.realPath : ''
+      if (res.errorCode === 0 && res.success) {
+        this.ruleForm.background = res.data ? this.url + res.data.realPath + res.data.fileName : ''
+      }
     },
     // 图片格式验证
     beforeAvatarUpload(file) {
@@ -383,7 +384,6 @@ export default {
     },
     // 查询分类
     selectClassify() {
-      this.isLoading = true
       const requestSelect = {
         data: {},
         code: '2286'
@@ -392,21 +392,9 @@ export default {
         if (res.errorCode === 0 && res.success) {
           this.classifyList = res.data
         } else {
-          this.$message({
-            showClose: true,
-            message: res.msg,
-            type: 'error'
-          })
+          this.$message.error(res.msg)
         }
       })
-    },
-    // 上传图片路径切掉前半部分
-    replaceUrl(url) {
-      var re = new RegExp('^' + process.env.VUE_APP_BASE_API)
-      if (url) {
-        url = url.replace(re, '')
-      }
-      return url
     },
     // 新增话题
     addTopic() {
@@ -414,7 +402,7 @@ export default {
       const requestAdd = {
         data: {
           title: this.ruleForm.title,
-          imgPath: this.replaceUrl(this.ruleForm.imgPath),
+          background: this.ruleForm.background,
           ownerId: this.ruleForm.ownerId,
           ownerName: this.ruleForm.ownerName,
           socialId: this.ruleForm.socialId,
@@ -430,13 +418,9 @@ export default {
           this.isLoading = false
           this.$emit('changeStatus', false)
           this.selectTopic(true)
-          this.$message('已添加！')
+          this.$message.success('已添加')
         } else {
-          this.$message({
-            showClose: true,
-            message: res.msg,
-            type: 'error'
-          })
+          this.$message.error(res.msg)
         }
       })
     },
@@ -456,11 +440,7 @@ export default {
           this.selectTopic(true)
           this.$message('已删除')
         } else {
-          this.$message({
-            showClose: true,
-            message: res.msg,
-            type: 'error'
-          })
+          this.$message.error(res.msg)
         }
       })
     },
@@ -470,7 +450,7 @@ export default {
       const requestUpdate = {
         data: {
           title: this.ruleForm.title,
-          imgPath: this.replaceUrl(this.ruleForm.imgPath),
+          background: this.ruleForm.background,
           socialId: this.ruleForm.socialId,
           intoduce: this.ruleForm.intoduce,
           invalidDate: this.ruleForm.invalidDate,
@@ -486,12 +466,9 @@ export default {
           this.editIndex = -1
           this.selectTopic(true)
           this.$emit('changeStatus', false)
+          this.$message.success('已修改')
         } else {
-          this.$message({
-            showClose: true,
-            message: res.msg,
-            type: 'error'
-          })
+          this.$message.error(res.msg)
         }
       })
     },
@@ -513,11 +490,7 @@ export default {
           this.tableData = res.data
           this.isLoading = false
         } else {
-          this.$message({
-            showClose: true,
-            message: res.msg,
-            type: 'error'
-          })
+          this.$message.error(res.msg)
         }
       })
     },
