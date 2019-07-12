@@ -40,7 +40,12 @@
             <el-dropdown-item command="互动数">互动数</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button type="text" @click.stop="$emit('changeStatus', !showCreate);isEdit=false;resetForm('ruleForm')">新建</el-button>
+        <el-button
+          type="text"
+          @click.stop="$emit('changeStatus', !showCreate)
+                       isEdit=false;resetForm('ruleForm')"
+        >新建
+        </el-button>
       </div>
     </div>
     <!-- 数据条数 -->
@@ -92,14 +97,22 @@
               </el-col>
             </el-form-item>
             <el-form-item label="发起人" prop="ownerName">
-              <el-avatar size="small" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" class="avatar" />
+              <el-avatar
+                size="small"
+                src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                class="avatar"
+              />
               <el-dropdown trigger="click" style="vertical-align: middle;" @command="selectInitiator">
                 <span class="el-dropdown-link">
                   {{ ruleForm.ownerId }}<i class="el-icon-arrow-down el-icon--right" />
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-for="(item, index) in userList" :key="index" :command="item">
-                    <el-avatar size="small" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" class="avatar" />
+                    <el-avatar
+                      size="small"
+                      src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                      class="avatar"
+                    />
                     {{ item.id }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -121,7 +134,7 @@
                 :headers="headers"
                 :data="resData"
               >
-                <img v-if="ruleForm.imgPath" :src="ruleForm.imgPath" class="cover">
+                <img v-if="ruleForm.background" :src="ruleForm.background" class="cover">
                 <i v-else class="el-icon-plus cover-uploader-icon" />
               </el-upload>
             </el-form-item>
@@ -136,11 +149,12 @@
       </transition>
       <!-- 表格 -->
       <!-- height="calc(100vh - 286px)" -->
-      <el-table v-loading="isLoading" :data="tableData" stripe :border="false" :default-sort="{prop: 'createDate', order: 'descending'}">
+      <el-table v-loading="loading" :data="tableData" stripe :border="false">
         <el-table-column label="封面图">
           <template slot-scope="scope">
-            <el-image :src="url + scope.row.imgPath" fit="cover" />
-            <el-tag v-show="scope.row.isTop" type="success" size="mini" style="position: absolute;top: 0;right: 0;">置顶</el-tag>
+            <el-image :src="scope.row.background" fit="cover" />
+            <el-tag v-show="scope.row.isTop" type="success" size="mini" style="position: absolute;top: 0;right: 0;">置顶
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="title" label="话题名称" />
@@ -158,35 +172,36 @@
         </el-table-column>
       </el-table>
       <!-- 分页器 -->
-      <div style="margin: 20px auto;display: flex;justify-content: center;">
-        <el-pagination
-          :current-page.sync="currentPage"
+      <div>
+        <pagin
+          class="mt10"
+          :total="total"
           :page-size="pageSize"
-          layout="prev, pager, next, jumper"
-          :total="1000"
-          @current-change="pageChange"
+          :current-page="currentPage"
+          @handleSizeChange="handleSizeChange"
+          @handleCurrentChange="handleCurrentChange"
         />
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
+import pagin from '@/components/tableAss/components/pagination'
 import {
   topic_select,
   topic_add,
   topic_update,
   topic_delete,
   classify_select
-} from '@/api/topic.js'
+} from '@/api/topic'
 
-import {
-  getToken
-} from '@/utils/auth.js'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'TopicTable',
-
+  components: { pagin },
   props: {
     showCreate: {
       type: Boolean
@@ -207,8 +222,9 @@ export default {
       currentPage: 1,
       // 每页显示的条数
       pageSize: 10,
+      total: 0,
       // 是否处于加载状态
-      isLoading: false,
+      loading: false,
       // 筛选
       screen: '全部',
       // 排序
@@ -226,7 +242,7 @@ export default {
       classifyList: [],
       // 表单数据
       ruleForm: {
-        imgPath: '',
+        background: '',
         clickCount: '',
         commentCount: '',
         createDate: '',
@@ -267,16 +283,6 @@ export default {
           required: false,
           message: '请上传封面图'
         }],
-        // createDate: [{
-        // 	type: 'date',
-        // 	required: false,
-        // 	message: '请选择时间'
-        // }],
-        // invalidDate: [{
-        // 	type: 'date',
-        // 	required: false,
-        // 	message: '请选择时间'
-        // }],
         ownerName: [{
           required: false,
           message: '请选择发起人'
@@ -300,7 +306,7 @@ export default {
       // return 'http://192.168.0.14:8084/common/upload_v1'
     },
     url() {
-      return 'http://192.168.0.254/changjia/static'
+      return 'http://192.168.0.254/changjia/static/'
     }
   },
   created() {
@@ -313,14 +319,6 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // var now = new Date().getTime()
-          // var start = new Date(this.ruleForm.createDate).getTime()
-          // var end = new Date(this.ruleForm.invalidDate).getTime()
-          // if (now > start || end <= start) {
-          // 	this.$message('日期格式错误!!')
-          // 	return false
-          // }
-          // 编辑
           if (this.isEdit) {
             this.updateTopic()
           } else {
@@ -357,19 +355,20 @@ export default {
         .then(r => {
           this.deleteTopic(info.id)
         })
-        .catch(_ => {})
+        .catch(_ => {
+        })
     },
     // 上传的图片路径
     handleAvatarSuccess(res, file) {
-      console.log(res)
-      // this.ruleForm.imgPath = res.data ? process.env.VUE_APP_BASE_API + res.data.realPath : ''
+      this.ruleForm.background = res.data ? this.url + res.data.realPath + res.data.fileName : ''
+      console.log(this.ruleForm.background, 777)
     },
     // 图片格式验证
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg'
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
-        this.$message.error('上传封面图片只能是 JPG 格式!')
+        this.$message.error('上传封面图片只能是 JPG/PNG 格式!')
       }
       if (!isLt2M) {
         this.$message.error('上传封面图片大小不能超过 2MB!')
@@ -383,7 +382,6 @@ export default {
     },
     // 查询分类
     selectClassify() {
-      this.isLoading = true
       const requestSelect = {
         data: {},
         code: '2286'
@@ -400,21 +398,12 @@ export default {
         }
       })
     },
-    // 上传图片路径切掉前半部分
-    replaceUrl(url) {
-      var re = new RegExp('^' + process.env.VUE_APP_BASE_API)
-      if (url) {
-        url = url.replace(re, '')
-      }
-      return url
-    },
     // 新增话题
     addTopic() {
-      this.isLoading = true
       const requestAdd = {
         data: {
           title: this.ruleForm.title,
-          imgPath: this.replaceUrl(this.ruleForm.imgPath),
+          background: this.ruleForm.background,
           ownerId: this.ruleForm.ownerId,
           ownerName: this.ruleForm.ownerName,
           socialId: this.ruleForm.socialId,
@@ -426,8 +415,6 @@ export default {
       }
       topic_add(requestAdd).then(res => {
         if (res.errorCode === 0 && res.success) {
-          console.log(res)
-          this.isLoading = false
           this.$emit('changeStatus', false)
           this.selectTopic(true)
           this.$message('已添加！')
@@ -442,7 +429,6 @@ export default {
     },
     // 删除话题
     deleteTopic(deleteId) {
-      this.isLoading = true
       const requestDelete = {
         data: {
           id: deleteId
@@ -451,8 +437,6 @@ export default {
       }
       topic_delete(requestDelete).then(res => {
         if (res.errorCode === 0 && res.success) {
-          console.log(res)
-          this.isLoading = false
           this.selectTopic(true)
           this.$message('已删除')
         } else {
@@ -466,11 +450,10 @@ export default {
     },
     // 修改话题
     updateTopic() {
-      this.isLoading = true
       const requestUpdate = {
         data: {
           title: this.ruleForm.title,
-          imgPath: this.replaceUrl(this.ruleForm.imgPath),
+          background: this.ruleForm.background,
           socialId: this.ruleForm.socialId,
           intoduce: this.ruleForm.intoduce,
           invalidDate: this.ruleForm.invalidDate,
@@ -481,7 +464,6 @@ export default {
       }
       topic_update(requestUpdate).then(res => {
         if (res.errorCode === 0 && res.success) {
-          this.isLoading = false
           this.isEdit = false
           this.editIndex = -1
           this.selectTopic(true)
@@ -497,7 +479,6 @@ export default {
     },
     // 查询话题
     selectTopic(flag) {
-      this.isLoading = true
       const requestSelect = {
         data: flag ? {} : {
           title: this.keyWord.trim()
@@ -509,9 +490,9 @@ export default {
       topic_select(requestSelect).then(res => {
         if (res.errorCode === 0 && res.success) {
           this.tableData = []
-          console.log(res)
+          this.total = res.total
           this.tableData = res.data
-          this.isLoading = false
+          this.loadingFn()
         } else {
           this.$message({
             showClose: true,
@@ -539,7 +520,8 @@ export default {
     },
     // input失去焦点时取消回车
     catchEnter() {
-      document.onkeyup = () => {}
+      document.onkeyup = () => {
+      }
     },
     // 筛选
     screenSelect(command) {
@@ -549,88 +531,100 @@ export default {
     sortsSelect(command) {
       this.sorts = command
     },
-    // 翻页
-    pageChange(page) {
+    handleSizeChange(val) {
+      this.pageSize = val
+      console.log(666)
       this.selectTopic()
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.selectTopic()
+    },
+    // 请求动画
+    loadingFn() {
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+      }, 400)
     }
   }
 }
 </script>
 
 <style scoped>
-	.content1 {
-		width: 73%;
-		height: calc(100vh - 130px);
-		overflow-y: scroll;
-		box-shadow: 0 0 10px #f0f0f0;
-	}
+  .content1 {
+    width: 73%;
+    height: calc(100vh - 130px);
+    overflow-y: scroll;
+    box-shadow: 0 0 10px #f0f0f0;
+  }
 
-	.content1::-webkit-scrollbar {
-		display: none
-	}
+  .content1::-webkit-scrollbar {
+    display: none
+  }
 
-	.searchBox {
-		background: #fafafa;
-		height: 44px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
+  .searchBox {
+    background: #fafafa;
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-	.el-select {
-		width: 80px;
-	}
+  .el-select {
+    width: 80px;
+  }
 
-	.createData {
-		width: 70%;
-		box-shadow: 0px 0px 10px #f0f0f0;
-		border-radius: 3px;
-		background: #fff;
-		position: absolute;
-		left: 15%;
-		top: 0;
-		z-index: 2;
-		padding: 20px;
-	}
+  .createData {
+    width: 70%;
+    box-shadow: 0px 0px 10px #f0f0f0;
+    border-radius: 3px;
+    background: #fff;
+    position: absolute;
+    left: 15%;
+    top: 0;
+    z-index: 2;
+    padding: 20px;
+  }
 
-	.td {
-		border-left: none;
-		border-right: none;
-	}
+  .td {
+    border-left: none;
+    border-right: none;
+  }
 
-	.cover-uploader {
-		border: 1px dashed #d9d9d9;
-		border-radius: 6px;
-		cursor: pointer;
-		position: relative;
-		overflow: hidden;
-		width: 100px;
-		height: 100px;
-	}
+  .cover-uploader {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+  }
 
-	.cover-uploader:hover {
-		border-color: #409EFF;
-	}
+  .cover-uploader:hover {
+    border-color: #409EFF;
+  }
 
-	.cover-uploader-icon {
-		font-size: 28px;
-		color: #8c939d;
-		width: 100px;
-		height: 100px;
-		line-height: 100px;
-		text-align: center;
-	}
+  .cover-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+  }
 
-	.cover {
-		width: 100px;
-		height: 100px;
-		display: block;
-	}
+  .cover {
+    width: 100px;
+    height: 100px;
+    display: block;
+  }
 
-	.avatar {
-		vertical-align: middle;
-		margin: 5px 10px 5px 0;
-		height: 28px;
-		width: 28px;
-	}
+  .avatar {
+    vertical-align: middle;
+    margin: 5px 10px 5px 0;
+    height: 28px;
+    width: 28px;
+  }
 </style>
