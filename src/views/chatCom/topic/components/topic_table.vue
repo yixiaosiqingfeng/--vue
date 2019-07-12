@@ -111,17 +111,17 @@
                 <el-radio :label="parseInt(20)">需关注</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="封面图" prop="background">
+            <el-form-item label="封面图" prop="imgPath">
               <el-upload
                 class="cover-uploader"
-                action="http://192.168.0.18:8084/common/upload_v1"
+                :action="queryUrl"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
                 :headers="headers"
                 :data="resData"
               >
-                <img v-if="ruleForm.background" :src="ruleForm.background" class="cover">
+                <img v-if="ruleForm.imgPath" :src="ruleForm.imgPath" class="cover">
                 <i v-else class="el-icon-plus cover-uploader-icon" />
               </el-upload>
             </el-form-item>
@@ -139,7 +139,7 @@
       <el-table v-loading="isLoading" :data="tableData" stripe :border="false" :default-sort="{prop: 'createDate', order: 'descending'}">
         <el-table-column label="封面图">
           <template slot-scope="scope">
-            <el-image :src="scope.row.background" fit="cover" />
+            <el-image :src="url + scope.row.imgPath" fit="cover" />
             <el-tag v-show="scope.row.isTop" type="success" size="mini" style="position: absolute;top: 0;right: 0;">置顶</el-tag>
           </template>
         </el-table-column>
@@ -159,7 +159,13 @@
       </el-table>
       <!-- 分页器 -->
       <div style="margin: 20px auto;display: flex;justify-content: center;">
-        <el-pagination :current-page.sync="currentPage" :page-size="pageSize" layout="prev, pager, next, jumper" :total="tableData.length" />
+        <el-pagination
+          :current-page.sync="currentPage"
+          :page-size="pageSize"
+          layout="prev, pager, next, jumper"
+          :total="1000"
+          @current-change="pageChange"
+        />
       </div>
     </div>
   </div>
@@ -200,7 +206,7 @@ export default {
       // 分页下标
       currentPage: 1,
       // 每页显示的条数
-      pageSize: 7,
+      pageSize: 10,
       // 是否处于加载状态
       isLoading: false,
       // 筛选
@@ -217,16 +223,10 @@ export default {
       // 用户列表
       userList: [],
       // 分类列表
-      classifyList: [{
-        name: '这个类',
-        id: '86502a62d5fc4349a0fa2ed93667a7bf'
-      }, {
-        name: '那个类',
-        id: '86502a62d5fc4349a0fa2ed93667a7bf'
-      }],
+      classifyList: [],
       // 表单数据
       ruleForm: {
-        background: '',
+        imgPath: '',
         clickCount: '',
         commentCount: '',
         createDate: '',
@@ -263,7 +263,7 @@ export default {
           required: true,
           message: '简介不能为空'
         }],
-        background: [{
+        imgPath: [{
           required: false,
           message: '请上传封面图'
         }],
@@ -294,11 +294,19 @@ export default {
       tableData: []
     }
   },
+  computed: {
+    queryUrl() {
+      return process.env.VUE_APP_BASE_API + '/common/upload_v1'
+      // return 'http://192.168.0.14:8084/common/upload_v1'
+    },
+    url() {
+      return 'http://192.168.0.254/changjia/static'
+    }
+  },
   created() {
     this.selectTopic(true)
     this.selectClassify()
     this.userList.push(this.$store.getters.userInFo)
-    console.log(this.$store.getters.userInFo)
   },
   methods: {
     // 提交
@@ -353,7 +361,8 @@ export default {
     },
     // 上传的图片路径
     handleAvatarSuccess(res, file) {
-      this.ruleForm.background = URL.createObjectURL(file.raw)
+      console.log(res)
+      // this.ruleForm.imgPath = res.data ? process.env.VUE_APP_BASE_API + res.data.realPath : ''
     },
     // 图片格式验证
     beforeAvatarUpload(file) {
@@ -391,13 +400,21 @@ export default {
         }
       })
     },
+    // 上传图片路径切掉前半部分
+    replaceUrl(url) {
+      var re = new RegExp('^' + process.env.VUE_APP_BASE_API)
+      if (url) {
+        url = url.replace(re, '')
+      }
+      return url
+    },
     // 新增话题
     addTopic() {
       this.isLoading = true
       const requestAdd = {
         data: {
           title: this.ruleForm.title,
-          background: this.ruleForm.background,
+          imgPath: this.replaceUrl(this.ruleForm.imgPath),
           ownerId: this.ruleForm.ownerId,
           ownerName: this.ruleForm.ownerName,
           socialId: this.ruleForm.socialId,
@@ -453,7 +470,7 @@ export default {
       const requestUpdate = {
         data: {
           title: this.ruleForm.title,
-          background: this.ruleForm.background,
+          imgPath: this.replaceUrl(this.ruleForm.imgPath),
           socialId: this.ruleForm.socialId,
           intoduce: this.ruleForm.intoduce,
           invalidDate: this.ruleForm.invalidDate,
@@ -531,6 +548,10 @@ export default {
     // 排序
     sortsSelect(command) {
       this.sorts = command
+    },
+    // 翻页
+    pageChange(page) {
+      this.selectTopic()
     }
   }
 }
