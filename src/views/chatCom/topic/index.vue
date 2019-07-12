@@ -2,27 +2,18 @@
   <div class="content">
     <!-- 表格部分 -->
     <topicTable :show-create="showCreate" @changeStatus="changeStatus" />
-    <div style="margin-left: 15px;">
-      <!-- 右上部分（统计） -->
-      <topicCensus />
-      <!-- 右下部分（我的） -->
-      <topicMine />
-    </div>
+
   </div>
 </template>
 
 <script>
 import topicTable from './components/topic_table.vue'
-import topicCensus from './components/topic_census.vue'
-import topicMine from './components/topic_mine.vue'
 
 export default {
   name: 'Index',
 
   components: {
-    topicTable,
-    topicCensus,
-    topicMine
+    topicTable
   },
 
   data() {

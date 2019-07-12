@@ -1,5 +1,9 @@
 <template>
   <div style="box-shadow: 0 0 15px #eee;">
+    <postChange
+      :change-data="changeData"
+      @qwe="qwe"
+    />
     <!-- 顶部搜索 -->
     <div class="right_list_top">
       <div class="list_top_select">
@@ -187,7 +191,7 @@
 </template>
 <script>
 import postComment from './post_right_comment'
-import postChange from './post_change'
+import postChange from './change'
 import axios from 'axios'
 export default {
   components: {
@@ -272,6 +276,9 @@ export default {
   },
 
   methods: {
+    qwe() {
+      console.log(777)
+    },
     // 搜索功能
     handleIconClick() {
       if (this.selectType === '') {

@@ -553,7 +553,7 @@ export default {
 
 <style scoped>
   .content1 {
-    width: 73%;
+    width:100%;
     height: calc(100vh - 130px);
     overflow-y: scroll;
     box-shadow: 0 0 10px #f0f0f0;
@@ -576,7 +576,6 @@ export default {
   }
 
   .createData {
-    width: 70%;
     box-shadow: 0px 0px 10px #f0f0f0;
     border-radius: 3px;
     background: #fff;

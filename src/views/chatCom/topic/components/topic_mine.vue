@@ -29,7 +29,7 @@ export default {
 <style scoped>
 	.content3 {
 		width: 315px;
-		height: calc(100vh - 367px);
+		height: calc(100vh - 294px);
 		box-shadow: 0 0 10px #f0f0f0;
 		margin-top: 15px;
 		padding: 20px;
