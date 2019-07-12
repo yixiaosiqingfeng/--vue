@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:660px;">
     <div>
       <div
         ref="biaoqingBox"
@@ -20,7 +20,7 @@
       </div>
 
       <div class="right_header_end">
-        <div style="width:82%;">
+        <div style="width:76%;">
           <ul class="aliicon">
             <li @click.stop="biaoqnFn">
               <i class="iconfont icon-biaoqing1" />&nbsp;
@@ -44,7 +44,7 @@
             </li>
           </ul>
         </div>
-        <div style="width:18%;margin-bottom: 3px;">
+        <div style="width:24%;margin-bottom: 3px;">
           <el-dropdown>
             <span class="el-dropdown-link">
               <i class="el-icon-edit" />
@@ -57,10 +57,10 @@
               <el-dropdown-item>昵称三</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-button type="primary" size="mini" @click="submit">发布</el-button>
+          <el-button type="primary" size="mini" @click="submit">修改</el-button>
         </div>
       </div>
-      <!-- 存放表情节目 -->
+      <!-- 存放表情 -->
       <div style="position:relative;" @click.stop="biaoqing=1">
         <div class="biaoqin_box" :class="{open:biaoqing===1,hidden:biaoqing===2}">
           <ul class="oul" style="display:flex;flex-wrap:wrap;">
@@ -103,6 +103,12 @@ export default {
     canEdit: {
       type: Boolean,
       default: true
+    },
+    changeData: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   data() {
@@ -178,8 +184,17 @@ export default {
       if (!this.isLocked || !this.innerText) {
         this.innerText = this.value
       }
+    },
+    changeData: {
+      handler(n,) {
+        console.log(n, '我是接收方')
+        this.innerText = n.content
+      },
+      deep: true
     }
+
   },
+
   mounted() {
     const _this = this
     document.addEventListener(
@@ -227,9 +242,10 @@ export default {
         this.biaoqing = 1
       }
     },
-    // 发布
+    // 修改
     submit() {
-      this.$emit('submit', this.topicData, this.photoData)
+      console.log(888)
+      this.$emit('submit', this.topicData, this.photoData, this.changeData)
     },
     // 上传图片界面控制
     phsta() {
@@ -359,7 +375,7 @@ export default {
 }
 .right_header_end {
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
   margin-top: -10px;
 }
 .post_ph {
