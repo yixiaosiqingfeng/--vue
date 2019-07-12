@@ -42,8 +42,8 @@ export default {
       isUpdate: false,
       // 请求参数
       queryData: {
-        data: {}
-        // code:'2602'
+        data: {},
+        code: '2602'
       }
     }
   },
@@ -54,7 +54,7 @@ export default {
     getData(obj) {
       allStatistics(obj).then(res => {
         if (res.success && res.errorCode === 0) {
-          console.log('res', res)
+          // console.log('allStatistics', res)
         }
       })
     },
