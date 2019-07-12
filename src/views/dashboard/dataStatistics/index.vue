@@ -42,8 +42,8 @@ export default {
       isUpdate: false,
       // 请求参数
       queryData: {
-        data: {}
-        // code:'2602'
+        data: {},
+        code: '2602'
       }
     }
   },

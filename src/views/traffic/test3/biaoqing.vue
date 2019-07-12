@@ -16,8 +16,12 @@
     </div>
     <div style="position:relative;" @click.stop="biaoqing=1">
       <div class="biaoqin_box" :class="{open:biaoqing===1,hidden:biaoqing===2}">
-        <ul class="oul" style="display:flex;flex-wrap:wrap;">
-          <li v-for="(item,index) in biaoqingArr" :key="index" style="width:28px;height:28px;cursor:pointer;">
+        <ul class="oul">
+          <li
+            v-for="(item,index) in biaoqingArr"
+            :key="index"
+            style="width:28px;height:28px;cursor:pointer;"
+          >
             <img :src="item.src" alt="" width="100%" height="100%" @click="getSrc(item.src)">
           </li>
         </ul>
@@ -166,18 +170,26 @@ export default {
 
   .biaoqin_box {
     position: relative;
-    width: 100%;
+    /*width: 200px;*/
     height: 0;
     box-shadow: 0 0 10px #eee;
     overflow: hidden;
   }
 
   .oul {
+    /*clear: both;*/
+    width: 180px;
     padding: 5px;
     border-radius: 5px;
     height: 108px;
     overflow-y: scroll;
     overflow-x: hidden;
+    display:flex;
+    flex-wrap: wrap;
+    align-content:flex-start;
+  }
+  .oul li{
+    /*float: left;*/
   }
 
   .biaoqin_box ul, .biaoqin_box li {
