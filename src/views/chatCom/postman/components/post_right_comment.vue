@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #f9f9f9;">
+  <div style="background-color: #eee;">
     <!-- 评论框区-->
     <div style="display:flex;flex-wrap:wrap;padding-left: 10%;" class="mt10">
       <!-- 左边头像 -->

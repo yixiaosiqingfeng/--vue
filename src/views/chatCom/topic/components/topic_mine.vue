@@ -6,18 +6,14 @@
       <el-col :span="6"><span :class="{tabBar: true, active: tabIndex == 2}" @click="tabIndex = 2">我的评论</span></el-col>
       <el-col :span="6"><span :class="{tabBar: true, active: tabIndex == 3}" @click="tabIndex = 3">我的点赞</span></el-col>
     </el-row>
-    <div v-show="tabIndex === 0" class="mine">帖子</div>
-    <div v-show="tabIndex === 1" class="mine">收藏</div>
-    <div v-show="tabIndex === 2" class="mine">评论</div>
-    <div v-show="tabIndex === 3" class="mine">点赞</div>
+    <div v-show="tabIndex == 0" class="mine">帖子</div>
+    <div v-show="tabIndex == 1" class="mine">收藏</div>
+    <div v-show="tabIndex == 2" class="mine">评论</div>
+    <div v-show="tabIndex == 3" class="mine">点赞</div>
   </div>
 </template>
 
 <script>
-import {
-  mine_select
-} from '@/api/topic.js'
-
 export default {
   name: 'TopicMine',
 
@@ -26,23 +22,6 @@ export default {
       // 右下部分标签页下标
       tabIndex: 0
     }
-  },
-
-  created() {
-    const requestSelect = {
-      code: '2362',
-      data: {
-        createId: this.$store.getters.userInFo.id,
-        code: '1804'
-      }
-    }
-    mine_select(requestSelect).then(res => {
-      if (res.errorCode === 0 && res.success) {
-        console.log(res.data)
-      } else {
-        this.$message.error(res.msg)
-      }
-    })
   }
 }
 </script>

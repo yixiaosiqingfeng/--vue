@@ -36,34 +36,8 @@
 </template>
 
 <script>
-import {
-  // time_census_select,
-  total_census_select
-  // comment_census_select
-} from '@/api/topic.js'
-
 export default {
-  name: 'TopicCensus',
-
-  data() {
-    return {
-
-    }
-  },
-
-  created() {
-    const requestSelect = {
-      code: '2602',
-      data: {}
-    }
-    total_census_select(requestSelect).then(res => {
-      if (res.errorCode === 0 && res.success) {
-        console.log(res.data)
-      } else {
-        this.$message.error(res.msg)
-      }
-    })
-  }
+  name: 'TopicCensus'
 }
 </script>
 

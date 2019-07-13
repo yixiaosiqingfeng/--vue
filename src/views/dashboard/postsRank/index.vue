@@ -43,14 +43,6 @@
 
 export default {
   name: 'PostsRank',
-  // props: {
-  //   todayPupularData: {
-  //     type: Object,
-  //     default() {
-  //       return {}
-  //     }
-  //   },
-  // },
   data() {
     return {
       count: 10,
@@ -76,9 +68,6 @@ export default {
     disabled() {
       return this.loading || this.noMore
     }
-  },
-  created() {
-    // console.log('',this.todayPupularData);
   },
   methods: {
     load() {

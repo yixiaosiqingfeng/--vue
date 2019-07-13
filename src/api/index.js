@@ -8,12 +8,3 @@ export function allStatistics(data) {
     data
   })
 }
-
-// 今日热门接口
-export function todayPopular(data) {
-  return request({
-    url: '/community_auth/select_forum_top10_v1',
-    method: 'post',
-    data
-  })
-}

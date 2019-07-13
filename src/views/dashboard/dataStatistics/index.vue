@@ -54,7 +54,7 @@ export default {
     getData(obj) {
       allStatistics(obj).then(res => {
         if (res.success && res.errorCode === 0) {
-          // console.log('allStatistics', res)
+          console.log('res', res)
         }
       })
     },
