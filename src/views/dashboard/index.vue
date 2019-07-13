@@ -2,6 +2,7 @@
   <div class="dashboard-container">
     <div class="con-left">
       <Weather />
+      <!-- <DataStatistics :timesharing-data="timeSharingData" @updataDataStetis="updateTimeShare" /> -->
       <DataStatistics />
       <ShowStatistics />
       <Todolish />
@@ -20,13 +21,37 @@ import ShowStatistics from './showStatistics'
 import Todolish from './todolish'
 import TopicHeat from './topicHeat'
 import PostsRank from './postsRank'
+import {
+  timeSharingStatistics
+} from '@/api/index'
 
 export default {
   name: 'Dashboard',
   components: { Weather, DataStatistics, ShowStatistics, Todolish, TopicHeat, PostsRank },
   data() {
     return {
-      currentRole: 'adminDashboard'
+      currentRole: 'adminDashboard',
+      timeSharingParam: { // 分时统计参数
+        data: {},
+        code: '2602'
+      }
+      // timeSharingData:'',
+    }
+  },
+  created() {
+    this.getTimeShareData(this.timeSharingParam)
+  },
+  methods: {
+    // 获取分时数据
+    getTimeShareData(obj) {
+      timeSharingStatistics(obj).then(res => {
+        if (res.success && res.errorCode === 0) {
+          this.timeSharingData = res.data
+        }
+      })
+    },
+    updateTimeShare() {
+      // this.getTimeShareData(this.timeSharingParam);
     }
   }
 }
@@ -44,6 +69,7 @@ export default {
       flex-direction: column;
     }
     .con-right{
+      width: 29%;
       margin-left: 15px;
       height: 880px;
       display: flex;
