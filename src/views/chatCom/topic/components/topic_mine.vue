@@ -16,7 +16,7 @@
             <div>{{ item.createName }}</div>
           </el-col>
           <el-col :span="6">
-            <div style="color: #e4393c;">{{ item.programName || '无节目' }}</div>
+            <div style="color: #e4393c;">{{ item.programName }}</div>
           </el-col>
           <el-col :span="6">
             <div style="color: #808080;">{{ item.createDate }}</div>
@@ -78,9 +78,6 @@ export default {
 
   created() {
     this.selectMine()
-    console.log(this.$store.getters.userInFo)
-    console.log(this.$store.getters.userInFo.appAccountId)
-    console.log(this.$store.getters.userInFo.id)
   },
 
   methods: {
@@ -112,7 +109,7 @@ export default {
       const requestSelect = {
         code: '2362',
         data: {
-          createId: this.$store.getters.userInFo.appAccountId,
+          createId: this.$store.getters.userInFo.id,
           code: this.queryCode[this.tabIndex]
         },
         limit: this.limit,

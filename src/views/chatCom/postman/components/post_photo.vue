@@ -1,5 +1,6 @@
 <template>
   <div class="photo_maxbox">
+    <!-- 我我我 -->
     <div style="display: flex;justify-content: space-between;margin:10px 5px;">
       <span>本地上传</span>
       <span

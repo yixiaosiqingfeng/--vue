@@ -1,6 +1,6 @@
 <template>
   <div style="box-shadow: 0 0 15px #eee;">
-    <!-- 顶部搜索 -->
+    <!-- 顶部搜索 我我我-->
     <div class="right_list_top">
       <div class="list_top_select">
         <div style="display:flex;margin-top: 8px;">
@@ -69,7 +69,7 @@
     <div class="right_list_post">
       <p
         style="color:#82848a;margin:8px 5px;"
-      >共找到{{ listData.length }}条互动，{{ listData.replyTotal }}条评论</p>
+      >共找到{{ total }}条互动</p>
       <div style="height:10px;background-color: #FBFBFB;" />
       <div style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 360px);">
         <div class="infinite-list-wrapper">
@@ -85,7 +85,7 @@
                 <!-- 帖子右侧 -->
                 <div class="postdata_right">
                   <div style="display:flex;">
-                    <div style="width:90%;">
+                    <div style="width:88%;">
                       <div>
                         <span>{{ i.createName }}</span>
                         <el-tooltip class="item" effect="dark" content="置顶" placement="top-end">
@@ -106,7 +106,7 @@
                     </div>
 
                     <!-- 帖子管理功能 -->
-                    <div style="width:10%;margin-top:5px;">
+                    <div style="width:12%;margin-top:5px;">
                       <el-dropdown trigger="click" @command="handleCommand">
                         <span class="el-dropdown-link">
                           帖子管理
@@ -115,17 +115,23 @@
                         <el-dropdown-menu slot="dropdown">
                           <el-dropdown-item
                             v-show="i.stick===10"
-                            :command="{id:i.id,stick:i.stick,value:postFunction.qxzd}"
+                            :command="{id:i.id,stick:i.stick,value:postFunction.zd}"
                           >置顶该贴</el-dropdown-item>
                           <el-dropdown-item
                             v-show="i.stick===20"
-                            :command="{id:i.id,stick:i.stick,value:postFunction.zd}"
+                            :command="{id:i.id,stick:i.stick,value:postFunction.qxzd}"
                           >取消置顶</el-dropdown-item>
-                          <el-dropdown-item :command="{id:i.id,value:postFunction.rm}">标记热门</el-dropdown-item>
-                          <el-dropdown-item
-                            :command="{id:i.id,value:postFunction.xg,content:i.content}"
-                          >修改帖子</el-dropdown-item>
-                          <el-dropdown-item :command="{id:i.id,value:postFunction.cc}">删除帖子</el-dropdown-item>
+                          <el-dropdown-item :command="{id:i.id,value:postFunction.rm,hot:i.hot}">标记热门</el-dropdown-item>
+
+                          <el-popover placement="left" width="100%" trigger="click">
+                            <change :change-data="changeData" @changePost="changePost" />
+                            <el-dropdown-item
+                              slot="reference"
+                              :command="{changeData:i,value:postFunction.xg,}"
+                            > 修改帖子</el-dropdown-item>
+                          </el-popover>
+
+                          <el-dropdown-item :command="{id:i.id,value:postFunction.cc}" v-html="'删除帖子'" />
                           <el-dropdown-item :command="{id:i.id,value:postFunction.sc}">收藏帖子</el-dropdown-item>
                         </el-dropdown-menu>
                       </el-dropdown>
@@ -137,19 +143,10 @@
                     ref="cont"
                     style="margin-top:10px;color:#666;font-size:14px;line-height: 20px;"
                     :contenteditable="ediText==='1'"
-                  >
-                    <el-input
-                      v-model="i.content"
-                      type="textarea"
-                      :disabled="ediFlag"
-                      :autosize="{ minRows: 2, maxRows: 4}"
-                      outline
-                      @blur="fun()"
-                    />
-                  </div>
-
+                    v-html="i.content"
+                  />
                   <div style="color:red;margin-top:5px;">#{{ i.title }}</div>
-
+                  <!-- 帖子图片 -->
                   <div v-show="i.type==='20'" class="postdata_right_photo">
                     <img src alt>
                   </div>
@@ -190,10 +187,12 @@
 </template>
 <script>
 import postComment from './post_right_comment'
+import change from './change'
 import axios from 'axios'
 export default {
   components: {
-    postComment
+    postComment,
+    change
   },
   props: {
     post: {
@@ -203,6 +202,10 @@ export default {
   },
   data() {
     return {
+      // 总互动数
+      total: '0',
+      // 修改所需数据
+      changeData: {},
       // 帖子管理功能
       postFunction: {
         cc: '删除',
@@ -285,10 +288,9 @@ export default {
         page: 1
       }
       axios
-        .post('http://192.168.0.18:3366/community_auth/select_forum_list_v1', l)
+        .post('http://192.168.0.254:3366/community_auth/select_forum_list_v1', l)
         .then(res => {
           if (res.data.success && res.data.errorCode === 0) {
-            console.log(res.data.data, '我是帖子列表数据')
             this.listData = res.data.data
           } else {
             this.$message.error(res.data.msg)
@@ -321,7 +323,7 @@ export default {
             }
             axios
               .post(
-                'http://192.168.0.18:3366/community_auth/remove_forum_v1',
+                'http://192.168.0.254:3366/community_auth/remove_forum_v1',
                 c
               )
               .then(res => {
@@ -338,18 +340,11 @@ export default {
                 }
               })
           })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
       } else if (command.value === '修改') {
         // 修改功能
-        this.ediText = '1'
-        this.ediFlag = false
         this.textId = command.id
-        // this.content = command.content;
+        this.changeData = command.changeData
+        console.log(this.changeData, '修改数据')
       } else if (command.value === '置顶') {
         // 置顶功能
         this.$confirm('是否置顶?', '提示', {
@@ -367,7 +362,7 @@ export default {
               }
             }
             axios
-              .post('http://192.168.0.18:3366/community_auth/stick_v1', c)
+              .post('http://192.168.0.254:3366/community_auth/stick_v1', c)
               .then(res => {
                 console.log(res, 111111)
                 if (res.data.success && res.data.errorCode === 0) {
@@ -381,42 +376,64 @@ export default {
                 }
               })
           })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
       } else if (command.value === '取消置顶') {
-        // 置顶功能
+        // 取消置顶功能
         this.$confirm('是否取消置顶?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
           center: true
-        })
-          .then(() => {
-            const c = {
-              code: '1803',
-              data: {
-                id: command.id,
-                stick: command.stick
-              }
+        }).then(() => {
+          const c = {
+            code: '1803',
+            data: {
+              id: command.id,
+              stick: command.stick
             }
-            axios
-              .post('http://192.168.0.18:3366/community_auth/stick_v1', c)
-              .then(res => {
-                if (res.data.success && res.data.errorCode === 0) {
-                  this.$message({
-                    type: 'success',
-                    message: '已取消置顶!'
-                  })
-                  this.getPostList()
-                } else {
-                  this.$message.error(res.data.msg)
-                }
-              })
-          })
+          }
+          axios
+            .post('http://192.168.0.254:3366/community_auth/stick_v1', c)
+            .then(res => {
+              if (res.data.success && res.data.errorCode === 0) {
+                this.$message({
+                  type: 'success',
+                  message: '已取消置顶!'
+                })
+                this.getPostList()
+              } else {
+                this.$message.error(res.data.msg)
+              }
+            })
+        })
+      } else if (command.value === '热门') {
+        // 标记热门功能
+        this.$confirm('是否标记为热门?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          const c = {
+            code: '1809',
+            data: {
+              id: command.id,
+              hot: command.hot
+            }
+          }
+          axios
+            .post('http://192.168.0.254:3366/community_auth/stick_v1', c)
+            .then(res => {
+              if (res.data.success && res.data.errorCode === 0) {
+                this.$message({
+                  type: 'success',
+                  message: '已设为热门!'
+                })
+                this.getPostList()
+              } else {
+                this.$message.error(res.data.msg)
+              }
+            })
+        })
       }
     },
     showNav(index) {
@@ -435,56 +452,19 @@ export default {
         page: 1
       }
       axios
-        .post('http://192.168.0.18:3366/community_auth/select_forum_list_v1', l)
+        .post('http://192.168.0.254:3366/community_auth/select_forum_list_v1', l)
         .then(res => {
           if (res.data.success && res.data.errorCode === 0) {
-            console.log(res.data.data, '我是帖子列表数据')
+            this.total = res.data.total
             this.listData = res.data.data
+            console.log(this.listData, '我是列表数据')
           } else {
             this.$message.error(res.data.msg)
           }
         })
     },
-    // 失去焦点事件
-    fun() {
-      // console.log(this.$refs.cont[0].innerText,'我是失去焦点后得到的数据');
-      this.$confirm('是否修改?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        center: true
-      })
-        .then(() => {
-          const c = {
-            code: '1805',
-            data: {
-              id: this.textId,
-              content: this.content
-            }
-          }
-          axios
-            .post('http://192.168.0.18:3366/community_auth/update_forum_v1', c)
-            .then(res => {
-              console.log(res, 111111)
-              if (res.data.success && res.data.errorCode === 0) {
-                this.$message({
-                  type: 'success',
-                  message: '已修改!'
-                })
-                this.getPostList()
-                this.ediText = ''
-              } else {
-                this.$message.error(res.data.msg)
-              }
-            })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })
-          this.ediText = ''
-        })
+    changePost() {
+      this.post++
     }
   }
 }
@@ -495,7 +475,7 @@ export default {
   margin-bottom: 10px;
 }
 .right_list_top {
-  margin-top: 10px;
+  margin: 10px 5px;
   height: 30px;
   display: flex;
   justify-content: space-between;
@@ -553,5 +533,10 @@ export default {
 }
 .el-sl /deep/ .el-input__inner {
   width: 115px;
+}
+.post_change {
+  position: absolute;
+  top: 380px;
+  left: 138px;
 }
 </style>

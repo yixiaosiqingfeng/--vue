@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 我我我 -->
     <rightHeader @addPost="addPost" />
     <rightList :post="post" />
   </div>
@@ -19,7 +20,6 @@ export default {
   methods: {
     addPost() {
       this.post++
-      console.log(this.post, 44444444)
     }
   }
 
