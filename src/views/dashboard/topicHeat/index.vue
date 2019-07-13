@@ -6,7 +6,7 @@
     </div>
     <ul v-if="heatToptic.length">
       <li v-for="item in heatToptic" :key="item.id">
-        <p class="top-num"><span :class="item.icon" :style="{color:item.color,fontSize:item.fontS}" /></p>
+        <p class="top-num"><span :class="item.icon" :style="{color:item.colors,fontSize:item.fontS}" /></p>
         <p class="title">#{{ item.title }}</p>
         <p>
           <span class="iconfont icon-pinglun" />
