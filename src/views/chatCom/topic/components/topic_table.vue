@@ -246,7 +246,8 @@ import {
   popularApi
 } from '@/api/topic'
 import { getToken } from '@/utils/auth'
-import axios from 'axios'
+import { initiatorApi } from '@/api_new/topic'
+
 export default {
   name: 'TopicTable',
   components: { pagin },
@@ -365,11 +366,11 @@ export default {
           appAccountId: this.$store.getters.userInFo.appAccountId
         }
       }
-      axios.post('http://192.168.0.18:3366/community_auth/select_user_info_by_account_v1', data).then(res => {
-        if (res.data.success && res.data.errorCode === 0) {
-          this.userList = res.data.data
+      initiatorApi(data).then(res => {
+        if (res.success && res.errorCode === 0) {
+          this.userList = res.data
         } else {
-          this.$message.error(res.data.msg)
+          this.$message.error(res.msg)
         }
       })
     },

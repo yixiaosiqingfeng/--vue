@@ -18,10 +18,8 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
-
 // 引入阿里图标
 import './assets/aliicon/iconfont.css'
-
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -31,6 +29,7 @@ import './assets/aliicon/iconfont.css'
  * please remove it before going online! ! !
  */
 import { mockXHR } from '../mock'
+
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
