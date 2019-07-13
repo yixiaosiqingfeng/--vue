@@ -1,6 +1,6 @@
 <template>
   <div style="background-color: #f9f9f9;">
-    <!-- 评论框区-->
+    <!-- 评论框区我我我-->
     <div style="display:flex;flex-wrap:wrap;padding-left: 10%;" class="mt10">
       <!-- 左边头像 -->
       <div class="com_left">
