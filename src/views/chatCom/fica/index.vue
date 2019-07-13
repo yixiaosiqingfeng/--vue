@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative;" class="huatiClass">
+  <div style="position: relative;padding:0 5px;" class="huatiClass">
     <!-- 头部搜索部分 -->
     <ficaHeader @searchFn="searchFn" @sortFn="sortFn" @updateData="updateData" />
     <!-- 当前已筛选出来的数据统计 -->

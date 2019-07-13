@@ -1,5 +1,5 @@
 <template>
-  <div class="content1">
+  <div class="content1" style="padding:0 5px 0 9px;">
     <div class="searchBox">
       <!-- 搜索框 -->
       <div style="width: 220px;margin-left: 10px;">
