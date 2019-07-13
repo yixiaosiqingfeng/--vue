@@ -3,43 +3,14 @@
   <div class="content2">
     <span style="font-size: 16px;font-weight: 700;margin-left: 10px;">数据统计</span><span style="float: right;color: #606266;">更多</span>
     <el-row style="margin-top: 20px;">
-      <el-col :span="12">
+      <el-col v-for="(item, index) in census" :key="index" :span="12">
         <div class="census">
-          <p>{{ interaction_Num }}</p>
-          <p>今日互动总数</p>
+          <p>{{ item.num }}</p>
+          <p>{{ item.title }}</p>
           <p>
-            环比昨日2%
-            <i class="el-icon-top" />
-          </p>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="census">
-          <p>{{ user_Num }}</p>
-          <p>今日互动人数</p>
-          <p>
-            环比昨日2%
-            <i class="el-icon-top" />
-          </p>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="census">
-          <p>{{ post_Num }}</p>
-          <p>今日新增贴子</p>
-          <p>
-            环比昨日2%
-            <i class="el-icon-top" />
-          </p>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="census">
-          <p>{{ topic_Num }}</p>
-          <p>今日新增话题</p>
-          <p>
-            环比昨日2%
-            <i class="el-icon-top" />
+            环比昨日{{ item.ratio }}%
+            <span v-show="item.ratio > 0" class="iconfont icon-up" style="color: green;" />
+            <span v-show="item.ratio < 0" class="iconfont icon-down" style="color: red;" />
           </p>
         </div>
       </el-col>
@@ -49,9 +20,7 @@
 
 <script>
 import {
-  time_census_select, // 2602
-  total_census_select, // 2603
-  comment_census_select // 2604
+  total_census_select // 2603
 } from '@/api/topic.js'
 
 export default {
@@ -59,21 +28,33 @@ export default {
 
   data() {
     return {
-      // 今日互动总数
-      interaction_Num: 0,
-      // 今日互动人数
-      user_Num: 0,
-      // 今日新增贴子
-      post_Num: 0,
-      // 今日新增话题
-      topic_Num: 0
+      // 统计数据
+      census: [{
+        title: '今日互动总数',
+        num: 0,
+        ratio: 0
+      },
+      {
+        title: '今日互动人数',
+        num: 0,
+        ratio: 0
+      },
+      {
+        title: '今日新增话题',
+        num: 0,
+        ratio: 0
+      },
+      {
+        title: '今日新增贴子',
+        num: 0,
+        ratio: 0
+      }
+      ]
     }
   },
 
   created() {
     this.selectTotalCensus()
-    // this.selectCommentCensus()
-    // this.selectTimeCensus()
   },
 
   methods: {
@@ -85,39 +66,15 @@ export default {
       }
       total_census_select(requestSelect).then(res => {
         if (res.errorCode === 0 && res.success) {
-          this.interaction_Num = res.data[0].forumCount + res.data[0].commentCount + res.data[0].goodClickCount + res.data[
-            0].trunCount
-          this.user_Num = res.data[0].activeUserCount
-          this.post_Num = res.data[0].forumCount
-          this.topic_Num = res.data[0].topicCount
-        } else {
-          this.$message.error(res.msg)
-        }
-      })
-    },
-    // 查询互动统计
-    selectCommentCensus() {
-      const requestSelect = {
-        code: '2604',
-        data: {}
-      }
-      comment_census_select(requestSelect).then(res => {
-        if (res.errorCode === 0 && res.success) {
-          console.log(res)
-        } else {
-          this.$message.error(res.msg)
-        }
-      })
-    },
-    // 查询分时统计
-    selectTimeCensus() {
-      const requestSelect = {
-        code: '2602',
-        data: {}
-      }
-      time_census_select(requestSelect).then(res => {
-        if (res.errorCode === 0 && res.success) {
-          console.log(res)
+          console.log(res.data[0])
+          this.census[0].num = res.data[0].commCount
+          this.census[1].num = res.data[0].activeUserCount
+          this.census[2].num = res.data[0].topicCount
+          this.census[3].num = res.data[0].forumCount
+          this.census[0].ratio = res.data[0].commCountRatio
+          this.census[1].ratio = res.data[0].activeUserCountRatio
+          this.census[2].ratio = res.data[0].topicCountRatio
+          this.census[3].ratio = res.data[0].forumCountRatio
         } else {
           this.$message.error(res.msg)
         }

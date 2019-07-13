@@ -54,28 +54,10 @@ export function mine_select(data) {
   })
 }
 
-// 分时统计查询
-export function time_census_select(data) {
-  return request({
-    url: '/admin_auth/select_time_census_v1',
-    method: 'post',
-    data
-  })
-}
-
 // 汇总统计查询
 export function total_census_select(data) {
   return request({
     url: '/admin_auth/select_census_v1',
-    method: 'post',
-    data
-  })
-}
-
-// 互动统计查询
-export function comment_census_select(data) {
-  return request({
-    url: '/admin_auth/select_comm_census_v1',
     method: 'post',
     data
   })
