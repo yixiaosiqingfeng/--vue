@@ -24,9 +24,7 @@ export default {
   },
 
   mounted() {
-    document.addEventListener('click', () => {
-      this.showCreate = false
-    }, false)
+
   },
 
   methods: {

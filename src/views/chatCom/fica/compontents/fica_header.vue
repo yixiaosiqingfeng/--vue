@@ -18,15 +18,15 @@
     <div>
       <el-dropdown trigger="click" @command="handleCommand">
         <div class="el-dropdown-link" style="cursor:pointer;">
-          <el-button type="text">{{ message }}<i class="el-icon-arrow-down el-icon--right" /></el-button>
+          <el-button type="text"><span style="color:#999;">{{ message }}<i class="el-icon-arrow-down el-icon--right" /></span></el-button>
         </div>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="按最新">按最新</el-dropdown-item>
+          <el-dropdown-item command="按时间">按时间</el-dropdown-item>
           <el-dropdown-item command="按话题数">按话题数</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <el-tooltip class="item" effect="dark" :content="sort" placement="top-end">
-        <el-button type="text" @click="sortFn"><span class="iconfont icon-shengjiangxu" /></el-button>
+        <el-button type="text" @click="sortFn"><span style="color:#999;" class="iconfont icon-shengjiangxu" /></el-button>
       </el-tooltip>
       <el-popover
         v-model="popover"
@@ -71,7 +71,7 @@
             </el-form-item>
           </el-form>
         </div>
-        <el-button slot="reference" type="text" class="mr30">新增<i class="el-icon-arrow-down el-icon--right" />
+        <el-button slot="reference" type="text" class="mr30">新增<i class="el-icon-plus" />
         </el-button>
       </el-popover>
       <!--<el-button type="text" class="mr15" @click="addDialog">新增<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i></el-button>-->
@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       value: '',
-      message: '按最新',
+      message: '按时间',
       sort: '升序',
       searchData: {
         sortOrderByTime: 0,
@@ -127,7 +127,7 @@ export default {
         return
       }
       this.message = val
-      if (val === '按最新') {
+      if (val === '按时间') {
         this.searchData.sortOrderByTime = 0
         this.searchData.sortOrderByTopic = null
       } else {
@@ -186,6 +186,8 @@ export default {
               this.popover = false
               this.resetForm('ruleForm')
               this.$emit('updateData')
+            } else {
+              this.$message.error(res.msg)
             }
           })
         } else {

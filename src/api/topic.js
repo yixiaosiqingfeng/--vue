@@ -44,3 +44,19 @@ export function classify_select(data) {
     data
   })
 }
+// 置顶话题
+export function placementApi(data) {
+  return request({
+    url: '/admin_auth/update_topic_to_top_v1',
+    method: 'post',
+    data
+  })
+}
+// 标记热门话题
+export function popularApi(data) {
+  return request({
+    url: '/admin_auth/update_topic_to_hot_v1',
+    method: 'post',
+    data
+  })
+}
