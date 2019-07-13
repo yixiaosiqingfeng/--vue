@@ -1,5 +1,4 @@
 <template>
-  <!-- 我我我 -->
   <div style="box-shadow:0 0 15px #eee;">
     <postc v-model="value" @changePost="changePost" />
   </div>
@@ -30,7 +29,7 @@ export default {
     },
     changeData: {
       handler(n,) {
-        console.log(n, '我是接收方')
+        // console.log(n, '我是接收方')
         this.value = n.content
       },
       deep: true
@@ -54,7 +53,7 @@ export default {
             }
           }
           axios
-            .post('http://192.168.0.254:3366/community_auth/update_forum_v1', p)
+            .post('http://192.168.0.18:3366/community_auth/update_forum_v1', p)
             .then(res => {
               if (res.data.success && res.data.errorCode === 0) {
                 this.$message({

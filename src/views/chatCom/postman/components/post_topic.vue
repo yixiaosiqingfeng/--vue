@@ -1,8 +1,17 @@
 <template>
   <div class="topic_maxbox">
-    <!-- 搜索 我我我-->
+    <!-- 搜索 -->
+    <div style="display: flex;justify-content: space-between;margin:10px 5px;">
+      <span>选择话题</span>
+      <span
+        class="el-icon-close"
+        style=" font-size: 18px;font-weight: 800;color:#696E78"
+        @click.stop="changClose"
+      />
+    </div>
+    <hr>
     <div class="topic_input">
-      <el-input v-model="selectTopic" placeholder="请输入" class="input-with-select" size="mini">
+      <el-input v-model="selectTopic" placeholder="请输入话题名称" class="input-with-select" size="mini">
         <el-button slot="append" icon="el-icon-search" @click="getTopic" />
       </el-input>
     </div>
@@ -88,13 +97,14 @@ export default {
       this.topicData.id = i
       this.topicData.title = t
       this.$emit('topic', this.topicData)
-    }
+    },
+    changClose() {}
   }
 }
 </script>
 <style scoped>
 .topic_maxbox {
-  width: 230px;
+  width: 300px;
   min-height: 100px;
   background-color: #fff;
   text-align: center;
