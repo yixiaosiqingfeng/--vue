@@ -121,7 +121,7 @@
                             v-show="i.stick===20"
                             :command="{id:i.id,stick:i.stick,value:postFunction.qxzd}"
                           >取消置顶</el-dropdown-item>
-                          <el-dropdown-item :command="{id:i.id,value:postFunction.rm}">标记热门</el-dropdown-item>
+                          <el-dropdown-item :command="{id:i.id,value:postFunction.rm,hot:i.hot}">标记热门</el-dropdown-item>
 
                           <el-popover placement="left" width="100%" trigger="click">
                             <change :change-data="changeData" @changePost="changePost" />
@@ -340,12 +340,6 @@ export default {
                 }
               })
           })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
       } else if (command.value === '修改') {
         // 修改功能
         this.textId = command.id
@@ -382,14 +376,8 @@ export default {
                 }
               })
           })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
       } else if (command.value === '取消置顶') {
-        // 置顶功能
+        // 取消置顶功能
         this.$confirm('是否取消置顶?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -410,6 +398,35 @@ export default {
                 this.$message({
                   type: 'success',
                   message: '已取消置顶!'
+                })
+                this.getPostList()
+              } else {
+                this.$message.error(res.data.msg)
+              }
+            })
+        })
+      } else if (command.value === '热门') {
+        // 标记热门功能
+        this.$confirm('是否标记为热门?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          const c = {
+            code: '1809',
+            data: {
+              id: command.id,
+              hot: command.hot
+            }
+          }
+          axios
+            .post('http://192.168.0.254:3366/community_auth/stick_v1', c)
+            .then(res => {
+              if (res.data.success && res.data.errorCode === 0) {
+                this.$message({
+                  type: 'success',
+                  message: '已设为热门!'
                 })
                 this.getPostList()
               } else {
@@ -440,6 +457,7 @@ export default {
           if (res.data.success && res.data.errorCode === 0) {
             this.total = res.data.total
             this.listData = res.data.data
+            console.log(this.listData, '我是列表数据')
           } else {
             this.$message.error(res.data.msg)
           }
