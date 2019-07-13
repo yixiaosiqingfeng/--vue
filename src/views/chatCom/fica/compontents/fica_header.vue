@@ -6,7 +6,7 @@
           v-model="value"
           size="mini"
           clearable
-          placeholder="请输入内容"
+          placeholder="请输入分类名称"
           class="input-with-select"
           @keyup.enter.native="submit"
           @clear="submit"
@@ -215,7 +215,7 @@ export default {
   }
 
   .input-with-select {
-    width: 300px;
+    width: 220px;
   }
 
   /*.input-with-select .el-input-group__prepend {*/
