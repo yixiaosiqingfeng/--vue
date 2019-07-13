@@ -3,32 +3,15 @@
   <div class="content2">
     <span style="font-size: 16px;font-weight: 700;margin-left: 10px;">数据统计</span><span style="float: right;color: #606266;">更多</span>
     <el-row style="margin-top: 20px;">
-      <el-col :span="12">
+      <el-col v-for="(item, index) in census" :key="index" :span="12">
         <div class="census">
-          <p>1200</p>
-          <p>总话题数</p>
-          <p>环比昨日2%↑</p>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="census">
-          <p>1200</p>
-          <p>今日互动总数</p>
-          <p>环比昨日2%↑</p>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="census">
-          <p>1200</p>
-          <p>总话题数</p>
-          <p>环比昨日2%↑</p>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="census">
-          <p>1200</p>
-          <p>总话题数</p>
-          <p>环比昨日2%↑</p>
+          <p>{{ item.num }}</p>
+          <p>{{ item.title }}</p>
+          <p>
+            环比昨日{{ item.ratio }}%
+            <span v-show="item.ratio > 0" class="iconfont icon-up" style="color: green;" />
+            <span v-show="item.ratio < 0" class="iconfont icon-down" style="color: red;" />
+          </p>
         </div>
       </el-col>
     </el-row>
@@ -36,8 +19,68 @@
 </template>
 
 <script>
+import {
+  total_census_select // 2603
+} from '@/api/topic.js'
+
 export default {
-  name: 'TopicCensus'
+  name: 'TopicCensus',
+
+  data() {
+    return {
+      // 统计数据
+      census: [{
+        title: '今日互动总数',
+        num: 0,
+        ratio: 0
+      },
+      {
+        title: '今日互动人数',
+        num: 0,
+        ratio: 0
+      },
+      {
+        title: '今日新增话题',
+        num: 0,
+        ratio: 0
+      },
+      {
+        title: '今日新增贴子',
+        num: 0,
+        ratio: 0
+      }
+      ]
+    }
+  },
+
+  created() {
+    this.selectTotalCensus()
+  },
+
+  methods: {
+    // 查询汇总统计
+    selectTotalCensus() {
+      const requestSelect = {
+        code: '2603',
+        data: {}
+      }
+      total_census_select(requestSelect).then(res => {
+        if (res.errorCode === 0 && res.success) {
+          console.log(res.data[0])
+          this.census[0].num = res.data[0].commCount
+          this.census[1].num = res.data[0].activeUserCount
+          this.census[2].num = res.data[0].topicCount
+          this.census[3].num = res.data[0].forumCount
+          this.census[0].ratio = res.data[0].commCountRatio
+          this.census[1].ratio = res.data[0].activeUserCountRatio
+          this.census[2].ratio = res.data[0].topicCountRatio
+          this.census[3].ratio = res.data[0].forumCountRatio
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    }
+  }
 }
 </script>
 
