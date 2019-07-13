@@ -69,7 +69,7 @@
     <div class="right_list_post">
       <p
         style="color:#82848a;margin:8px 5px;"
-      >共找到{{ listData.length }}条互动</p>
+      >共找到{{ total }}条互动</p>
       <div style="height:10px;background-color: #FBFBFB;" />
       <div style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 360px);">
         <div class="infinite-list-wrapper">
@@ -202,7 +202,9 @@ export default {
   },
   data() {
     return {
-      // 传递数据
+      // 总互动数
+      total: '0',
+      // 修改所需数据
       changeData: {},
       // 帖子管理功能
       postFunction: {
@@ -436,6 +438,7 @@ export default {
         .post('http://192.168.0.254:3366/community_auth/select_forum_list_v1', l)
         .then(res => {
           if (res.data.success && res.data.errorCode === 0) {
+            this.total = res.data.total
             this.listData = res.data.data
           } else {
             this.$message.error(res.data.msg)
