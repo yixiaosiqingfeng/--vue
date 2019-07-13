@@ -1,5 +1,5 @@
 <template>
-  <div class="content1" style="padding:0 5px 0 9px;">
+  <div class="content1" style="padding:10px 5px 0 9px;">
     <div class="searchBox">
       <!-- 搜索框 -->
       <div style="width: 220px;">
@@ -17,7 +17,7 @@
       </div>
       <!-- 筛选 -->
       <div style="margin-right: 10px;">
-        <el-dropdown style="margin-right: 10px;" trigger="click" @command="screenSelect">
+        <el-dropdown style="margin-right: 10px;" trigger="click" size="mini" @command="screenSelect">
           <span class="el-dropdown-link" style="color:#999;">
             筛选:
             <el-button type="text"><span style="color:#999;">{{ screen }}<i class="el-icon-arrow-down el-icon--right" /></span></el-button>
@@ -29,7 +29,7 @@
             <el-dropdown-item :command="3">非置顶</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-dropdown style="margin-right: 10px;" trigger="click" @command="screenSelect1">
+        <el-dropdown style="margin-right: 10px;" trigger="click" size="mini" @command="screenSelect1">
           <span class="el-dropdown-link">
             <el-button type="text"><span style="color:#999;">{{ screen1 }}<i class="el-icon-arrow-down el-icon--right" /></span></el-button>
           </span>
@@ -44,6 +44,7 @@
         <el-button
           type="text"
           class="mr10"
+          size="mini"
           @click.stop="addFn"
         >新建<i class="el-icon-plus" />
         </el-button>
@@ -676,8 +677,6 @@ export default {
   }
 
   .searchBox {
-    background: #fafafa;
-    height: 44px;
     display: flex;
     justify-content: space-between;
     align-items: center;
