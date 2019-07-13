@@ -51,7 +51,7 @@
     </div>
     <!-- 数据条数 -->
     <div style="color: #909399;font-size: 12px;height: 40px;line-height: 40px;margin-left: 10px;">
-      共<span style="color: #E6A23C;">{{ tableData.length }}</span>条数据
+      共<span style="color: orange;font-weight:500;">{{ tableData.length }}</span>条数据
     </div>
     <!-- 新建 -->
     <div style="position: relative;">

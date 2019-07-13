@@ -4,8 +4,7 @@
     <ficaHeader @searchFn="searchFn" @sortFn="sortFn" @updateData="updateData" />
     <!-- 当前已筛选出来的数据统计 -->
     <div class="add_btn_box">
-      <p style="font-size:12px;color:#999;" class="ml10">共找到{{ total }}条数据</p>
-      <div />
+      <p style="font-size:12px;color:#999;" class="ml10 mt10 mb10">共找到<i style="color: orange;font-weight:500;">{{ total }}</i>条数据</p>
     </div>
     <!--表格部分-->
     <div class="ml5">
@@ -21,7 +20,7 @@
         >
           <template slot-scope="scope">
             <div class="modify">
-              <div v-show="scope.row.flag" style="width:69px;height:80px;">
+              <div v-show="scope.row.flag" style="width:40px;height:50px;">
                 <el-upload
                   class="avatar-uploader"
                   :action="queryUrl"
@@ -35,22 +34,22 @@
                     v-if="scope.row.imgPath"
                     :src="scope.row.imgPath"
                     class="avatar"
-                    style="width:75px;height:75px;"
+                    style="width:45px;height:45px;"
                   >
                   <i v-else class="el-icon-plus avatar-uploader-icon" />
                 </el-upload>
               </div>
-              <div v-show="!scope.row.flag" style="width:69px;height:80px;">
+              <div v-show="!scope.row.flag" style="width:50px;height:50px;">
                 <img
                   v-if="scope.row.imgPath"
                   :src="scope.row.imgPath"
                   class="avatar"
-                  width="100%"
-                  height="100%"
+                  width="50"
+                  height="50"
                   style="cursor:pointer;"
                   @click="queryImgFn(scope.row.imgPath)"
                 >
-                <div v-else style="width:69px;height:80px;" />
+                <div v-else style="width:50px;height:50px;" />
               </div>
             </div>
           </template>
@@ -360,17 +359,17 @@ export default {
   }
 
   .huatiClass .avatar {
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     display: block;
   }
 
   .huatiClass .modify .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
     text-align: center;
   }
 
