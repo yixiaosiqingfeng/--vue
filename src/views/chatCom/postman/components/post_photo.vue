@@ -1,16 +1,16 @@
 <template>
   <div class="photo_maxbox">
-    <!-- 我我我 -->
     <div style="display: flex;justify-content: space-between;margin:10px 5px;">
-      <span>本地上传</span>
+      <span>上传图片</span>
       <span
         class="el-icon-close"
         style=" font-size: 18px;font-weight: 800;color:#696E78"
         @click.stop="changClose"
       />
     </div>
-    <div style="margin:5px;">
-      <p>最多可选择9张图片进行上传</p>
+    <hr>
+    <div>
+      <p style="color:#82848a;margin:8px 5px;">最多可选择9张图片进行上传</p>
     </div>
     <div class="maxbox_up">
       <el-upload
@@ -21,6 +21,8 @@
         :limit="9"
         :data="resData"
         :on-success="handleSuccess"
+        :on-error="hansleError"
+        :multiple="true"
       >
         <i class="el-icon-plus" />
       </el-upload>
@@ -54,6 +56,7 @@ export default {
     }
   },
   methods: {
+    // 删除图片
     handleRemove(file, fileList) {
       console.log(file, fileList)
     },
@@ -64,7 +67,7 @@ export default {
     changClose() {
       this.$emit('changClose')
     },
-    // 上传成功后处理函数
+    // 上传成功
     handleSuccess(res) {
       console.log(res, '我是上传成功的函数')
       if (res.success && res.errorCode === 0) {
@@ -77,6 +80,10 @@ export default {
       } else {
         this.$message.error(res.msg)
       }
+    },
+    // 上传失败
+    hansleError() {
+      this.$message.error('上传失败')
     }
   }
 }

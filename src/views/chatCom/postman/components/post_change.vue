@@ -1,7 +1,6 @@
 <template>
   <div style="width:660px;">
     <div>
-      <!-- 我我我 -->
       <div
         ref="biaoqingBox"
         class="edit-div"

@@ -1,7 +1,6 @@
 <template>
   <div>
     <div>
-      <!-- 我我我 -->
       <div
         ref="biaoqingBox"
         class="edit-div"
@@ -14,6 +13,10 @@
       />
 
       <div class="input_btn">
+        <!-- <el-popover placement="right" width="400" trigger="click">
+          <el-button type="text" slot="reference">#{{ topicText }}</el-button>
+          <el-tag type="danger" size="mini">#{{ topicText }}</el-tag>
+        </el-popover> -->
         <el-tag type="danger" size="mini">#{{ topicText }}</el-tag>
         <el-tag type="danger" size="mini">
           <i class="el-icon-location-information" /> 位置信息
@@ -21,7 +24,7 @@
       </div>
 
       <div class="right_header_end">
-        <div style="width:82%;">
+        <div style="flex-grow: 1;">
           <ul class="aliicon">
             <li @click.stop="biaoqnFn">
               <i class="iconfont icon-biaoqing1" />&nbsp;
@@ -31,11 +34,12 @@
               <i class="iconfont icon-tupian" />&nbsp;
               <span>图片</span>
             </li>
-            <li>
+
+            <li @click="pvsta">
               <i class="iconfont icon-shipin-m" />&nbsp;
               <span>视频</span>
             </li>
-            <li>
+            <li @click="plsta">
               <i class="iconfont icon-lianjie" />&nbsp;
               <span>链接</span>
             </li>
@@ -45,26 +49,28 @@
             </li>
           </ul>
         </div>
-        <div style="width:18%;margin-bottom: 3px;">
-          <el-dropdown>
+        <div style="margin-bottom: 3px;">
+          <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
               <i class="el-icon-edit" />
-              发布昵称
+              <span>{{ vest.name }}</span>
               <i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>昵称一</el-dropdown-item>
-              <el-dropdown-item>昵称二</el-dropdown-item>
-              <el-dropdown-item>昵称三</el-dropdown-item>
+              <el-dropdown-item
+                v-for="i in vests"
+                :key="i.id"
+                :command="{n:i.nickname,i:i.id}"
+              >{{ i.nickname }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <el-button type="primary" size="mini" @click="submit">发布</el-button>
         </div>
       </div>
-      <!-- 存放表情节目 -->
+      <!-- 存放表情界面 -->
       <div style="position:relative;" @click.stop="biaoqing=1">
         <div class="biaoqin_box" :class="{open:biaoqing===1,hidden:biaoqing===2}">
-          <ul class="oul" style="display:flex;flex-wrap:wrap;">
+          <ul class="oul" style="display:flex;flex-wrap:wrap; padding:10px;">
             <li
               v-for="(item,index) in biaoqingArr"
               :key="index"
@@ -76,16 +82,28 @@
         </div>
       </div>
     </div>
-    <!-- 控制图片 -->
+    <!-- 上传图片 -->
     <el-collapse-transition>
       <div v-show="phFlag" class="post_ph">
         <postPhoto @changClose="changClose" @upSuccess="upSuccess" />
       </div>
     </el-collapse-transition>
-    <!-- 控制话题 -->
+    <!-- 选择话题 -->
     <el-collapse-transition>
       <div v-show="ptFlag" class="post_pt">
         <posttopic :go-topic="goTopic" @topic="topic" />
+      </div>
+    </el-collapse-transition>
+    <!-- 上传视频 -->
+    <el-collapse-transition>
+      <div v-show="pvFlag" class="post_pv">
+        <postvideo />
+      </div>
+    </el-collapse-transition>
+    <!-- 上传链接 -->
+    <el-collapse-transition>
+      <div v-show="plFlag" class="post_pv">
+        <postlink />
       </div>
     </el-collapse-transition>
   </div>
@@ -93,9 +111,12 @@
 <script>
 import postPhoto from './post_photo'
 import posttopic from './post_topic'
+import postvideo from './post_video'
+import postlink from './post_link'
+import axios from 'axios'
 export default {
   name: 'EditDiv',
-  components: { postPhoto, posttopic },
+  components: { postPhoto, posttopic, postvideo, postlink },
   props: {
     value: {
       type: String,
@@ -108,11 +129,22 @@ export default {
   },
   data() {
     return {
+      // 马甲号
+      vests: [],
+      vest: {
+        name: '',
+        id: ''
+      },
+      // 获取话题控制
       goTopic: 1,
       // 添加图片控制
       phFlag: false,
       // 选择话题控制
       ptFlag: false,
+      // 上传视频控制
+      pvFlag: false,
+      // 上传链接控制
+      plFlag: false,
       // 输入框内容
       innerText: this.value,
       // 光标
@@ -120,7 +152,7 @@ export default {
       // 控制表情
       biaoqing: false,
       // 话题标签
-      topicText: '',
+      topicText: '我要上热门',
       // 话题
       topicData: {},
       // 上传的图片
@@ -179,6 +211,13 @@ export default {
       if (!this.isLocked || !this.innerText) {
         this.innerText = this.value
       }
+    },
+    vests: {
+      handler(n) {
+        // console.log(n, '我是新值')
+        this.vest.name = n[1].nickname
+      },
+      deep: true
     }
   },
   mounted() {
@@ -192,6 +231,7 @@ export default {
       },
       false
     )
+    this.getVests()
   },
   methods: {
     changeText() {
@@ -230,7 +270,7 @@ export default {
     },
     // 发布
     submit() {
-      this.$emit('submit', this.topicData, this.photoData)
+      this.$emit('submit', this.topicData, this.photoData, this.vest)
     },
     // 上传图片界面控制
     phsta() {
@@ -238,6 +278,8 @@ export default {
         this.biaoqing = 2
       }
       this.ptFlag = false
+      this.pvFlag = false
+      this.plFlag = false
       this.phFlag = !this.phFlag
     },
     // 选择话题界面控制
@@ -246,6 +288,8 @@ export default {
         this.biaoqing = 2
       }
       this.phFlag = false
+      this.pvFlag = false
+      this.plFlag = false
       this.ptFlag = !this.ptFlag
       this.goTopic++
     },
@@ -262,6 +306,54 @@ export default {
     // 上传图片成功后
     upSuccess(photoData) {
       this.photoData = photoData
+    },
+    // 上传视频
+    pvsta() {
+      if (this.biaoqing === 1) {
+        this.biaoqing = 2
+      }
+      this.phFlag = false
+      this.ptFlag = false
+      this.plFlag = false
+      this.pvFlag = !this.pvFlag
+    },
+    // 上传链接
+    plsta() {
+      if (this.biaoqing === 1) {
+        this.biaoqing = 2
+      }
+      this.phFlag = false
+      this.ptFlag = false
+      this.pvFlag = false
+      this.plFlag = !this.plFlag
+    },
+    // 获取马甲
+    getVests() {
+      // console.log(this.$store.getters.userInFo,9999)
+      const v = {
+        code: '1810',
+        data: {
+          appAccountId: this.$store.getters.userInFo.appAccountId // app账号id 必填
+        }
+      }
+      axios
+        .post(
+          'http://192.168.0.18:3366/community_auth/select_user_info_by_account_v1',
+          v
+        )
+        .then(res => {
+          if (res.data.success && res.data.errorCode === 0) {
+            const d = res.data
+            this.vests = d.data
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
+    },
+    handleCommand(name) {
+      console.log(name, '111111111')
+      this.vest = name
+      this.vest.name = name.n
     }
   }
 }
@@ -298,7 +390,7 @@ export default {
 
 .biaoqin_box {
   position: absolute;
-  width: 36%;
+  width: 300px;
   height: 0;
   box-shadow: 0 0 15px #eee;
   overflow: hidden;
@@ -307,11 +399,12 @@ export default {
 }
 
 .oul {
-  padding: 5px;
+  padding: 10px;
   border-radius: 5px;
   height: 108px;
   overflow-y: scroll;
   overflow-x: hidden;
+  align-content: flex-start;
 }
 
 .biaoqin_box ul,
@@ -361,6 +454,7 @@ export default {
 .right_header_end {
   display: flex;
   justify-content: space-between;
+  // align-items: center;
   margin-top: -10px;
 }
 .post_ph {
@@ -370,9 +464,14 @@ export default {
 }
 .post_pt {
   position: absolute;
-  top: 144px;
-  left: 162px;
+
   background-color: #fff;
   z-index: 9;
+}
+.post_pv {
+  position: absolute;
+  background-color: #fff;
+  z-index: 9;
+  box-shadow: 0 0 15px #eee;
 }
 </style>

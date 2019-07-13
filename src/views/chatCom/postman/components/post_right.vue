@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- 我我我 -->
     <rightHeader @addPost="addPost" />
     <rightList :post="post" />
   </div>
