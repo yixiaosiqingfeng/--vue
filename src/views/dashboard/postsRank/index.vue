@@ -141,11 +141,12 @@ export default {
           }
           .list-content-text{
             width: 300px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
             font-size: 12px;
             color: #333;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
           }
           .go-hot{
             color:red;
