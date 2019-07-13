@@ -1,6 +1,6 @@
 <template>
   <div>
-    视频上传界面
+    视频上传界面，我我我
   </div>
 </template>
 <script>

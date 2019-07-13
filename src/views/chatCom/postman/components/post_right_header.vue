@@ -1,4 +1,5 @@
 <template>
+  <!-- 我我我 -->
   <div style="box-shadow:0 0 15px #eee;">
     <biaoqin v-model="value" @submit="submit" />
   </div>
