@@ -9,13 +9,37 @@
       </p>
     </div>
     <div class="dataStatistics-con-list">
-      <ul>
-        <li v-for="item in dataList" :key="item.id">
-          <h2>{{ item.num }}</h2>
-          <a>{{ item.title }}</a>
+      <ul v-for="item in dataList" :key="item.id">
+        <li>
+          <h2>{{ item.userTotal }}</h2>
+          <a>总用户</a>
           <p>
-            <a>环比昨日  {{ item.score }}</a>
-            <span :class="item.icon" :style="{color:item.icon==='iconfont icon-up'?'green':'red'}" />
+            <a>环比昨日  {{ item.userTotalRatio }}%</a>
+            <span :class="item.userTotalRatio>0?'iconfont icon-up':'iconfont icon-down'" :style="{color:item.userTotalRatio>0?'green':'red'}" />
+          </p>
+        </li>
+        <li>
+          <h2>{{ item.userCount }}</h2>
+          <a>新增用户</a>
+          <p>
+            <a>环比昨日  {{ item.userCountRatio }}%</a>
+            <span :class="item.userCountRatio>0?'iconfont icon-up':'iconfont icon-down'" :style="{color:item.userTotalRatio>0?'green':'red'}" />
+          </p>
+        </li>
+        <li>
+          <h2>{{ interactive(item) }}</h2>
+          <a>互动总数</a>
+          <p>
+            <a>环比昨日  {{ interactiveScore(item) }}%</a>
+            <span :class="interactiveScore(item)>0?'iconfont icon-up':'iconfont icon-down'" :style="{color:item.userTotalRatio>0?'green':'red'}" />
+          </p>
+        </li>
+        <li>
+          <h2>{{ item.activeUserCount }}</h2>
+          <a>日活跃用户</a>
+          <p>
+            <a>环比昨日  {{ item.activeUserCountRatio }}%</a>
+            <span :class="item.activeUserCountRatio>0?'iconfont icon-up':'iconfont icon-down'" :style="{color:item.userTotalRatio>0?'green':'red'}" />
           </p>
         </li>
       </ul>
@@ -33,33 +57,75 @@ import {
 
 export default {
   name: 'DataStatistics',
+  // props: {
+  //   timesharingData: {
+  //     type: Object,
+  //     default() {
+  //       return {}
+  //     }
+  //   }
+  // },
+  // props: ['timesharingData'],
   data() {
     return {
-      dataList: [
-        { id: 1, title: '用户总数', num: 1200, score: '2%', icon: 'iconfont icon-up' }, { id: 2, title: '用户总数', num: 1200, score: '4%', icon: 'iconfont icon-down' },
-        { id: 3, title: '用户总数', num: 1200, score: '2%', icon: 'iconfont icon-down' }, { id: 4, title: '用户总数', num: 1200, score: '11%', icon: 'iconfont icon-up' }
-      ],
+      dataList: [],
       isUpdate: false,
       // 请求参数
       queryData: {
         data: {},
-        code: '2602'
-      }
+        code: '2603'
+      },
+      timeSharingData: ''
     }
+  },
+  watch: {
+    // timesharingData(newValue, oldValue) {
+    //   this.dataList = Object.assign({}, this.dataList, newValue) // 新数组替换旧数组
+    // }
+    // dataList(newValue, oldValue) {
+    //   this.dataList = Object.assign({}, this.dataList, newValue); //新数组替换旧数组
+    // },
   },
   created() {
     this.getData(this.queryData)
   },
   methods: {
+    // 请求总数据
     getData(obj) {
       allStatistics(obj).then(res => {
         if (res.success && res.errorCode === 0) {
-          console.log('res', res)
+          const data = res.data
+          this.dataList = data
         }
       })
     },
+    // 计算互动总数（如果某个值为null，防止NAN出现）
+    interactive(obj) {
+      obj.forumCount = obj.forumCount ? obj.forumCount : 0
+      obj.commentCount = obj.commentCount ? obj.commentCount : 0
+      obj.goodClick_count = obj.goodClick_count ? obj.goodClick_count : 0
+      obj.trunCount = obj.trunCount ? obj.trunCount : 0
+      obj.clockCount = obj.clockCount ? obj.clockCount : 0
+      obj.rewardCount = obj.rewardCount ? obj.rewardCount : 0
+      const interactiveTotal = parseInt(obj.forumCount + obj.commentCount + obj.goodClick_count + obj.trunCount + obj.clockCount + obj.rewardCount)
+      return interactiveTotal
+    },
+    // 计算互动环比数
+    interactiveScore(obj) {
+      obj.forumCountRatio = obj.forumCountRatio ? obj.forumCountRatio : 0
+      obj.commentCountRatio = obj.commCountRatio ? obj.commCountRatio : 0
+      obj.goodClickCountRatio = obj.commentCountRatio ? obj.commentCountRatio : 0
+      obj.trunCountRatio = obj.trunCountRatio ? obj.trunCountRatio : 0
+      obj.clockCountRatio = obj.clockCountRatio ? obj.clockCountRatio : 0
+      obj.rewardCountRatio = obj.rewardCountRatio ? obj.rewardCountRatio : 0
+      const scoreTotal = parseInt(obj.forumCountRatio + obj.commentCountRatio + obj.goodClickCountRatio + obj.trunCountRatio + obj.clockCountRatio + obj.rewardCountRatio)
+      return scoreTotal
+    },
+    // 刷新总数据
     updataDataStetis() {
       this.isUpdate = true
+      this.getData(this.queryData)
+      // this.$emit("updataDataStetis");
       setTimeout(() => {
         this.isUpdate = false
       }, 300)

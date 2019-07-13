@@ -3,33 +3,36 @@
     <p class="ft18 fw">帖子排名</p>
     <div class="infinite-list-wrapper">
       <ul>
-        <li v-for="item in postRank" :key="item.id" class="infinite-list-item">
+        <li v-for="item in postRankData" :key="item.id" class="infinite-list-item">
           <h4>{{ item.top }}</h4>
           <div class="list-content">
-            <p class="list-content-head">
-              <img src="" alt="">
-              <span>{{ item.name }}</span>
-              <a>{{ item.title }}</a>
-              <span class="time">{{ item.time }}</span>
-            </p>
-            <p class="list-content-text">
-              <span>{{ item.con }}</span>
-              <img src="" alt="">
-            </p>
-            <p class="go-hot">#我要上热门</p>
+            <div class="list-content-head lis">
+              <img v-if="item.imgUrl" :src="item.imgUrl" :alt="item.createName">
+              <img v-else src="@/assets/index_images/default_user.jpg" alt="">
+              <span class="createName">{{ item.createName }}</span>
+              <a v-if="item.programName">{{ item.programName }}yes</a>
+              <a v-if="!item.programName">no</a>
+              <span class="time">{{ item.createDate }}</span>
+            </div>
+            <div class="list-content-text lis">
+              <span v-if="item.content" v-html="item.content">{{ item.content }}</span>
+              <span v-else />
+            </div>
+            <div v-if="item.topicName" class="go-hot lis">#{{ item.topicName }}</div>
+            <div v-else class="go-hot lis">#我要上热门</div>
             <div class="link">
               <p>[
                 <span>赞</span>
-                <a>{{ item.praise }}</a>
+                <a>{{ item.goodClickCount }}</a>
                 ]
               </p>
               <p>
                 [<span>评论</span>
-                <a>{{ item.comments }}</a>]
+                <a>{{ item.replyTotal }}</a>]
               </p>
               <p>
-                [<span>转发</span>
-                <a>{{ item.forwarding }}</a>]
+                [<span>分享</span>
+                <a>{{ item.shareCount }}</a>]
               </p>
             </div>
           </div>
@@ -40,6 +43,10 @@
 </template>
 
 <script>
+import axios from 'axios'
+// import {
+//   todayPopular
+// } from '@/api/index'
 
 export default {
   name: 'PostsRank',
@@ -47,18 +54,7 @@ export default {
     return {
       count: 10,
       loading: false,
-      postRank: [
-        { id: 1, top: 1, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconconconconconconconconconconconconconconconconconconc', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 2, top: 2, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 3, top: 3, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 4, top: 4, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 5, top: 5, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 6, top: 6, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconconconconc', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 7, top: 7, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 8, top: 8, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 9, top: 9, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' },
-        { id: 10, top: 10, headPortrait: '', name: '小小', title: '同步新空气', time: '12：00', con: 'conconconconconcon', praise: '20', comments: '30', forwarding: '40', img: '' }
-      ]
+      postRankData: []
     }
   },
   computed: {
@@ -69,6 +65,9 @@ export default {
       return this.loading || this.noMore
     }
   },
+  created() {
+    this.getTodayPopular()
+  },
   methods: {
     load() {
       this.loading = true
@@ -76,6 +75,21 @@ export default {
         this.count += 2
         this.loading = false
       }, 2000)
+    },
+    getTodayPopular() {
+      const todayPopularParam = {
+        code: '1808',
+        data: {}
+      }
+      axios
+        .post('http://192.168.0.18:3366/community_auth/select_forum_top10_v1', todayPopularParam)
+        .then(res => {
+          if (res.data.success && res.data.errorCode === 0) {
+            this.postRankData = res.data.data
+          } else {
+            this.$message.error(res.data.msg)
+          }
+        })
     }
   }
 }
@@ -96,16 +110,24 @@ export default {
         cursor: pointer;
         .list-content{
           padding: 0 10px;
-          p{
+          .lis{
             padding: 4px 0;
             font-size: 15px;
+            margin-bottom: 5px;
           }
           .list-content-head{
+            display: flex;
+            align-items: center;
+            .createName{
+              font-weight: bold;
+              color: #333;
+            }
             img{
-              width: 30px;
-              height: 24px;
+              width: 22px;
+              height: 22px;
               border: 1px solid #ccc;
               margin-right: 10px;
+              border-radius: 50%;
             }
             a{
               color: red;
@@ -113,7 +135,7 @@ export default {
               padding: 0 20px;
             }
             .time{
-              font-size: 11px;
+              font-size: 10px;
               color: #999;
             }
           }
@@ -122,16 +144,19 @@ export default {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            font-size: 12px;
+            color: #333;
           }
           .go-hot{
             color:red;
-            font-size: 11px;
+            font-size: 10px;
           }
           .link{
             display: flex;
+            color: #555;
             p{
               padding-right: 15px;
-              font-size: 13px;
+              font-size: 12px;
             }
           }
         }
