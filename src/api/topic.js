@@ -60,4 +60,21 @@ export function popularApi(data) {
     data
   })
 }
+// 查询我的帖子、收藏、评论、点赞
+export function mine_select(data) {
+  return request({
+    url: '/admin_auth/select_my_operate_log_v1',
+    method: 'post',
+    data
+  })
+}
+
+// 汇总统计查询
+export function total_census_select(data) {
+  return request({
+    url: '/admin_auth/select_census_v1',
+    method: 'post',
+    data
+  })
+}
 
