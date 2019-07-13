@@ -5,30 +5,42 @@
     <el-row style="margin-top: 20px;">
       <el-col :span="12">
         <div class="census">
-          <p>1200</p>
-          <p>总话题数</p>
-          <p>环比昨日2%↑</p>
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="census">
-          <p>1200</p>
+          <p>{{ interaction_Num }}</p>
           <p>今日互动总数</p>
-          <p>环比昨日2%↑</p>
+          <p>
+            环比昨日2%
+            <i class="el-icon-top" />
+          </p>
         </div>
       </el-col>
       <el-col :span="12">
         <div class="census">
-          <p>1200</p>
-          <p>总话题数</p>
-          <p>环比昨日2%↑</p>
+          <p>{{ user_Num }}</p>
+          <p>今日互动人数</p>
+          <p>
+            环比昨日2%
+            <i class="el-icon-top" />
+          </p>
         </div>
       </el-col>
       <el-col :span="12">
         <div class="census">
-          <p>1200</p>
-          <p>总话题数</p>
-          <p>环比昨日2%↑</p>
+          <p>{{ post_Num }}</p>
+          <p>今日新增贴子</p>
+          <p>
+            环比昨日2%
+            <i class="el-icon-top" />
+          </p>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="census">
+          <p>{{ topic_Num }}</p>
+          <p>今日新增话题</p>
+          <p>
+            环比昨日2%
+            <i class="el-icon-top" />
+          </p>
         </div>
       </el-col>
     </el-row>
@@ -37,9 +49,9 @@
 
 <script>
 import {
-  // time_census_select,
-  total_census_select
-  // comment_census_select
+  time_census_select, // 2602
+  total_census_select, // 2603
+  comment_census_select // 2604
 } from '@/api/topic.js'
 
 export default {
@@ -47,22 +59,70 @@ export default {
 
   data() {
     return {
-
+      // 今日互动总数
+      interaction_Num: 0,
+      // 今日互动人数
+      user_Num: 0,
+      // 今日新增贴子
+      post_Num: 0,
+      // 今日新增话题
+      topic_Num: 0
     }
   },
 
   created() {
-    const requestSelect = {
-      code: '2602',
-      data: {}
-    }
-    total_census_select(requestSelect).then(res => {
-      if (res.errorCode === 0 && res.success) {
-        console.log(res.data)
-      } else {
-        this.$message.error(res.msg)
+    this.selectTotalCensus()
+    // this.selectCommentCensus()
+    // this.selectTimeCensus()
+  },
+
+  methods: {
+    // 查询汇总统计
+    selectTotalCensus() {
+      const requestSelect = {
+        code: '2603',
+        data: {}
       }
-    })
+      total_census_select(requestSelect).then(res => {
+        if (res.errorCode === 0 && res.success) {
+          this.interaction_Num = res.data[0].forumCount + res.data[0].commentCount + res.data[0].goodClickCount + res.data[
+            0].trunCount
+          this.user_Num = res.data[0].activeUserCount
+          this.post_Num = res.data[0].forumCount
+          this.topic_Num = res.data[0].topicCount
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    // 查询互动统计
+    selectCommentCensus() {
+      const requestSelect = {
+        code: '2604',
+        data: {}
+      }
+      comment_census_select(requestSelect).then(res => {
+        if (res.errorCode === 0 && res.success) {
+          console.log(res)
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    // 查询分时统计
+    selectTimeCensus() {
+      const requestSelect = {
+        code: '2602',
+        data: {}
+      }
+      time_census_select(requestSelect).then(res => {
+        if (res.errorCode === 0 && res.success) {
+          console.log(res)
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    }
   }
 }
 </script>
