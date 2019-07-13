@@ -116,21 +116,28 @@
             <el-form-item label="发起人" prop="ownerName">
               <el-avatar
                 size="small"
-                src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                :src="initPhoto?initPhoto:'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"
                 class="avatar"
               />
               <el-dropdown trigger="click" style="vertical-align: middle;" @command="selectInitiator">
                 <span class="el-dropdown-link">
-                  {{ ruleForm.ownerId }}<i class="el-icon-arrow-down el-icon--right" />
+                  {{ ruleForm.ownerName?ruleForm.ownerName:'无数据' }}<i class="el-icon-arrow-down el-icon--right" />
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-for="(item, index) in userList" :key="index" :command="item">
                     <el-avatar
+                      v-if="item.photo"
+                      size="small"
+                      :src="item.photo"
+                      class="avatar"
+                    />
+                    <el-avatar
+                      v-else
                       size="small"
                       src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
                       class="avatar"
                     />
-                    {{ item.id }}
+                    {{ item.nickname }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -238,16 +245,15 @@ import {
   popularApi
 } from '@/api/topic'
 import { getToken } from '@/utils/auth'
-
+import axios from 'axios'
 export default {
   name: 'TopicTable',
   components: { pagin },
   data() {
     return {
+      // 发起人初始头像
+      initPhoto: '',
       // 搜索关键字
-      keyWord: '',
-      // 搜索分类
-      searchSelect: '名称',
       // 是否为编辑状态
       isEdit: false,
       showCreate: false, // 显示或隐藏弹框
@@ -261,8 +267,6 @@ export default {
       // 筛选
       screen: '热门',
       screen1: '按时间',
-      // 排序
-      // sort: '升序',
       // 上传图片
       headers: {
         token: getToken()
@@ -311,7 +315,7 @@ export default {
         title: [{ required: true, message: '名称不能为空' }],
         intoduce: [{ required: true, message: '简介不能为空' }],
         background: [{ required: true, message: '请上传封面图' }],
-        ownerName: [{ required: false, message: '请选择发起人' }],
+        ownerName: [{ required: true, message: '请选择发起人' }],
         socialId: [{ required: true, message: '请选择分类' }],
         jurisdiction: [{ required: true, message: '请选择发帖权限' }],
         effectTime: [{ required: true, message: '请选择开始时间' }],
@@ -342,13 +346,39 @@ export default {
     }
   },
   created() {
+    this.initPhoto = this.$store.getters.userInFo.photo
+    this.ruleForm.ownerName = this.$store.getters.userInFo.userName
     this.initData()
+    this.initiator()
     document.addEventListener('click', () => {
       this.showCreate = false
     }, false)
     this.selectClassify()
   },
   methods: {
+    // 发起人请求数据  nickname
+    initiator() {
+      const data = {
+        code: '1810',
+        data: {
+          appAccountId: this.$store.getters.userInFo.appAccountId
+        }
+      }
+      axios.post('http://192.168.0.18:3366/community_auth/select_user_info_by_account_v1', data).then(res => {
+        if (res.data.success && res.data.errorCode === 0) {
+          this.userList = res.data.data
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
+    // 选择发起人
+    selectInitiator(item) {
+      console.log()
+      this.initPhoto = item.photo
+      this.ruleForm.ownerId = item.id
+      this.ruleForm.ownerName = item.nickname
+    },
     // 查询话题
     selectTopic(obj) {
       obj.data.title = obj.data.title ? obj.data.title.trim() : null
@@ -516,11 +546,7 @@ export default {
       }
       return isJPG && isLt2M
     },
-    // 选择发起人
-    selectInitiator(item) {
-      this.ruleForm.ownerId = item.id
-      this.ruleForm.ownerName = item.username
-    },
+
     // 删除话题
     deleteTopic(deleteId) {
       const requestDelete = {
@@ -712,7 +738,8 @@ export default {
     height: 28px;
     width: 28px;
   }
-  .el-table_1_column_1{
-    position:relative;
+
+  .el-table_1_column_1 {
+    position: relative;
   }
 </style>
