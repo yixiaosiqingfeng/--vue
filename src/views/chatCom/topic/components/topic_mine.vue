@@ -101,7 +101,7 @@ export default {
       //     createName: 'userzxcxzcxzczxc',
       //     programName: '节目名',
       //     createDate: '2019-07-13',
-      //     content: '内容内容内容内容内容内容内容内容',
+      //     content: '内容内容内容内容内容内容内容内容容内容内容内容内容内容内容内容容内容内容内容内容内容内容内容容内容内容内容内容内容内容内容容内容内容内容内容内容内容内容',
       //     title: '我要上热门',
       //     showGoodClickCount: 0,
       //     showCommentCount: 0,
@@ -202,6 +202,8 @@ export default {
   }
 
   .content {
+    text-indent: 2em;
+    color: #888;
     line-height: 16px;
     overflow: hidden;
     text-overflow: ellipsis;
