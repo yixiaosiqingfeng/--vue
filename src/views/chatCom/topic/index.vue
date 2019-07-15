@@ -24,9 +24,7 @@ export default {
   },
 
   mounted() {
-    document.addEventListener('click', () => {
-      this.showCreate = false
-    }, false)
+
   },
 
   methods: {
@@ -41,7 +39,6 @@ export default {
 <style scoped>
 	.content {
 		display: flex;
-		padding-top: 15px;
 		justify-content: space-between;
 	}
 </style>

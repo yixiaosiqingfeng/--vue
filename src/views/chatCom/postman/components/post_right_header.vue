@@ -22,7 +22,7 @@ export default {
     }
   },
   methods: {
-    submit(topicData, photoData) {
+    submit(topicData, photoData, vest) {
       if (this.value === ' ') {
         this.$message.warning('请输入文本内容')
         return
@@ -31,7 +31,7 @@ export default {
       if (photoData.length !== 0) {
         this.ty = 20
         for (const a in photoData) {
-          console.log(photoData[a].realPath + photoData[a].fileName, 99999999)
+          // console.log(photoData[a].realPath + photoData[a].fileName, 99999999)
           this.img_url.push(photoData[a].realPath + photoData[a].fileName)
         }
       }
@@ -47,8 +47,8 @@ export default {
             data: {
               subjectId: topicData.id, // 话题id 必填
               appAccountId: this.$store.getters.userInFo.appAccountId, // app账号id 必填
-              userInfoId: '5065c133e64d4973a9ae504868aaa766', // 用户信息id 必填
-              create_name: '张小三', // 马甲名字
+              userInfoId: vest.id, // 用户信息id 必填
+              create_name: vest.name, // 马甲名字
               content: this.value, // 内容
               img_url: this.img_url.join(','), // 图片路径 选填
               video_url: '', // 视频路径 选填

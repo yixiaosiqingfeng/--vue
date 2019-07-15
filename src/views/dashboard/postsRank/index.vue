@@ -23,16 +23,16 @@
             <div class="link">
               <p>[
                 <span>赞</span>
-                <a>{{ item.goodClickCount }}</a>
+                <a>{{ item.goodClickCount?item.goodClickCount:0 }}</a>
                 ]
               </p>
               <p>
                 [<span>评论</span>
-                <a>{{ item.replyTotal }}</a>]
+                <a>{{ item.replyTotal?item.replyTotal:0 }}</a>]
               </p>
               <p>
                 [<span>分享</span>
-                <a>{{ item.shareCount }}</a>]
+                <a>{{ item.shareCount?item.shareCount:0 }}</a>]
               </p>
             </div>
           </div>
@@ -86,6 +86,7 @@ export default {
         .then(res => {
           if (res.data.success && res.data.errorCode === 0) {
             this.postRankData = res.data.data
+            console.log('this.postRankData', this.postRankData)
           } else {
             this.$message.error(res.data.msg)
           }

@@ -198,7 +198,7 @@ export const asyncRoutes = [
   {
     path: '/chatCom',
     component: Layout,
-    redirect: '/chatCom/fica',
+    redirect: '/chatCom/postman',
     name: 'chatCom',
     meta: {
       title: '互动社区',
@@ -207,21 +207,21 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'fica',
+        path: 'postman',
         component: () => import('@/views/chatCom'),
-        name: 'fica',
-        redirect: '/chatCom/fica/ficaList',
+        name: 'postman',
+        redirect: '/chatCom/postman/postmanList',
         meta: {
-          title: '分类管理',
+          title: '帖子管理',
           roles: ['admin', 'editor'] // or you can only set roles in sub nav
         },
         children: [
           {
-            path: 'ficaList',
-            component: () => import('@/views/chatCom/fica'),
-            name: 'ficaList',
+            path: 'postmanList',
+            component: () => import('@/views/chatCom/postman'),
+            name: 'postmanList',
             meta: {
-              title: '分类管理',
+              title: '帖子管理',
               roles: ['admin', 'editor'] // or you can only set roles in sub nav
             }
           }
@@ -249,21 +249,21 @@ export const asyncRoutes = [
         ]
       },
       {
-        path: 'postman',
+        path: 'fica',
         component: () => import('@/views/chatCom'),
-        name: 'postman',
-        redirect: '/chatCom/postman/postmanList',
+        name: 'fica',
+        redirect: '/chatCom/fica/ficaList',
         meta: {
-          title: '帖子管理',
+          title: '分类管理',
           roles: ['admin', 'editor'] // or you can only set roles in sub nav
         },
         children: [
           {
-            path: 'postmanList',
-            component: () => import('@/views/chatCom/postman'),
-            name: 'postmanList',
+            path: 'ficaList',
+            component: () => import('@/views/chatCom/fica'),
+            name: 'ficaList',
             meta: {
-              title: '帖子管理',
+              title: '分类管理',
               roles: ['admin', 'editor'] // or you can only set roles in sub nav
             }
           }
@@ -274,7 +274,7 @@ export const asyncRoutes = [
   {
     path: '/traffic',
     component: Layout,
-    redirect: '/traffic/askft',
+    redirect: '/traffic/preset',
     name: 'traffic',
     meta: {
       title: '路况管理',
@@ -282,6 +282,69 @@ export const asyncRoutes = [
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
+      {
+        path: 'preset',
+        component: () => import('@/views/traffic'),
+        name: 'preset',
+        redirect: '/traffic/preset/presetList',
+        meta: {
+          title: '路况预设',
+          roles: ['admin', 'editor'] // or you can only set roles in sub nav
+        },
+        children: [
+          {
+            path: 'presetList',
+            component: () => import('@/views/traffic/preset'),
+            name: 'presetList',
+            meta: {
+              title: '路况预设',
+              roles: ['admin', 'editor'] // or you can only set roles in sub nav
+            }
+          }
+        ]
+      },
+      {
+        path: 'official',
+        component: () => import('@/views/traffic'),
+        name: 'official',
+        redirect: '/traffic/official/offList',
+        meta: {
+          title: '官方路况',
+          roles: ['admin', 'editor'] // or you can only set roles in sub nav
+        },
+        children: [
+          {
+            path: 'offList',
+            component: () => import('@/views/traffic/official'),
+            name: 'offList',
+            meta: {
+              title: '官方路况',
+              roles: ['admin', 'editor'] // or you can only set roles in sub nav
+            }
+          }
+        ]
+      },
+      {
+        path: 'livrec',
+        component: () => import('@/views/traffic'),
+        name: 'livrec',
+        redirect: '/traffic/livrec/livrecList',
+        meta: {
+          title: '直播记录',
+          roles: ['admin', 'editor'] // or you can only set roles in sub nav
+        },
+        children: [
+          {
+            path: 'livrecList',
+            component: () => import('@/views/traffic/livrec'),
+            name: 'livrecList',
+            meta: {
+              title: '直播记录',
+              roles: ['admin', 'editor'] // or you can only set roles in sub nav
+            }
+          }
+        ]
+      },
       {
         path: 'askft',
         component: () => import('@/views/traffic'),

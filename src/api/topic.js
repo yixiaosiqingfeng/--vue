@@ -44,3 +44,37 @@ export function classify_select(data) {
     data
   })
 }
+// 置顶话题
+export function placementApi(data) {
+  return request({
+    url: '/admin_auth/update_topic_to_top_v1',
+    method: 'post',
+    data
+  })
+}
+// 标记热门话题
+export function popularApi(data) {
+  return request({
+    url: '/admin_auth/update_topic_to_hot_v1',
+    method: 'post',
+    data
+  })
+}
+// 查询我的帖子、收藏、评论、点赞
+export function mine_select(data) {
+  return request({
+    url: '/admin_auth/select_my_operate_log_v1',
+    method: 'post',
+    data
+  })
+}
+
+// 汇总统计查询
+export function total_census_select(data) {
+  return request({
+    url: '/admin_auth/select_census_v1',
+    method: 'post',
+    data
+  })
+}
+

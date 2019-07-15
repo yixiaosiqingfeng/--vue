@@ -7,8 +7,8 @@
     <ul v-if="heatToptic.length">
       <li v-for="item in heatToptic" :key="item.id">
         <p class="top-num"><span :class="item.icon" :style="{color:item.colors,fontSize:item.fontS}" /></p>
-        <p class="title">#{{ item.title }}</p>
-        <p>
+        <p class="title" :title="item.title">#{{ item.title }}</p>
+        <p class="inter-active">
           <span class="iconfont icon-pinglun" />
           <a>{{ interactive(item) }}</a>
         </p>
@@ -94,7 +94,7 @@ export default {
       margin-top: 20px;
       li{
         display: flex;
-        justify-content: space-around;
+        justify-content: flex-start;
         margin: 11px 0;
         font-size: 12px;
         p{
@@ -125,6 +125,9 @@ export default {
           .top-num4{
             font-size: 14px;
           }
+        }
+        .inter-active{
+          padding: 0 20px 0 30px;
         }
         .title{
           width: 100px;

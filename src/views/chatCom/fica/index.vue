@@ -1,61 +1,13 @@
 <template>
-  <div style="position: relative;" class="huatiClass">
+  <div style="position: relative;padding:0 5px;" class="huatiClass">
     <!-- 头部搜索部分 -->
-    <ficaHeader @searchFn="searchFn" />
+    <ficaHeader @searchFn="searchFn" @sortFn="sortFn" @updateData="updateData" />
     <!-- 当前已筛选出来的数据统计 -->
     <div class="add_btn_box">
-      <p style="font-size:12px;color:#999;" class="ml10">共找到22条数据</p>
-      <div>
-        <el-popover
-          v-model="popover"
-          placement="bottom-end"
-          width="400"
-          trigger="click"
-        >
-          <div>
-            <h3 class="mb20">新增分类</h3>
-            <el-form ref="ruleForm" :model="ruleForm.data" :rules="rules" label-width="100px" class="demo-ruleForm">
-              <el-form-item label="分类名称" prop="name">
-                <el-input v-model="ruleForm.data.name" />
-              </el-form-item>
-              <el-form-item label="备注" prop="note">
-                <el-input v-model="ruleForm.data.note" type="textarea" />
-              </el-form-item>
-              <el-form-item label="图片" prop="imgPath">
-                <div class="huatiClass_add">
-                  <el-upload
-                    class="avatar-uploader"
-                    :action="queryUrl"
-                    :accept="accept"
-                    :show-file-list="false"
-                    :data="{type:1}"
-                    :on-success="handleAvatarSuccess"
-                    :before-upload="beforeAvatarUpload"
-                  >
-                    <img
-                      v-if="ruleForm.data.imgPath"
-                      width="80"
-                      height="80"
-                      :src="ruleForm.data.imgPath"
-                      class="avatar"
-                    >
-                    <i v-else class="el-icon-plus avatar-uploader-icon" />
-                  </el-upload>
-                </div>
-              </el-form-item>
-              <el-form-item>
-                <el-button @click="resetForm('ruleForm')">重置</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">创建</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
-          <el-button slot="reference" type="text" class="mr30">新增<i class="el-icon-arrow-down el-icon--right" />
-          </el-button>
-        </el-popover>
-      </div>
+      <p style="font-size:12px;color:#999;" class="ml10 mt10 mb10">共找到<i style="color: orange;font-weight:500;">{{ total }}</i>条数据</p>
     </div>
     <!--表格部分-->
-    <div>
+    <div class="ml5">
       <el-table
         v-loading="loading"
         :data="tableData"
@@ -63,12 +15,12 @@
       >
         <el-table-column
           prop="date"
-          label="图片"
+          label="分类图片"
           width="100"
         >
           <template slot-scope="scope">
             <div class="modify">
-              <div v-show="scope.row.flag" style="width:69px;height:80px;">
+              <div v-show="scope.row.flag" style="width:40px;height:50px;">
                 <el-upload
                   class="avatar-uploader"
                   :action="queryUrl"
@@ -82,22 +34,22 @@
                     v-if="scope.row.imgPath"
                     :src="scope.row.imgPath"
                     class="avatar"
-                    style="width:75px;height:75px;"
+                    style="width:45px;height:45px;"
                   >
                   <i v-else class="el-icon-plus avatar-uploader-icon" />
                 </el-upload>
               </div>
-              <div v-show="!scope.row.flag" style="width:69px;height:80px;">
+              <div v-show="!scope.row.flag" style="width:50px;height:50px;">
                 <img
                   v-if="scope.row.imgPath"
                   :src="scope.row.imgPath"
                   class="avatar"
-                  width="100%"
-                  height="100%"
+                  width="50"
+                  height="50"
                   style="cursor:pointer;"
                   @click="queryImgFn(scope.row.imgPath)"
                 >
-                <div v-else style="width:69px;height:80px;" />
+                <div v-else style="width:50px;height:50px;" />
               </div>
             </div>
           </template>
@@ -127,19 +79,22 @@
         </el-table-column>
         <el-table-column
           prop="topicCount"
+          width="70"
           label="话题数"
         />
         <el-table-column
+          width="80"
           prop="createrName"
           label="创建人"
         />
         <el-table-column
+          width="150"
           prop="createDate"
           label="创建时间"
         />
         <el-table-column
           prop="createDate"
-          width="150"
+          width="140"
           label="操作"
         >
           <template slot-scope="scope">
@@ -172,7 +127,6 @@
 import ficaHeader from './compontents/fica_header'
 import pagin from '@/components/tableAss/components/pagination'
 import {
-  addCategory,
   categoryList,
   delCategory,
   updateCategory
@@ -187,7 +141,6 @@ export default {
       dialogImageUrl: '',
       // 服务器地址
       yunUrl: 'http://192.168.0.254/changjia/static/',
-      urlsuccess: false,
       // 表格参数
       total: 0,
       loading: true,
@@ -197,31 +150,21 @@ export default {
       // 列表请求参数
       queryData: {
         data: {
-          name: ''
+          name: '',
+          sortOrderByTime: null,
+          sortOrderByTopic: null
         },
         limit: 10,
         page: 1,
         code: '2286'
       },
-      // 新增参数
-      ruleForm: {
-        data: {
-          name: '',
-          note: '',
-          createrName: '',
-          imgPath: ''
-        },
-        code: '2289'
-      },
-      // 验证规则
-      rules: {
-        name: [
-          { required: true, message: '请输入分类名称', trigger: 'blur' }
-        ]
-      },
+
       // 修改数据
       modifyData: null,
-      modifyFlag: true
+      modifyFlag: true,
+      initModifyUrl: '',
+      initModifyname: '',
+      initModifynote: ''
     }
   },
   computed: {
@@ -231,11 +174,11 @@ export default {
     }
   },
   created() {
+    this.popover = true
     this.initData()
   },
   methods: {
     getQueryData(obj) {
-      console.log(obj.data.name, 4545)
       obj.data.name = obj.data.name ? obj.data.name.trim() : null
       categoryList(obj).then(res => {
         if (res.success && res.errorCode === 0) {
@@ -251,13 +194,6 @@ export default {
     // 初始化数据
     initData() {
       this.getQueryData(this.queryData)
-    },
-    // 上传函数
-    handleAvatarSuccess(res, file) {
-      if (res.success && res.errorCode === 0) {
-        this.urlsuccess = true
-        this.ruleForm.data.imgPath = res.data ? this.yunUrl + res.data.realPath + res.data.fileName : ''
-      }
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
@@ -275,33 +211,13 @@ export default {
         this.modifyData.imgPath = res.data ? this.yunUrl + res.data.realPath + res.data.fileName : ''
       }
     },
-    // 创建函数
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.ruleForm.data.createrName = this.$store.getters.userInFo.username + 'qwdq'
-          addCategory(this.ruleForm).then(res => {
-            if (res.success && res.errorCode === 0) {
-              this.popover = false
-              this.urlsuccess = false
-              this.resetForm('ruleForm')
-              this.initData()
-            }
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    // 重置按钮
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-    },
     modifyFn(obj) {
       if (this.modifyFlag) {
         obj.flag = true
         this.modifyData = obj
+        this.initModifyUrl = obj.imgPath
+        this.initModifyname = obj.name
+        this.initModifynote = obj.note
         this.modifyFlag = false
       } else {
         this.$message.error('请把上一条修改完成或取消')
@@ -322,10 +238,6 @@ export default {
       for (const a in data.data) {
         data.data[a] = obj[a]
       }
-      // var re = new RegExp('^' + this.yunUrl)
-      // if (data.data.imgPath) {
-      //   data.data.imgPath = data.data.imgPath.replace(re, '')
-      // }
       if (data.data.name === '') {
         this.$message.error('分类名称不能为空哦！')
         return
@@ -355,6 +267,9 @@ export default {
     // 取消函数
     closeFn(obj) {
       obj.flag = false
+      obj.imgPath = this.initModifyUrl
+      obj.name = this.initModifyname
+      obj.note = this.initModifynote
       this.modifyFlag = true
     },
     // 删除接口
@@ -365,7 +280,7 @@ export default {
         },
         code: '2287'
       }
-      this.$confirm('确定要保存修改吗？', '提示', {
+      this.$confirm('确定要删除吗', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -376,14 +291,14 @@ export default {
             this.initData()
             this.$message({
               type: 'success',
-              message: '修改成功!'
+              message: '删除成功!'
             })
           }
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消修改'
+          message: '已取消删除'
         })
       })
     },
@@ -410,6 +325,14 @@ export default {
     queryImgFn(url) {
       this.dialogImageUrl = url
       this.dialogVisible = true
+    },
+    sortFn(obj) {
+      this.queryData.data.sortOrderByTopic = obj.sortOrderByTopic
+      this.queryData.data.sortOrderByTime = obj.sortOrderByTime
+      this.initData()
+    },
+    updateData() {
+      this.initData()
     }
   }
 }
@@ -436,31 +359,17 @@ export default {
   }
 
   .huatiClass .avatar {
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     display: block;
-  }
-
-  .huatiClass_add .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 80px;
-    height: 80px;
-    line-height: 80px;
-    text-align: center;
-  }
-
-  .huatiClass_add .el-upload--text {
-    border: 1px dashed #ccc;
-    border-radius: 6px;
   }
 
   .huatiClass .modify .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
     text-align: center;
   }
 

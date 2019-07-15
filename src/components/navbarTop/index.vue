@@ -2,7 +2,7 @@
   <div style="height:100%;position:relative;">
     <div class="topBar">
       <el-menu router :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-        <el-menu-item v-for="(item,index) in navArr" :key="index" :index="item.meta.code">{{ item.meta.title }}
+        <el-menu-item v-for="(item,index) in navArr" :key="index" :index="item.meta.code"><span style="font-size:16px;">{{ item.meta.title }}</span>
         </el-menu-item>
       </el-menu>
     </div>
